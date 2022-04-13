@@ -24,3 +24,13 @@ header de taille n contien la taille du block (libre ou pas) 000000001 <- 1 si o
 
 si on alloue un block avec une size < au block_size / 2 on divide le block:
 on modifie le header et on ajoute un header au suivant
+
+la structure d'un block de memoire sera 
+```
+---------------------------------------------------------------------------
+|        header        |       payload    |             footer            |
+---------------------------------------------------------------------------
+| size + allocated bit |   data + padding |   pointer to head of previous |
+---------------------------------------------------------------------------
+```
+size include the padding of 8 bit (that allow the allocated bit)
