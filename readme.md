@@ -1,5 +1,8 @@
 # Malloc
 
+***project status***
+
+[![tmatis's 42 malloc Score](https://badge42.vercel.app/api/v2/cl1mkhkns001109mixy0purl5/project/2559363)](https://github.com/JaeSeoKim/badge42)
 ## Authorised functions
 
 - mmap
