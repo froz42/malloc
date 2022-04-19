@@ -1,0 +1,12 @@
+*.o
+*.d
+*.a
+unit_tests/collected.hpp
+unit_tests/collected.cpp
+unit_tests/collected
+unit_tests/Makefile
+malloc
+bin_test
+vscode/
+.vscode/
+*.log

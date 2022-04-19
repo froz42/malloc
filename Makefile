@@ -6,7 +6,7 @@
 #    By: tmatis <tmatis@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2022/04/13 15:18:04 by tmatis           ###   ########.fr        #
+#    Updated: 2022/04/16 16:33:13 by tmatis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ SRCS_PATH		= ./src
 
 INCLUDE_PATH	= ./src
 
-SRCS			= malloc/malloc.c
+SRCS			= malloc.c
 
 MAIN			= main.c
 
@@ -225,6 +225,7 @@ endif
 $(NAME):	${OBJS} ${OBJ_MAIN}
 			@$(call display_progress_bar)
 			@$(call run_and_test,$(CC) $(CFLAGS) $(DFLAGS) -I$(INCLUDE_PATH) -o $@ ${OBJS} ${OBJ_MAIN})
+			@echo "                                                              "
 
 setup:
 	@$(call save_files_changed)
@@ -235,13 +236,21 @@ objs/%.o: 	$(SRCS_PATH)/%$(FILE_EXTENSION)
 			@$(call run_and_test,$(CC) $(CFLAGS) $(DFLAGS) -c $< -o $@ -I$(INCLUDE_PATH))
 
 clean:		header
-			@rm -rf objs objs_tests
+			@rm -rf objs unit_tests/objs unit_tests/collected.cpp unit_tests/collected.hpp
 			@printf "%-53b%b" "$(COM_COLOR)clean:" "$(OK_COLOR)[✓]$(NO_COLOR)\n"
 
 fclean:		header clean
-			@rm -rf $(NAME)
+			@rm -rf $(NAME) unit_tests/collected ./bin_test
 			@printf "%-53b%b" "$(COM_COLOR)fclean:" "$(OK_COLOR)[✓]$(NO_COLOR)\n"
 
 re:			fclean all
+
+unit:		all
+			@cd unit_tests && bash CAR.sh ${OBJS}
+			@./bin_test $$FILTER 2> unit_errors.log
+
+unit_all: 	all
+			@cd unit_tests && bash CAR.sh ${OBJS}
+			@./bin_test --show-all
 
 .PHONY:		all clean fclean re header
