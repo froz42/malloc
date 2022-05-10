@@ -2,6 +2,13 @@
 #include <sys/mman.h>
 #include "malloc.h"
 
+
+static void init_area(void *area, size_t size)
+{
+	*(size_t *)area = size;
+	*get_prev_block(area) = NULL;
+}
+
 /*
 ** get_or_create_area
 ** create a area to store small and medium allocation
@@ -19,6 +26,11 @@ void *get_or_create_area()
 				MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
 		if (area == MAP_FAILED)
 			area = NULL;
+		else
+		{
+			init_area(area, TINY_CAPACITY - sizeof(void *) * 2);
+			init_area((char *)area + TINY_CAPACITY, SMALL_CAPACITY - sizeof(void *) * 2);
+		}
 	}
 	return area;
 }

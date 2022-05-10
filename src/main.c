@@ -9,5 +9,6 @@ int main(void)
 	printf("SMALL_CAPACITY -> %lu\n", SMALL_CAPACITY);
 	printf("sizeof(size_t) -> %lu\n", sizeof(size_t));
 	printf("sizeof(void *) -> %lu\n", sizeof(void *));
+	printf("MINIMAL_SIZE -> %lu\n", MINIMAL_SIZE);
 
 }

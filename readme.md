@@ -9,31 +9,18 @@
 - munmap
 - getpagesize
 
-# ROADMAP
+# Data structure
 
-- [ ] comprendre comment marche mmap munmap getpagesize
-- [ ] implementer un malloc basique en utilisant uniquement les hors zone
-- [ ] reflechir au zone memoires (regarder l'implementation standard)
-- [ ] implementer les zone memoire et hors zone et free
-- [ ] trouver un moyen de defragmenter la memoire
+## alocated block
 
-
-
-# implementation small , tiny zones
-
-https://moss.cs.iit.edu/cs351/slides/slides-malloc.pdf
-
-header de taille n contien la taille du block (libre ou pas) 000000001 <- 1 si occuper 0 si free donc un mask 0x1
-
-si on alloue un block avec une size < au block_size / 2 on divide le block:
-on modifie le header et on ajoute un header au suivant
-
-la structure d'un block de memoire sera 
 ```
----------------------------------------------------------------------------
-|        header        |       payload    |             footer            |
----------------------------------------------------------------------------
-| size + allocated bit |   data + padding |   pointer to head of previous |
----------------------------------------------------------------------------
+head (size n + is_allocated) + payload of n size + footer (where the previous block start)
 ```
-size include the padding of 8 bit (that allow the allocated bit)
+
+## freed block
+
+rb tree of freed nodes
+
+```
+head (size n + is_allocated) + left + right + parent + footer (where the previous block start)
+```
