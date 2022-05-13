@@ -81,5 +81,11 @@ cat Makefile.template | sed "s@$(echo objs_template | sed 's/\./\\./g')@${OBJS}@
 echo -e "${GREEN}done${NC}"
 echo -e -n "${BLUE}Compiling... ${NC}"
 make -s
+if [ $? -eq 0 ]; then
+	echo -e "${GREEN}done${NC}"
+else
+	echo -e "${RED}failed${NC}"
+	exit 1;
+fi
 echo -e "${GREEN}done${NC}"
 echo 

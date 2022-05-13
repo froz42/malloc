@@ -6,6 +6,7 @@
 # endif
 
 # include "data_access.h"
+# include "fit_allocation.h"
 
 # define TINY_MAX_SIZE 256 // max size in bytes for tiny area
 # define SMALL_MAX_SIZE 1024 // max size in bytes for small area

@@ -6,7 +6,7 @@
 #    By: tmatis <tmatis@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2022/05/09 16:37:05 by tmatis           ###   ########.fr        #
+#    Updated: 2022/05/13 15:10:24 by tmatis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ SRCS_PATH		= ./src
 
 INCLUDE_PATH	= ./src
 
-SRCS			= malloc.c data_access.c
+SRCS			= malloc.c data_access.c fit_allocation.c
 
 MAIN			= main.c
 
@@ -246,11 +246,9 @@ fclean:		header clean
 re:			fclean all
 
 unit:		all
-			@cd unit_tests && bash CAR.sh ${OBJS}
-			@./bin_test $$FILTER 2> unit_errors.log
+			@cd unit_tests && bash CAR.sh ${OBJS} && ../bin_test $$FILTER 2> unit_errors.log
 
 unit_all: 	all
-			@cd unit_tests && bash CAR.sh ${OBJS}
-			@./bin_test --show-all
+			@cd unit_tests && bash CAR.sh ${OBJS} && ../bin_test --show-all
 
 .PHONY:		all clean fclean re header
