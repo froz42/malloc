@@ -24,6 +24,6 @@
 # define ALLIGN_16(x) ((x + 15) & ~15)
 
 void *get_or_create_area();
-
+void *ft_malloc(size_t size);
 
 #endif

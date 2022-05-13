@@ -11,6 +11,15 @@ int is_allocated(void *block)
 }
 
 /*
+** set a block as allocated
+** @param block: the block to set
+*/
+void set_allocated(void *block)
+{
+	*(size_t *)block |= 1;
+}
+
+/*
 ** search_fit find a block that can fit the size
 ** @param area: the area to search
 ** @param size: the size to fit

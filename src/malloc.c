@@ -34,3 +34,17 @@ void *get_or_create_area()
 	}
 	return area;
 }
+
+void *ft_malloc(size_t size)
+{
+	void *start = get_or_create_area();
+	void *block;
+
+	if (start == NULL)
+		return NULL;
+	block = find_fit(start, size);
+	if (block == NULL)
+		return NULL;
+	set_allocated(block);
+	return (get_block_data(block));
+}
