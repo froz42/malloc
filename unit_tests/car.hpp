@@ -16,12 +16,12 @@ extern "C"
 
 typedef void car_test;
 
-#define RED "\033[1;31m"
-#define GREEN "\033[1;32m"
-#define YELLOW "\033[1;33m"
-#define BLUE "\033[1;34m"
-#define MAGENTA "\033[1;35m"
-#define CYAN "\033[1;36m"
+#define RED_TEXT "\033[1;31m"
+#define GREEN_TEXT "\033[1;32m"
+#define YELLOW_TEXT "\033[1;33m"
+#define BLUE_TEXT "\033[1;34m"
+#define MAGENTA_TEXT "\033[1;35m"
+#define CYAN_TEXT "\033[1;36m"
 #define BOLD "\033[1m"
 #define UNDERLINE "\033[4m"
 #define RESET "\033[0m"
@@ -49,9 +49,9 @@ void car_assert_fn(T x, int line, std::string filename, std::string funcname,
 			show_module_head(module_name, false);
 			has_module_failled_yet = true;
 		}
-		std::cout << CYAN << BOLD << " >>> " << RESET
-				  << RED << "[✖] " << BLUE << "Assertion"
-				  << RED << " failed: " << RESET << BOLD << x_str << RESET << " in " << funcname
+		std::cout << CYAN_TEXT << BOLD << " >>> " << RESET
+				  << RED_TEXT << "[✖] " << BLUE_TEXT << "Assertion"
+				  << RED_TEXT << " failed: " << RESET << BOLD << x_str << RESET << " in " << funcname
 				  << "(" << filename << ":" << line << ")" << std::endl;
 		fail_assert++;
 	}
@@ -59,9 +59,9 @@ void car_assert_fn(T x, int line, std::string filename, std::string funcname,
 	{
 		success_assert++;
 		if (filter != "" && (filter == "--show-all" || funcname.find(filter) != std::string::npos))
-			std::cout << CYAN << BOLD << " >>> " << RESET
-					  << GREEN << "[✔] " << BLUE << "Assertion"
-					  << GREEN << " passed: " << RESET << BOLD << x_str << RESET << " in " << funcname
+			std::cout << CYAN_TEXT << BOLD << " >>> " << RESET
+					  << GREEN_TEXT << "[✔] " << BLUE_TEXT << "Assertion"
+					  << GREEN_TEXT << " passed: " << RESET << BOLD << x_str << RESET << " in " << funcname
 					  << "(" << filename << ":" << line << ")" << std::endl;
 	}
 }
@@ -78,12 +78,12 @@ void car_assert_cmp_fn(T1 x, T2 y, int line, std::string filename, std::string f
 			show_module_head(module_name, false);
 			has_module_failled_yet = true;
 		}
-		std::cout << CYAN << BOLD << " >>> " << RESET
-				  << RED << "[✖] " << BLUE << "Assertion"
-				  << RED << " failed: " << RESET << BOLD << x_str << RESET << " != " << BOLD << y_str << RESET << " in " << funcname
+		std::cout << CYAN_TEXT << BOLD << " >>> " << RESET
+				  << RED_TEXT << "[✖] " << BLUE_TEXT << "Assertion"
+				  << RED_TEXT << " failed: " << RESET << BOLD << x_str << RESET << " != " << BOLD << y_str << RESET << " in " << funcname
 				  << "(" << filename << ":" << line << ")" << std::endl;
-		std::cout << std::setw(27) << "(" << RED << x
-				  << RESET << " != " << GREEN
+		std::cout << std::setw(27) << "(" << RED_TEXT << x
+				  << RESET << " != " << GREEN_TEXT
 				  << y << RESET << ")" << std::endl;
 		fail_assert++;
 	}
@@ -91,9 +91,9 @@ void car_assert_cmp_fn(T1 x, T2 y, int line, std::string filename, std::string f
 	{
 		success_assert++;
 		if (filter != "" && (filter == "--show-all" || funcname.find(filter) != std::string::npos))
-			std::cout << CYAN << BOLD << " >>> " << RESET
-					  << GREEN << "[✔] " << BLUE << "Assertion"
-					  << GREEN << " passed: " << RESET << BOLD << x_str << RESET << " == " << BOLD << y_str << RESET << " in " << funcname
+			std::cout << CYAN_TEXT << BOLD << " >>> " << RESET
+					  << GREEN_TEXT << "[✔] " << BLUE_TEXT << "Assertion"
+					  << GREEN_TEXT << " passed: " << RESET << BOLD << x_str << RESET << " == " << BOLD << y_str << RESET << " in " << funcname
 					  << "(" << filename << ":" << line << ")" << std::endl;
 	}
 }

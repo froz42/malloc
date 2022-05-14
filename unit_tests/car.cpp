@@ -20,20 +20,20 @@ void show_module_head(std::string module_name, bool ok)
 		return;
 	std::cout << "Module " << BOLD << module_name << " " << RESET;
 	if (ok)
-		std::cout << GREEN << "[PASS]" << RESET << std::endl;
+		std::cout << GREEN_TEXT << "[PASS]" << RESET << std::endl;
 	else
-		std::cout << RED << "[FAIL]" << RESET << std::endl;
+		std::cout << RED_TEXT << "[FAIL]" << RESET << std::endl;
 }
 
 static void session_end(int success_module, int module_count)
 {
 	std::cout << std::endl;
 	if (!fail_assert)
-		std::cout << GREEN
+		std::cout << GREEN_TEXT
 				  << "========================== TEST SESSION END ==========================="
 				  << RESET << std::endl;
 	else
-		std::cout << BOLD << RED
+		std::cout << BOLD << RED_TEXT
 				  << "========================== TEST SESSION END ==========================="
 				  << RESET << std::endl;
 	if (!(success_assert + fail_assert))

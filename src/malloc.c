@@ -3,9 +3,9 @@
 #include "malloc.h"
 
 
-static void init_area(void *area, size_t size)
+void init_area(void *area, size_t size)
 {
-	*(size_t *)area = size;
+	*(size_t *)area = size - sizeof(void *) * 2;
 	*get_prev_block(area) = NULL;
 }
 
@@ -28,8 +28,8 @@ void *get_or_create_area()
 			area = NULL;
 		else
 		{
-			init_area(area, TINY_CAPACITY - sizeof(void *) * 2);
-			init_area((char *)area + TINY_CAPACITY, SMALL_CAPACITY - sizeof(void *) * 2);
+			init_area(area, TINY_CAPACITY);
+			init_area((char *)area + TINY_CAPACITY, SMALL_CAPACITY);
 		}
 	}
 	return area;

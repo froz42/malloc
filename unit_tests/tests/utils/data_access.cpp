@@ -17,6 +17,13 @@ car_test data_access(void)
 	car_assert_cmp(*get_prev_block(block_ptr), *prev);
 	*get_prev_block(block_ptr) = (void *)0x12345678;
 	car_assert_cmp(*get_prev_block(block_ptr), (void *)0x12345678);
+
+	set_block_size(block_ptr, 128);
+	car_assert_cmp(get_block_size(block_ptr), 128U);
+
+	set_allocated(block_ptr);
+	car_assert_cmp(is_allocated(block_ptr), true);
+	car_assert_cmp(get_block_size(block_ptr), 128U);
 }
 
 car_test area_access(void)

@@ -16,7 +16,8 @@ car_test define_sizes(void)
 
 	car_assert_cmp(TOTAL_CAPACITY, (TINY_CAPACITY + SMALL_CAPACITY));
 	// test MINIMAL_SIZE
-	car_assert_cmp(MINIMAL_SIZE, (sizeof(size_t) + (sizeof(void *) * 4)));
+	car_assert_cmp(MINIMAL_SIZE, 48u);
+	car_assert_cmp(MINIMAL_SIZE, ALLIGN_16(MINIMAL_SIZE));
 }
 
 car_test define_utils(void)

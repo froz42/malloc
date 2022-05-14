@@ -14,7 +14,7 @@
 ## alocated block
 
 ```
-head (size n + is_allocated) + payload of n size + footer (where the previous block start)
+head (size n + is_allocated) + payload of n size + prev (where the previous block start)
 ```
 
 ## freed block
@@ -22,5 +22,5 @@ head (size n + is_allocated) + payload of n size + footer (where the previous bl
 rb tree of freed nodes
 
 ```
-head (size n + is_allocated) + left + right + parent + footer (where the previous block start)
+head (size n + is_allocated) + left + right + parent + prev (where the previous block start)
 ```

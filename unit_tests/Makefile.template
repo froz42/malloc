@@ -6,7 +6,7 @@
 #    By: tmatis <tmatis@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2021/10/08 13:02:01 by tmatis           ###   ########.fr        #
+#    Updated: 2022/05/14 00:15:37 by tmatis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@
 
 
 NAME	= collected
-CC 		= clang++
+CC 		= g++
 CFLAGS	= -Wall -Wextra -Werror -std=c++98 -g
 DFLAGS	= -MMD -MF $(@:.o=.d)
 
