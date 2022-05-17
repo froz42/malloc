@@ -10,6 +10,12 @@ car_test define_sizes(void)
 
 	car_assert_cmp(TINY_CAPACITY, (TINY_MAX_SIZE * 256 + sizeof(size_t) * 256 * 4));
 	car_assert_cmp(SMALL_CAPACITY, (SMALL_MAX_SIZE * 256 + sizeof(size_t) * 256 * 4));
+	
+	car_assert_cmp(TINY_MAX_SIZE, ALLIGN_16(TINY_MAX_SIZE));
+	car_assert_cmp(SMALL_MAX_SIZE, ALLIGN_16(SMALL_MAX_SIZE));
+	car_assert_cmp(TINY_CAPACITY, ALLIGN_16(TINY_CAPACITY));
+	car_assert_cmp(SMALL_CAPACITY, ALLIGN_16(SMALL_CAPACITY));
+	car_assert_cmp(TOTAL_CAPACITY, ALLIGN_16(TOTAL_CAPACITY));
 
 	car_assert_cmp(TINY_CAPACITY % page_size, 0u);
 	car_assert_cmp(SMALL_CAPACITY % page_size, 0u);

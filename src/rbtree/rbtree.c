@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include "rbtree.h"
-
+#include <stdio.h>
 
 /*
 ** this function return the sentinel node
@@ -34,11 +34,171 @@ free_tree_t *get_free_trees(void)
 	return (&free_trees);
 }
 
-/*
-void init_rb_node(void *block)
+void *get_grand_parent(void *block)
 {
-	
+	if (is_allocated(block))
+	{
+		printf("error: grand_parent: block is allocated\n");
+		exit(EXIT_FAILURE);
+	}
+	return (*get_parent(*get_parent(block)));
 }
-*/
 
+void *get_sibling(void *block)
+{
+	if (is_allocated(block))
+	{
+		printf("error: get_sibling: block is allocated\n");
+		exit(EXIT_FAILURE);
+	}
+	if (*get_parent(block) == *get_left_child(*get_parent(block)))
+		return (*get_right_child(*get_parent(block)));
+	else
+		return (*get_left_child(*get_parent(block)));
+}
+
+void rotate_left(void *x, void **root)
+{
+	void *y = *get_right_child(x);
+	*get_right_child(x) = *get_left_child(y);
+	if (*get_left_child(y) != get_nil_node())
+		*get_parent(*get_left_child(y)) = x;
+	*get_parent(y) = *get_parent(x);
+	if (*get_parent(x) == get_nil_node())
+		*root = y;
+	else if (x == *get_left_child(*get_parent(x)))
+		*get_left_child(*get_parent(x)) = y;
+	else
+		*get_right_child(*get_parent(x)) = y;
+	*get_left_child(y) = x;
+	*get_parent(x) = y;
+}
+
+void rotate_right(void *x, void **root)
+{
+	void *y = *get_left_child(x);
+	*get_left_child(x) = *get_right_child(y);
+	if (*get_right_child(y) != get_nil_node())
+		*get_parent(*get_right_child(y)) = x;
+	*get_parent(y) = *get_parent(x);
+	if (*get_parent(x) == get_nil_node())
+		*root = y;
+	else if (x == *get_right_child(*get_parent(x)))
+		*get_right_child(*get_parent(x)) = y;
+	else
+		*get_left_child(*get_parent(x)) = y;
+	*get_right_child(y) = x;
+	*get_parent(x) = y;
+}
+
+void _insert_recursive(void **root, void *n)
+{
+	if (*root != get_nil_node() && get_block_size(*root) < get_block_size(n))
+	{
+		if (*get_left_child(*root) != get_nil_node())
+			return _insert_recursive(get_left_child(*root), n);
+		else
+			*get_left_child(*root) = n;
+	}
+	else if (*root != get_nil_node())
+	{
+		if (*get_right_child(*root) != get_nil_node())
+			return _insert_recursive(get_right_child(*root), n);
+		else
+			*get_right_child(*root) = n;
+	}
+	*get_parent(n) = *root;
+	*get_color(n) = RED;
+	*get_left_child(n) = get_nil_node();
+	*get_right_child(n) = get_nil_node();
+}
+
+void _insert_fixup(void *k, void **root)
+{
+	void *u;
+
+	while (*get_color(*get_parent(k)) == RED)
+	{
+		if (*get_parent(k) == *get_right_child(*get_parent(get_parent(k))))
+		{
+			u = *get_left_child(*get_parent(get_parent(k)));
+			if (*get_color(u) == RED)
+			{
+				*get_color(u) = BLACK;
+				*get_color(*get_parent(k)) = BLACK;
+				*get_color(*get_parent(get_parent(k))) = RED;
+				k = *get_parent(get_parent(k));
+			}
+			else
+			{
+				if (k == *get_left_child(*get_parent(k)))
+				{
+					k = *get_parent(k);
+					rotate_right(k, root);
+				}
+				*get_color(*get_parent(k)) = BLACK;
+				*get_color(*get_parent(get_parent(k))) = RED;
+				rotate_left(*get_parent(get_parent(k)), root);
+			}
+		}
+		else
+		{
+			u = *get_right_child(*get_parent(get_parent(k)));
+
+			if (*get_color(u) == RED)
+			{
+				*get_color(u) = BLACK;
+				*get_color(*get_parent(k)) = BLACK;
+				*get_color(*get_parent(get_parent(k))) = RED;
+				k = *get_parent(get_parent(k));
+			}
+			else
+			{
+				if (k == *get_right_child(*get_parent(k)))
+				{
+					k = *get_parent(k);
+					rotate_left(k, root);
+				}
+				*get_color(*get_parent(k)) = BLACK;
+				*get_color(*get_parent(get_parent(k))) = RED;
+				rotate_right(*get_parent(get_parent(k)), root);
+			}
+		}
+		if (*root == k)
+			break;
+	}
+	*get_color(*root) = BLACK;
+}
+
+void insert_free_block(void *block)
+{
+	if (is_allocated(block))
+	{
+		printf("error: insert_free_block: block is allocated\n");
+		exit(EXIT_FAILURE);
+	}
+
+	free_tree_t *free_trees = get_free_trees();
+	void *area = get_or_create_area();
+
+	*get_parent(block) = get_nil_node();
+	*get_left_child(block) = get_nil_node();
+	*get_right_child(block) = get_nil_node();
+	*get_color(block) = RED;
+
+	if (get_block_size(block) <= TINY_MAX_SIZE)
+	{
+		// insert in tiny tree
+		return ;
+	}
+	
+	if (get_block_size(block) <= SMALL_MAX_SIZE)
+	{
+		// insert in small tree
+		return ;
+	}
+
+	printf("error: insert_free_block: block is too large\n");
+	exit(EXIT_FAILURE);
+}
 
