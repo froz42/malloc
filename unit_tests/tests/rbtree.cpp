@@ -33,3 +33,19 @@ car_test get_free_trees_tests(void)
 	car_assert_cmp(trees->small, nil);
 	car_assert_cmp(trees->tiny, nil);
 }
+
+car_test test_insertion(void)
+{
+	char block[64];
+	char block2[32];
+
+	init_area(block, 64);
+	init_area(block2, 32);
+
+	insert_free_block(block);
+
+	free_tree_t *trees = get_free_trees();
+	void *nil = get_nil_node();
+
+	car_assert_cmp(trees->tiny, nil);
+}
