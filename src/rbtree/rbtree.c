@@ -91,19 +91,19 @@ void rotate_right(void *x, void **root)
 	*get_parent(x) = y;
 }
 
-void _insert_recursive(void **root, void *n)
+void insert_recursive(void **root, void *n)
 {
 	if (*root != get_nil_node() && get_block_size(*root) < get_block_size(n))
 	{
 		if (*get_left_child(*root) != get_nil_node())
-			return _insert_recursive(get_left_child(*root), n);
+			return insert_recursive(get_left_child(*root), n);
 		else
 			*get_left_child(*root) = n;
 	}
 	else if (*root != get_nil_node())
 	{
 		if (*get_right_child(*root) != get_nil_node())
-			return _insert_recursive(get_right_child(*root), n);
+			return insert_recursive(get_right_child(*root), n);
 		else
 			*get_right_child(*root) = n;
 	}
@@ -113,7 +113,7 @@ void _insert_recursive(void **root, void *n)
 	*get_right_child(n) = get_nil_node();
 }
 
-void _insert_fixup(void *k, void **root)
+void insert_fixup(void *k, void **root)
 {
 	void *u;
 
@@ -175,30 +175,32 @@ void insert_free_block(void *block)
 	if (is_allocated(block))
 	{
 		printf("error: insert_free_block: block is allocated\n");
-		exit(EXIT_FAILURE);
+		return ;
 	}
-
-	free_tree_t *free_trees = get_free_trees();
-	void *area = get_or_create_area();
 
 	*get_parent(block) = get_nil_node();
 	*get_left_child(block) = get_nil_node();
 	*get_right_child(block) = get_nil_node();
 	*get_color(block) = RED;
 
+	void **root;
+	free_tree_t *free_trees = get_free_trees();
+
 	if (get_block_size(block) <= TINY_MAX_SIZE)
+		root = &free_trees->tiny;
+	else if (get_block_size(block) <= SMALL_MAX_SIZE)
+		root = &free_trees->small;
+	else
 	{
-		// insert in tiny tree
+		printf("error: insert_free_block: block is too large\n");
 		return ;
 	}
 	
-	if (get_block_size(block) <= SMALL_MAX_SIZE)
-	{
-		// insert in small tree
-		return ;
-	}
+	insert_recursive(root, block);
 
-	printf("error: insert_free_block: block is too large\n");
-	exit(EXIT_FAILURE);
+	if (*get_parent(block) == get_nil_node())
+		*get_color(block) = BLACK;
+	else
+		insert_fixup(root, block);
 }
 
