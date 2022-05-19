@@ -57,6 +57,17 @@ block_ptr get_sibling(void *block)
 		return (*get_left_child(*get_parent(block)));
 }
 
+void transplant(block_ptr u, block_ptr v, block_ptr *root)
+{
+	if (*get_parent(u) == get_nil_node())
+		*root = v;
+	else if (u == *get_left_child(*get_parent(u)))
+		*get_left_child(*get_parent(u)) = v;
+	else
+		*get_right_child(*get_parent(u)) = v;
+	*get_parent(v) = *get_parent(u);
+}
+
 void rotate_left(block_ptr x, block_ptr *root)
 {
 	block_ptr y = *get_right_child(x);
@@ -171,6 +182,122 @@ void insert_fixup(block_ptr *root, block_ptr k)
 	*get_color(*root) = BLACK;
 }
 
+block_ptr minimum(block_ptr x)
+{
+	while (*get_left_child(x) != get_nil_node())
+		x = *get_left_child(x);
+	return (x);
+}
+
+void delete_fixup(block_ptr x, block_ptr *root)
+{
+	block_ptr s;
+
+	while (x != *root && *get_color(x) == BLACK)
+	{
+		if (x == *get_left_child(*get_parent(x)))
+		{
+			s = *get_right_child(*get_parent(x));
+			if (*get_color(s) == RED)
+			{
+				*get_color(s) = BLACK;
+				*get_color(*get_parent(x)) = RED;
+				rotate_left(*get_parent(x), root);
+				s = *get_right_child(*get_parent(x));
+			}
+			if (*get_color(*get_left_child(s)) == BLACK && *get_color(*get_right_child(s)) == BLACK)
+			{
+				*get_color(s) = RED;
+				x = *get_parent(x);
+			}
+			else
+			{
+				if (*get_color(*get_right_child(s)) == BLACK)
+				{
+					*get_color(*get_left_child(s)) = BLACK;
+					*get_color(s) = RED;
+					rotate_right(s, root);
+					s = *get_right_child(*get_parent(x));
+				}
+				*get_color(s) = *get_color(*get_parent(x));
+				*get_color(*get_parent(x)) = BLACK;
+				*get_color(*get_right_child(s)) = BLACK;
+				rotate_left(*get_parent(x), root);
+				x = *root;
+			}
+		}
+		else
+		{
+			s = *get_left_child(*get_parent(x));
+			if (*get_color(s) == RED)
+			{
+				*get_color(s) = BLACK;
+				*get_color(*get_parent(x)) = RED;
+				rotate_right(*get_parent(x), root);
+				s = *get_left_child(*get_parent(x));
+			}
+			if (*get_color(*get_right_child(s)) == BLACK && *get_color(*get_left_child(s)) == BLACK)
+			{
+				*get_color(s) = RED;
+				x = *get_parent(x);
+			}
+			else
+			{
+				if (*get_color(*get_left_child(s)) == BLACK)
+				{
+					*get_color(*get_right_child(s)) = BLACK;
+					*get_color(s) = RED;
+					rotate_left(s, root);
+					s = *get_left_child(*get_parent(x));
+				}
+				*get_color(s) = *get_color(*get_parent(x));
+				*get_color(*get_parent(x)) = BLACK;
+				*get_color(*get_left_child(s)) = BLACK;
+				rotate_right(*get_parent(x), root);
+				x = *root;
+			}
+		}
+	}
+	*get_color(x) = BLACK;
+}
+
+void delete_node(block_ptr z, block_ptr *root)
+{
+	block_ptr y = z;
+	block_ptr x;
+	int y_original_color = *get_color(y);
+	if (*get_left_child(z) == get_nil_node())
+	{
+		x = *get_right_child(z);
+		transplant(z, x, root);
+	}
+	else if (*get_right_child(z) == get_nil_node())
+	{
+		x = *get_left_child(z);
+		transplant(z, x, root);
+	}
+	else
+	{
+		y = minimum(*get_right_child(z));
+		y_original_color = *get_color(y);
+		x = *get_right_child(y);
+		if (*get_parent(y) == z)
+			*get_parent(x) = y;
+		else
+		{
+			transplant(y, *get_right_child(y), root);
+			*get_right_child(y) = *get_right_child(z);
+			*get_parent(*get_right_child(y)) = y;
+		}
+		transplant(z, y, root);
+		*get_left_child(y) = *get_left_child(z);
+		*get_parent(*get_left_child(y)) = y;
+		*get_color(y) = *get_color(z);
+	}
+	if (y_original_color == BLACK)
+		delete_fixup(x, root);
+}
+
 void insert_free_block(block_ptr block)
 {
 	if (is_allocated(block))
@@ -203,4 +330,28 @@ void insert_free_block(block_ptr block)
 		*get_color(block) = BLACK;
 	else
 		insert_fixup(root, block);
+}
+
+void delete_free_block(block_ptr block)
+{
+	if (is_allocated(block))
+	{
+		printf("error: insert_free_block: block is allocated\n");
+		return ;
+	}
+
+	block_ptr *root;
+	free_tree_t *free_trees = get_free_trees();
+
+	if (get_block_size(block) <= TINY_MAX_SIZE)
+		root = &free_trees->tiny;
+	else if (get_block_size(block) <= SMALL_MAX_SIZE)
+		root = &free_trees->small;
+	else
+	{
+		printf("error: insert_free_block: block is too large\n");
+		return ;
+	}
+
+	delete_node(block, root);
 }

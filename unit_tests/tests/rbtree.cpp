@@ -38,9 +38,11 @@ car_test test_insertion(void)
 {
 	char block[128];
 	char block2[64];
+	char block3[62];
 
 	init_area(block, 128);
 	init_area(block2, 64);
+	init_area(block3, 62);
 
 	insert_free_block(block);
 
@@ -66,7 +68,73 @@ car_test test_insertion(void)
 	car_assert_cmp(*get_right_child(block2), nil);
 	car_assert_cmp(*get_color(block2), RED);
 
+	insert_free_block(block3);
+	car_assert_cmp(trees->tiny, (block_ptr)block2);
+	car_assert_cmp(*get_parent(block2), nil);
+	car_assert_cmp(*get_left_child(block2), (block_ptr)block3);
+	car_assert_cmp(*get_right_child(block2), (block_ptr)block);
+	car_assert_cmp(*get_color(block2), BLACK);
+	car_assert_cmp(*get_parent(block3), (block_ptr)block2);
+	car_assert_cmp(*get_left_child(block3), nil);
+	car_assert_cmp(*get_right_child(block3), nil);
+	car_assert_cmp(*get_color(block3), RED);
+
 	// clear changes
 	trees->tiny = nil;
 	trees->small = nil;
+}
+
+car_test test_deletion(void)
+{
+	char block[128];
+	char block2[64];
+	char block3[62];
+
+	init_area(block, 128);
+	init_area(block2, 64);
+	init_area(block3, 62);
+
+	insert_free_block(block);
+	insert_free_block(block2);
+	insert_free_block(block3);
+
+	free_tree_t *trees = get_free_trees();
+	block_ptr nil = get_nil_node();
+
+	delete_free_block((block_ptr)block2);
+	car_assert_cmp(trees->tiny, (block_ptr)block);
+	car_assert_cmp(*get_parent(block), nil);
+	car_assert_cmp(*get_left_child(block), (block_ptr)block3);
+	car_assert_cmp(*get_right_child(block), nil);
+	car_assert_cmp(*get_color(block), BLACK);
+	car_assert_cmp(*get_parent(block3), (block_ptr)block);
+	car_assert_cmp(*get_left_child(block3), nil);
+	car_assert_cmp(*get_right_child(block3), nil);
+	car_assert_cmp(*get_color(block3), RED);
+
+	insert_free_block(block2);
+
+	delete_free_block((block_ptr)block);
+	car_assert_cmp(trees->tiny, (block_ptr)block2);
+	car_assert_cmp(*get_parent(block2), nil);
+	car_assert_cmp(*get_left_child(block2), (block_ptr)block3);
+	car_assert_cmp(*get_right_child(block2), nil);
+	car_assert_cmp(*get_color(block2), BLACK);
+	car_assert_cmp(*get_parent(block3), (block_ptr)block2);
+	car_assert_cmp(*get_left_child(block3), nil);
+	car_assert_cmp(*get_right_child(block3), nil);
+	car_assert_cmp(*get_color(block3), RED);
+
+	insert_free_block(block);
+
+	delete_free_block((block_ptr)block3);
+	car_assert_cmp(trees->tiny, (block_ptr)block2);
+	car_assert_cmp(*get_parent(block2), nil);
+	car_assert_cmp(*get_right_child(block2), (block_ptr)block);
+	car_assert_cmp(*get_left_child(block2), nil);
+	car_assert_cmp(*get_color(block2), BLACK);
+	car_assert_cmp(*get_parent(block), (block_ptr)block2);
+	car_assert_cmp(*get_left_child(block), nil);
+	car_assert_cmp(*get_right_child(block), nil);
+	car_assert_cmp(*get_color(block), RED);
 }

@@ -15,5 +15,6 @@ typedef struct free_tree_s
 block_ptr get_nil_node(void);
 free_tree_t *get_free_trees(void);
 void insert_free_block(block_ptr block);
+void delete_free_block(block_ptr block);
 
 #endif //RBTREE_H
