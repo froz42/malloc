@@ -8,13 +8,12 @@
 
 typedef struct free_tree_s
 {
-	void *tiny;
-	void *small;
+	block_ptr tiny;
+	block_ptr small;
 } free_tree_t;
 
 void *get_nil_node(void);
-void init_rb_node(void *block);
 free_tree_t *get_free_trees(void);
-void insert_free_block(void *block);
+void insert_free_block(block_ptr block);
 
 #endif //RBTREE_H

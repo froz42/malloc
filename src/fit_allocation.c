@@ -5,7 +5,7 @@
 ** @param block: the block to check
 ** @return: 1 if the block is allocated, 0 if the block is free
 */
-int is_allocated(void *block)
+int is_allocated(block_ptr block)
 {
 	return ((*(size_t *)block) & 1);
 }
@@ -14,7 +14,7 @@ int is_allocated(void *block)
 ** set a block as allocated
 ** @param block: the block to set
 */
-void set_allocated(void *block)
+void set_allocated(block_ptr block)
 {
 	*(size_t *)block |= 1;
 }
@@ -26,7 +26,7 @@ void set_allocated(void *block)
 ** @param capacity: the capacity of the area
 ** @return: the block that can fit the size or null if not found
 */
-void *search_fit(void *area, size_t size, size_t capacity)
+block_ptr search_fit(area_ptr area, size_t size, size_t capacity)
 {
 	const void *end = (char *)area + capacity;
 	void *block = area;
@@ -46,11 +46,11 @@ void *search_fit(void *area, size_t size, size_t capacity)
 ** @param size: the size to fit
 ** @return the block that fit the size or NULL if not found
 */
-void *find_fit(void *start, size_t size)
+block_ptr find_fit(area_ptr area, size_t size)
 {
 	if (size <= TINY_MAX_SIZE)
-		return (search_fit(get_tiny_area(start), size, TINY_CAPACITY));
+		return (search_fit(get_tiny_area(area), size, TINY_CAPACITY));
 	else if (size <= SMALL_MAX_SIZE)
-		return (search_fit(get_small_area(start), size, SMALL_CAPACITY));
+		return (search_fit(get_small_area(area), size, SMALL_CAPACITY));
 	return NULL;
 }

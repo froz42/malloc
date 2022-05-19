@@ -3,7 +3,7 @@
 #include "malloc.h"
 
 
-void init_area(void *area, size_t size)
+void init_area(area_ptr area, size_t size)
 {
 	*(size_t *)area = size - sizeof(void *) * 2;
 	*get_prev_block(area) = NULL;
@@ -18,7 +18,7 @@ void init_area(void *area, size_t size)
 */
 void *get_or_create_area()
 {
-	static void *area = NULL;
+	static area_ptr area = NULL;
 
 	if (area == NULL)
 	{
@@ -37,8 +37,8 @@ void *get_or_create_area()
 
 void *ft_malloc(size_t size)
 {
-	void *start = get_or_create_area();
-	void *block;
+	area_ptr start = get_or_create_area();
+	block_ptr block;
 
 	if (start == NULL)
 		return NULL;

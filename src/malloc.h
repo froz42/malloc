@@ -5,6 +5,9 @@
 #  define MAP_ANONYMOUS	0x20
 # endif
 
+typedef void* block_ptr;
+typedef void* area_ptr;
+
 # include "fit_allocation.h"
 # include "data_access.h"
 # include "rbtree/rbtree.h"
@@ -25,8 +28,8 @@
 // minimal size is the size minimal to store rbtree node
 # define MINIMAL_SIZE ALLIGN_16(sizeof(size_t) + (sizeof(void *) * 4) + sizeof(int))
 
-void init_area(void *area, size_t size);
-void *get_or_create_area();
+void init_area(area_ptr area, size_t size);
+area_ptr get_or_create_area();
 void *ft_malloc(size_t size);
 
 #endif
