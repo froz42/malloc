@@ -137,4 +137,11 @@ car_test test_deletion(void)
 	car_assert_cmp(*get_left_child(block), nil);
 	car_assert_cmp(*get_right_child(block), nil);
 	car_assert_cmp(*get_color(block), RED);
+
+	delete_free_block((block_ptr)block2);
+	delete_free_block((block_ptr)block);
+	delete_free_block((block_ptr)block3);
+
+	car_assert_cmp(trees->tiny, nil);
+	car_assert_cmp(trees->small, nil);
 }
