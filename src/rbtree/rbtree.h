@@ -16,5 +16,6 @@ block_ptr get_nil_node(void);
 free_tree_t *get_free_trees(void);
 void insert_free_block(block_ptr block);
 void delete_free_block(block_ptr block);
+block_ptr find_best_fit(size_t size);
 
 #endif //RBTREE_H
