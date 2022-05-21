@@ -18,4 +18,7 @@ block_ptr *get_left_child(block_ptr block);
 block_ptr *get_right_child(block_ptr block);
 block_ptr *get_parent(block_ptr block);
 int *get_color(void *block);
+
+int is_allocated(block_ptr block);
+void set_allocated(block_ptr block);
 #endif // DATA_ACCESS_H

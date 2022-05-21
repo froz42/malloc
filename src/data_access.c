@@ -152,3 +152,22 @@ area_ptr get_large_area(void *start)
 {
 	return ((char *)start + TINY_CAPACITY + SMALL_CAPACITY);
 }
+
+/*
+** check if a block is allocated
+** @param block: the block to check
+** @return: 1 if the block is allocated, 0 if the block is free
+*/
+int is_allocated(block_ptr block)
+{
+	return ((*(size_t *)block) & 1);
+}
+
+/*
+** set a block as allocated
+** @param block: the block to set
+*/
+void set_allocated(block_ptr block)
+{
+	*(size_t *)block |= 1;
+}

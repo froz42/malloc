@@ -8,7 +8,6 @@
 typedef void* block_ptr;
 typedef void* area_ptr;
 
-# include "fit_allocation.h"
 # include "data_access.h"
 # include "rbtree/rbtree.h"
 
