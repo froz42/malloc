@@ -32,4 +32,21 @@ car_test test_split_block(void)
 	car_assert_cmp(*get_prev_block(new_block3), (block_ptr)area);
 	car_assert_cmp(get_next_block(new_block3), new_block);
 	car_assert_cmp(*get_prev_block(new_block), new_block3);
+
+	// check all block
+	car_assert_cmp(get_block_size(area), 100u);
+	car_assert_cmp(get_next_block(area), new_block3);
+	car_assert_cmp(*get_prev_block(area), (block_ptr)NULL);
+
+	car_assert_cmp(get_block_size(new_block3), 84u);
+	car_assert_cmp(get_next_block(new_block3), new_block);
+	car_assert_cmp(*get_prev_block(new_block3), area);
+
+	car_assert_cmp(get_block_size(new_block), 200u);
+	car_assert_cmp(get_next_block(new_block), new_block2);
+	car_assert_cmp(*get_prev_block(new_block), new_block3);
+
+	car_assert_cmp(get_block_size(new_block2), 1600u);
+	car_assert_cmp(get_next_block(new_block2), (block_ptr)&area[sizeof(area)]);
+	car_assert_cmp(*get_prev_block(new_block2), new_block);
 }
