@@ -50,3 +50,35 @@ car_test test_split_block(void)
 	car_assert_cmp(get_next_block(new_block2), (block_ptr)&area[sizeof(area)]);
 	car_assert_cmp(*get_prev_block(new_block2), new_block);
 }
+
+car_test test_merge_next_block(void)
+{
+	char area[2048];
+	init_area(area, 2048);
+
+	split_block(area, 500, &area[sizeof(area)]);
+
+	car_assert_cmp(get_block_size(area), 500u);
+	car_assert_cmp(get_block_size(get_next_block(area)), 2048 - (2 * (sizeof(void *) + sizeof(size_t))) - 500);
+
+	merge_next_block(area, &area[sizeof(area)]);
+
+	car_assert_cmp(get_block_size(area), 2048 - (sizeof(void *) + sizeof(size_t)));
+	car_assert_cmp(*get_prev_block(area), (block_ptr)NULL);
+
+	block_ptr new_block1 = split_block(area, 500, &area[sizeof(area)]);
+	split_block(area, 200, &area[sizeof(area)]);
+
+	merge_next_block(area, &area[sizeof(area)]);
+
+	car_assert_cmp(get_block_size(area), 500u);
+	car_assert_cmp(*get_prev_block(area), (block_ptr)NULL);
+	car_assert_cmp(get_next_block(area), new_block1);
+	car_assert_cmp(*get_prev_block(new_block1), area);
+
+	merge_next_block(area, &area[sizeof(area)]);
+
+	car_assert_cmp(get_block_size(area), 2048 - (sizeof(void *) + sizeof(size_t)));
+	
+
+}

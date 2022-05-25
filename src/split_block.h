@@ -4,5 +4,5 @@
 #include "malloc.h"
 
 block_ptr split_block(block_ptr block, size_t size, void *areaend);
-
+void merge_next_block(block_ptr block_a, void *areaend);
 #endif

@@ -29,3 +29,17 @@ block_ptr split_block(block_ptr block, size_t size, void *areaend)
 	return (new_block);
 }
 
+void merge_next_block(block_ptr block_a, void *areaend)
+{
+	block_ptr block_b = get_next_block(block_a);
+	block_ptr prev = *get_prev_block(block_a);
+	block_ptr next = get_next_block(block_b);
+
+	set_block_size(block_a,
+		get_block_size(block_a)
+		+ get_block_size(block_b)
+		+ sizeof(size_t) + sizeof(void *));
+	*get_prev_block(block_a) = prev;
+	if (next < areaend)
+		*get_prev_block(next) = block_a;
+}
