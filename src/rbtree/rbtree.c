@@ -70,7 +70,8 @@ void transplant(block_ptr u, block_ptr v, block_ptr *root)
 
 void rotate_left(block_ptr x, block_ptr *root)
 {
-	block_ptr y = *get_right_child(x);
+	block_ptr const y = *get_right_child(x);
+
 	*get_right_child(x) = *get_left_child(y);
 	if (*get_left_child(y) != get_nil_node())
 		*get_parent(*get_left_child(y)) = x;
@@ -87,7 +88,8 @@ void rotate_left(block_ptr x, block_ptr *root)
 
 void rotate_right(block_ptr x, block_ptr *root)
 {
-	block_ptr y = *get_left_child(x);
+	block_ptr const y = *get_left_child(x);
+
 	*get_left_child(x) = *get_right_child(y);
 	if (*get_right_child(y) != get_nil_node())
 		*get_parent(*get_right_child(y)) = x;
@@ -315,7 +317,7 @@ block_ptr find_best_fit(size_t size)
 	block_ptr *root = get_proper_root(size);
 	block_ptr best_fit = NULL;
 	block_ptr current = *root;
-	block_ptr nil = get_nil_node();
+	block_ptr const nil = get_nil_node();
 
 	while (current != nil)
 	{
@@ -371,7 +373,7 @@ void delete_free_block(block_ptr block)
 	}
 
 	block_ptr *root;
-	free_tree_t *free_trees = get_free_trees();
+	free_tree_t * const free_trees = get_free_trees();
 
 	if (get_block_size(block) <= TINY_MAX_SIZE)
 		root = &free_trees->tiny;

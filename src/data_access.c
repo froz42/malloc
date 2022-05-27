@@ -26,7 +26,7 @@ size_t get_block_size(block_ptr block)
 
 void set_block_size(block_ptr block, size_t size)
 {
-	int allocated = is_allocated(block);
+	int const allocated = is_allocated(block);
 	*(size_t *)block = size | (allocated & 1);
 }
 
