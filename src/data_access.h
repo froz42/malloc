@@ -21,4 +21,7 @@ int *get_color(void *block);
 
 int is_allocated(block_ptr block);
 void set_allocated(block_ptr block);
+
+block_ptr get_block_from_data(void *data);
+
 #endif // DATA_ACCESS_H

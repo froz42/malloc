@@ -29,7 +29,7 @@ typedef void* area_ptr;
 # define MINIMAL_SIZE ALLIGN_16(sizeof(size_t) + (sizeof(void *) * 4) + sizeof(int))
 
 void init_area(area_ptr area, size_t size);
-area_ptr get_or_create_area();
+area_ptr get_or_create_area(void);
 void *ft_malloc(size_t size);
 
 #endif

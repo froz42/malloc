@@ -34,29 +34,6 @@ free_tree_t *get_free_trees(void)
 	return (&free_trees);
 }
 
-block_ptr get_grand_parent(void *block)
-{
-	if (is_allocated(block))
-	{
-		printf("error: grand_parent: block is allocated\n");
-		exit(EXIT_FAILURE);
-	}
-	return (*get_parent(*get_parent(block)));
-}
-
-block_ptr get_sibling(void *block)
-{
-	if (is_allocated(block))
-	{
-		printf("error: get_sibling: block is allocated\n");
-		exit(EXIT_FAILURE);
-	}
-	if (*get_parent(block) == *get_left_child(*get_parent(block)))
-		return (*get_right_child(*get_parent(block)));
-	else
-		return (*get_left_child(*get_parent(block)));
-}
-
 void transplant(block_ptr u, block_ptr v, block_ptr *root)
 {
 	if (*get_parent(u) == get_nil_node())

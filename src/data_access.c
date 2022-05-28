@@ -171,3 +171,8 @@ void set_allocated(block_ptr block)
 {
 	*(size_t *)block |= 1;
 }
+
+block_ptr get_block_from_data(void *data)
+{
+	return ((block_ptr)((char *)data - sizeof(size_t)));
+}

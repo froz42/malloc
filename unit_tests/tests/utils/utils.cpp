@@ -27,6 +27,13 @@ car_test test_get_or_create_area(void)
 
 	car_assert_cmp(area, area2);
 
+	free_tree_t *trees = get_free_trees();
 
+	car_assert_cmp(trees->tiny, tiny_area);
+	car_assert_cmp(trees->small, small_area);
 
+	block_ptr nil = get_nil_node();
+
+	trees->tiny = nil;
+	trees->small = nil;
 }
