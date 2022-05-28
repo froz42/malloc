@@ -312,9 +312,8 @@ block_ptr *get_proper_root(size_t size)
 		return (NULL);
 }
 
-block_ptr find_best_fit(size_t size)
+block_ptr find_best_fit(size_t size, block_ptr *root)
 {
-	block_ptr *root = get_proper_root(size);
 	block_ptr best_fit = NULL;
 	block_ptr current = *root;
 	block_ptr const nil = get_nil_node();
@@ -336,7 +335,7 @@ block_ptr find_best_fit(size_t size)
 	return (best_fit);
 }
 
-void insert_free_block(block_ptr block)
+void insert_free_block(block_ptr block, block_ptr *root)
 {
 	if (is_allocated(block))
 	{
@@ -349,13 +348,6 @@ void insert_free_block(block_ptr block)
 	*get_right_child(block) = get_nil_node();
 	*get_color(block) = RED;
 
-	block_ptr *root = get_proper_root(get_block_size(block));
-	if (!root)
-	{
-		printf("error: get_proper_root: error while getting root\n");
-		return ;
-	}
-	
 	insert_recursive(root, block);
 
 	if (*get_parent(block) == get_nil_node())
@@ -364,24 +356,11 @@ void insert_free_block(block_ptr block)
 		insert_fixup(root, block);
 }
 
-void delete_free_block(block_ptr block)
+void delete_free_block(block_ptr block, block_ptr *root)
 {
 	if (is_allocated(block))
 	{
 		printf("error: insert_free_block: block is allocated\n");
-		return ;
-	}
-
-	block_ptr *root;
-	free_tree_t * const free_trees = get_free_trees();
-
-	if (get_block_size(block) <= TINY_MAX_SIZE)
-		root = &free_trees->tiny;
-	else if (get_block_size(block) <= SMALL_MAX_SIZE)
-		root = &free_trees->small;
-	else
-	{
-		printf("error: insert_free_block: block is too large\n");
 		return ;
 	}
 
