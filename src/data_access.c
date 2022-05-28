@@ -75,6 +75,12 @@ block_ptr *get_prev_block(block_ptr block)
 	return (void **)((char *)get_block_data(block) + get_block_size(block));
 }
 
+block_ptr *get_off_map_next_block(block_ptr block)
+{
+	return (void **)((char *)get_block_data(block) + get_block_size(block));
+}
+
+
 /*
 ** get the left child of the block node
 ** |--------------------------------------------|

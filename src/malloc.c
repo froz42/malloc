@@ -53,6 +53,14 @@ void *get_area_end(area_ptr area, size_t size)
 	return NULL;
 }
 
+void *handle_off_heap(size_t size, void *area_end)
+{
+	const block_ptr new_block = new_off_map_block(size, area_end);
+	if (new_block == NULL)
+		return NULL;
+	return get_block_data(new_block);
+}
+
 void *ft_malloc(size_t size)
 {
 	size = ALLIGN_16(size);
@@ -65,17 +73,11 @@ void *ft_malloc(size_t size)
 	block_ptr *root = get_proper_root(size);
 	
 	if (!root)
-	{
-		printf("not implemented\n");
-		return NULL;
-	}
+		return handle_off_heap(size, get_large_area(area));
 
 	block_ptr best_fit = find_best_fit(size, root);
 	if (!best_fit)
-	{
-		printf("not implemented\n");
-		return NULL;
-	}
+		return handle_off_heap(size, get_large_area(area));
 
 	delete_free_block(best_fit, root);
 	if (get_block_size(best_fit) - size > MINIMAL_SIZE)

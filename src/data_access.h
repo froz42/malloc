@@ -9,6 +9,7 @@ void set_block_size(block_ptr block, size_t size);
 void *get_block_data(block_ptr block);
 block_ptr get_next_block(block_ptr block);
 block_ptr *get_prev_block(block_ptr block);
+block_ptr *get_off_map_next_block(block_ptr block);
 
 area_ptr get_tiny_area(void *start);
 area_ptr get_small_area(void *start);
