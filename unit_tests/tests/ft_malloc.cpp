@@ -74,8 +74,8 @@ car_test test_off_heap(void)
 	block_ptr block1 = get_block_from_data(alloc1);
 	block_ptr block2 = get_block_from_data(alloc2);
 
-	car_assert_cmp(get_block_size(block1), ALLIGN_16(SMALL_MAX_SIZE + 1u) + 16);
-	car_assert_cmp(get_block_size(block2), ALLIGN_16(SMALL_MAX_SIZE * 2u) + 16);
+	car_assert_cmp(get_block_size(block1), ALLIGN_16(SMALL_MAX_SIZE + 1u));
+	car_assert_cmp(get_block_size(block2), ALLIGN_16(SMALL_MAX_SIZE * 2u));
 
 	trees->tiny = nil;
 	trees->small = nil;
