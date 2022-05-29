@@ -42,7 +42,8 @@ void transplant(block_ptr u, block_ptr v, block_ptr *root)
 		*get_left_child(*get_parent(u)) = v;
 	else
 		*get_right_child(*get_parent(u)) = v;
-	*get_parent(v) = *get_parent(u);
+	if (*get_parent(v) != get_nil_node())
+		*get_parent(v) = *get_parent(u);
 }
 
 void rotate_left(block_ptr x, block_ptr *root)
@@ -261,7 +262,10 @@ void delete_node(block_ptr z, block_ptr *root)
 		y_original_color = *get_color(y);
 		x = *get_right_child(y);
 		if (*get_parent(y) == z)
-			*get_parent(x) = y;
+		{
+			if (x != get_nil_node())
+				*get_parent(x) = y;
+		}
 		else
 		{
 			transplant(y, *get_right_child(y), root);
