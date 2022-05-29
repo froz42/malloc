@@ -30,6 +30,11 @@ void set_block_size(block_ptr block, size_t size)
 	*(size_t *)block = size | (allocated & 1);
 }
 
+void set_raw_block_size(block_ptr block, size_t size)
+{
+	*(size_t *)block = size;
+}
+
 /*
 ** get block data
 ** |-------------------|
@@ -176,6 +181,11 @@ int is_allocated(block_ptr block)
 void set_allocated(block_ptr block)
 {
 	*(size_t *)block |= 1;
+}
+
+void set_free(block_ptr block)
+{
+	*(size_t *)block &= ~1;
 }
 
 block_ptr get_block_from_data(void *data)

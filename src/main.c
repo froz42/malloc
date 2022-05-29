@@ -4,6 +4,5 @@
 
 int main(void)
 {
-	void *data = ft_malloc(60);
-	printf("%p\n", data);
+	printf("%zu", TINY_CAPACITY);
 }

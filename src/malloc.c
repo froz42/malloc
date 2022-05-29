@@ -6,7 +6,7 @@
 
 void init_area(area_ptr area, size_t size)
 {
-	*(size_t *)area = size - sizeof(void *) * 2;
+	set_raw_block_size(area, size - sizeof(void *) * 2);
 	*get_prev_block(area) = NULL;
 }
 
@@ -53,12 +53,17 @@ void *get_area_end(area_ptr area, size_t size)
 	return NULL;
 }
 
-void *handle_off_heap(size_t size, void *area_end)
+void *handle_off_map(size_t size, void *area_end)
 {
 	const block_ptr new_block = new_off_map_block(size, area_end);
 	if (new_block == NULL)
 		return NULL;
 	return get_block_data(new_block);
+}
+
+int is_off_map(void *data, area_ptr area)
+{
+	return (data < area || data >= get_large_area(area));
 }
 
 void *ft_malloc(size_t size)
@@ -73,18 +78,47 @@ void *ft_malloc(size_t size)
 	block_ptr *root = get_proper_root(size);
 	
 	if (!root)
-		return handle_off_heap(size, get_large_area(area));
+		return handle_off_map(size, get_large_area(area));
 
 	block_ptr best_fit = find_best_fit(size, root);
 	if (!best_fit)
-		return handle_off_heap(size, get_large_area(area));
+		return handle_off_map(size, get_large_area(area));
 
 	delete_free_block(best_fit, root);
 	if (get_block_size(best_fit) - size > MINIMAL_SIZE)
 	{
 		block_ptr new_block = split_block(best_fit, size, get_area_end(area, size));
+		printf("size: %zu\n", get_block_size(new_block));
+		printf("is allocated: %d\n", is_allocated(new_block));
 		insert_free_block(new_block, root);
 	}
 	set_allocated(best_fit);
 	return get_block_data(best_fit);
+}
+
+
+
+void ft_free(void *data)
+{
+	if (data == NULL)
+		return;
+
+	area_ptr area = get_or_create_area();
+	block_ptr block = get_block_from_data(data);
+
+	if (!is_allocated(block))
+		return;
+	
+	if (is_off_map(block, area))
+	{
+		printf("error: not implemented\n");
+		return;
+	}
+
+	set_free(block);
+
+	block_ptr *root = get_proper_root(get_block_size(block));
+
+	block_ptr new_block = unfrag_block(block, get_large_area(area), root);
+	insert_free_block(new_block, root);
 }

@@ -7,6 +7,8 @@
 size_t get_block_size(block_ptr block);
 void set_block_size(block_ptr block, size_t size);
 void *get_block_data(block_ptr block);
+void set_raw_block_size(block_ptr block, size_t size);
+
 block_ptr get_next_block(block_ptr block);
 block_ptr *get_prev_block(block_ptr block);
 block_ptr *get_off_map_next_block(block_ptr block);
@@ -22,6 +24,7 @@ int *get_color(void *block);
 
 int is_allocated(block_ptr block);
 void set_allocated(block_ptr block);
+void set_free(block_ptr block);
 
 block_ptr get_block_from_data(void *data);
 
