@@ -12,6 +12,7 @@ typedef void* area_ptr;
 # include "rbtree/rbtree.h"
 # include "split_block.h"
 # include "off_map.h"
+# include "unfrag.h"
 
 # define TINY_MAX_SIZE 256 // max size in bytes for tiny area
 # define SMALL_MAX_SIZE 1024 // max size in bytes for small area

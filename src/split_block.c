@@ -29,7 +29,7 @@ block_ptr split_block(block_ptr block, size_t size, void *areaend)
 	return (new_block);
 }
 
-void merge_next_block(block_ptr block_a, void *areaend)
+void merge_next_block(block_ptr block_a, void *area_end)
 {
 	block_ptr const block_b = get_next_block(block_a);
 	block_ptr const prev = *get_prev_block(block_a);
@@ -40,6 +40,6 @@ void merge_next_block(block_ptr block_a, void *areaend)
 		+ get_block_size(block_b)
 		+ sizeof(size_t) + sizeof(void *));
 	*get_prev_block(block_a) = prev;
-	if (next < areaend)
+	if (next < area_end)
 		*get_prev_block(next) = block_a;
 }
