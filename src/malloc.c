@@ -88,8 +88,6 @@ void *ft_malloc(size_t size)
 	if (get_block_size(best_fit) - size > MINIMAL_SIZE)
 	{
 		block_ptr new_block = split_block(best_fit, size, get_area_end(area, size));
-		printf("size: %zu\n", get_block_size(new_block));
-		printf("is allocated: %d\n", is_allocated(new_block));
 		insert_free_block(new_block, root);
 	}
 	set_allocated(best_fit);

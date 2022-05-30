@@ -5,9 +5,6 @@ void reset_area(void)
 {
 	area_ptr area = get_or_create_area();
 
-	printf("size of area: %zu\n", get_block_size(area));
-
-
 	block_ptr const tiny_area = get_tiny_area(area);
 	block_ptr const small_area = get_small_area(area);
 
@@ -92,20 +89,32 @@ car_test test_ft_free(void)
 	area_ptr area = get_or_create_area();
 
 
-	printf("size of area: %zu\n", get_block_size(area));
 	free_tree_t *trees = get_free_trees();
 
-	printf("size of tiny block: %zu\n", get_block_size(trees->tiny));
 
 
 	void *alloc1 = ft_malloc(50);
-
-
 
 	block_ptr block1 = get_block_from_data(alloc1);
 
 	car_assert_cmp(area, block1);
 
 	car_assert(alloc1 != NULL);
-	//ft_free(alloc1);
+	ft_free(alloc1);
+
+	car_assert_cmp(trees->tiny, area);
+
+	void *alloc2 = ft_malloc(50);
+	void *alloc3 = ft_malloc(50);
+	void *alloc4 = ft_malloc(50);
+
+	car_assert(alloc2 != NULL);
+	car_assert(alloc3 != NULL);
+	car_assert(alloc4 != NULL);
+
+	ft_free(alloc2);
+	ft_free(alloc3);
+	ft_free(alloc4);
+
+	car_assert_cmp(trees->tiny, area);
 }
