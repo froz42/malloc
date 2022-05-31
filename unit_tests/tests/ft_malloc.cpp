@@ -1,5 +1,6 @@
 #include "../car.hpp"
 #include <stdio.h>
+#include <string.h>
 
 void reset_area(void)
 {
@@ -117,4 +118,75 @@ car_test test_ft_free(void)
 	ft_free(alloc4);
 
 	car_assert_cmp(trees->tiny, area);
+}
+
+car_test test_off_map_ft_free(void)
+{
+	reset_area();
+
+	void *alloc1 = ft_malloc(SMALL_MAX_SIZE * 2);
+
+	car_assert(alloc1 != NULL);
+
+	block_ptr block1 = get_block_from_data(alloc1);
+
+	area_ptr area = get_or_create_area();
+
+	car_assert(area != block1);
+	car_assert(get_small_area(area) != block1);
+
+	ft_free(alloc1);
+}
+
+car_test tiny_alloc_stress_test(void)
+{
+	reset_area();
+
+	void *alloc[500];
+
+	for (int i = 0; i < 500; i++)
+	{
+		alloc[i] = ft_malloc(TINY_MAX_SIZE);
+		memset(alloc[i], 0, TINY_MAX_SIZE);
+	}
+	
+	for (int i = 0; i < 500; i++)
+		ft_free(alloc[i]);
+
+	free_tree_t *trees = get_free_trees();
+	area_ptr area = get_or_create_area();
+	
+	car_assert(trees->tiny == area);
+
+	for (int i = 0; i < 500; i++)
+	{
+		alloc[i] = ft_malloc(TINY_MAX_SIZE);
+		memset(alloc[i], 0, TINY_MAX_SIZE);
+	}
+	
+	for (int i = 0; i < 500; i++)
+		ft_free(alloc[i]);
+
+	car_assert(trees->tiny == area);
+}
+
+car_test small_alloc_stress_test(void)
+{
+	reset_area();
+
+	void *alloc[500];
+
+	for (int i = 0; i < 500; i++)
+	{
+		alloc[i] = ft_malloc(SMALL_MAX_SIZE);
+		memset(alloc[i], 0, SMALL_MAX_SIZE);
+	}
+	
+	for (int i = 0; i < 500; i++)
+		ft_free(alloc[i]);
+
+	area_ptr area = get_or_create_area();
+	free_tree_t *trees = get_free_trees();
+
+	car_assert(trees->small == get_small_area(area));
 }

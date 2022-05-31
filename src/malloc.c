@@ -108,10 +108,7 @@ void ft_free(void *data)
 		return;
 	
 	if (is_off_map(block, area))
-	{
-		printf("error: not implemented\n");
-		return;
-	}
+		return remove_off_map_block(block);
 
 	set_free(block);
 
