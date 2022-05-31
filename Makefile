@@ -6,7 +6,7 @@
 #    By: tmatis <tmatis@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2022/05/29 12:36:52 by tmatis           ###   ########.fr        #
+#    Updated: 2022/05/31 15:28:08 by tmatis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,10 +14,13 @@
 #                                     CONFIG                                   #
 ################################################################################
 
+ifeq ($(HOSTTYPE),)
+	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
+endif
 
-NAME	= malloc
+NAME 	= libft_malloc_$(HOSTTYPE).so
 CC 		= clang
-CFLAGS	= -Wall -Wextra -Werror -g
+CFLAGS	= -Wall -Wextra -Werror -g -fPIC
 DFLAGS	= -MMD -MF $(@:.o=.d)
 AUTHOR	= tmatis
 DATE	= 13/04/2022
@@ -37,7 +40,6 @@ INCLUDE_PATH	= ./src
 SRCS			= malloc.c data_access.c rbtree/rbtree.c split_block.c off_map.c \
 					unfrag.c
 
-MAIN			= main.c
 
 ################################################################################
 #                                  Makefile  objs                              #
@@ -47,9 +49,7 @@ SHELL := /bin/bash
 
 
 OBJS				= $(addprefix objs/, ${SRCS:$(FILE_EXTENSION)=.o})
-OBJ_MAIN			= $(addprefix objs/, ${MAIN:$(FILE_EXTENSION)=.o})
 DEPS				= $(addprefix objs/, ${SRCS:$(FILE_EXTENSION)=.d})
-DEPS_MAIN			= $(addprefix objs/, ${MAIN:$(FILE_EXTENSION)=.d})
 
 ################################################################################
 #                                 Makefile logic                               #
@@ -223,9 +223,9 @@ endif
 
 
 -include $(DEPS) $(DEPS_MAIN)
-$(NAME):	${OBJS} ${OBJ_MAIN}
+$(NAME):	${OBJS}
 			@$(call display_progress_bar)
-			@$(call run_and_test,$(CC) $(CFLAGS) $(DFLAGS) -I$(INCLUDE_PATH) -o $@ ${OBJS} ${OBJ_MAIN})
+			@$(call run_and_test,$(CC) $(CFLAGS) $(DFLAGS) -I$(INCLUDE_PATH) -shared -o $@ ${OBJS})
 			@echo "                                                              "
 
 setup:

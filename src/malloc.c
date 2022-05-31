@@ -2,6 +2,7 @@
 #include <sys/mman.h>
 #include "malloc.h"
 #include <stdio.h>
+#include <string.h>
 
 
 void init_area(area_ptr area, size_t size)
@@ -66,12 +67,14 @@ int is_off_map(void *data, area_ptr area)
 	return (data < area || data >= get_large_area(area));
 }
 
-void *ft_malloc(size_t size)
+void *malloc(size_t size)
 {
 	size = ALLIGN_16(size);
 	
 	if (size < MINIMAL_SIZE)
 		size = MINIMAL_SIZE;
+
+	write(1, "malloc\n", 7);
 
 	area_ptr area = get_or_create_area();
 
@@ -94,9 +97,7 @@ void *ft_malloc(size_t size)
 	return get_block_data(best_fit);
 }
 
-
-
-void ft_free(void *data)
+void free(void *data)
 {
 	if (data == NULL)
 		return;

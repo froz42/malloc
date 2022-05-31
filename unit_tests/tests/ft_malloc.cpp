@@ -22,14 +22,14 @@ void reset_area(void)
 	insert_free_block(small_area, &trees->small);
 }
 
-car_test test_ft_malloc(void)
+car_test test_malloc(void)
 {
 	reset_area();
 
 	free_tree_t *trees = get_free_trees();
 	block_ptr nil = get_nil_node();
 
-	void *alloc1 = ft_malloc(50);
+	void *alloc1 = malloc(50);
 
 	car_assert(alloc1 != NULL);
 
@@ -39,7 +39,7 @@ car_test test_ft_malloc(void)
 
 	car_assert_cmp(is_allocated(block1), true);
 
-	void *alloc2 = ft_malloc(50);
+	void *alloc2 = malloc(50);
 
 	car_assert(alloc2 != NULL);
 
@@ -65,11 +65,11 @@ void test_off_heap(void)
 	free_tree_t *trees = get_free_trees();
 	block_ptr nil = get_nil_node();
 
-	void *alloc1 = ft_malloc(SMALL_MAX_SIZE + 1);
+	void *alloc1 = malloc(SMALL_MAX_SIZE + 1);
 
 	car_assert(alloc1 != NULL);
 
-	void *alloc2 = ft_malloc(SMALL_MAX_SIZE * 2);
+	void *alloc2 = malloc(SMALL_MAX_SIZE * 2);
 
 	car_assert(alloc2 != NULL);
 
@@ -83,7 +83,7 @@ void test_off_heap(void)
 	trees->small = nil;
 }
 
-car_test test_ft_free(void)
+car_test test_free(void)
 {
 	reset_area();
 
@@ -94,37 +94,37 @@ car_test test_ft_free(void)
 
 
 
-	void *alloc1 = ft_malloc(50);
+	void *alloc1 = malloc(50);
 
 	block_ptr block1 = get_block_from_data(alloc1);
 
 	car_assert_cmp(area, block1);
 
 	car_assert(alloc1 != NULL);
-	ft_free(alloc1);
+	free(alloc1);
 
 	car_assert_cmp(trees->tiny, area);
 
-	void *alloc2 = ft_malloc(50);
-	void *alloc3 = ft_malloc(50);
-	void *alloc4 = ft_malloc(50);
+	void *alloc2 = malloc(50);
+	void *alloc3 = malloc(50);
+	void *alloc4 = malloc(50);
 
 	car_assert(alloc2 != NULL);
 	car_assert(alloc3 != NULL);
 	car_assert(alloc4 != NULL);
 
-	ft_free(alloc2);
-	ft_free(alloc3);
-	ft_free(alloc4);
+	free(alloc2);
+	free(alloc3);
+	free(alloc4);
 
 	car_assert_cmp(trees->tiny, area);
 }
 
-car_test test_off_map_ft_free(void)
+car_test test_off_map_free(void)
 {
 	reset_area();
 
-	void *alloc1 = ft_malloc(SMALL_MAX_SIZE * 2);
+	void *alloc1 = malloc(SMALL_MAX_SIZE * 2);
 
 	car_assert(alloc1 != NULL);
 
@@ -135,7 +135,7 @@ car_test test_off_map_ft_free(void)
 	car_assert(area != block1);
 	car_assert(get_small_area(area) != block1);
 
-	ft_free(alloc1);
+	free(alloc1);
 }
 
 car_test tiny_alloc_stress_test(void)
@@ -146,12 +146,12 @@ car_test tiny_alloc_stress_test(void)
 
 	for (int i = 0; i < 500; i++)
 	{
-		alloc[i] = ft_malloc(TINY_MAX_SIZE);
+		alloc[i] = malloc(TINY_MAX_SIZE);
 		memset(alloc[i], 0, TINY_MAX_SIZE);
 	}
 	
 	for (int i = 0; i < 500; i++)
-		ft_free(alloc[i]);
+		free(alloc[i]);
 
 	free_tree_t *trees = get_free_trees();
 	area_ptr area = get_or_create_area();
@@ -160,12 +160,12 @@ car_test tiny_alloc_stress_test(void)
 
 	for (int i = 0; i < 500; i++)
 	{
-		alloc[i] = ft_malloc(TINY_MAX_SIZE);
+		alloc[i] = malloc(TINY_MAX_SIZE);
 		memset(alloc[i], 0, TINY_MAX_SIZE);
 	}
 	
 	for (int i = 0; i < 500; i++)
-		ft_free(alloc[i]);
+		free(alloc[i]);
 
 	car_assert(trees->tiny == area);
 }
@@ -178,12 +178,12 @@ car_test small_alloc_stress_test(void)
 
 	for (int i = 0; i < 500; i++)
 	{
-		alloc[i] = ft_malloc(SMALL_MAX_SIZE);
+		alloc[i] = malloc(SMALL_MAX_SIZE);
 		memset(alloc[i], 0, SMALL_MAX_SIZE);
 	}
 	
 	for (int i = 0; i < 500; i++)
-		ft_free(alloc[i]);
+		free(alloc[i]);
 
 	area_ptr area = get_or_create_area();
 	free_tree_t *trees = get_free_trees();

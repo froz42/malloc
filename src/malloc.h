@@ -32,7 +32,7 @@ typedef void* area_ptr;
 
 void init_area(area_ptr area, size_t size);
 area_ptr get_or_create_area(void);
-void *ft_malloc(size_t size);
-void ft_free(void *data);
+void *malloc(size_t size);
+void free(void *data);
 
 #endif

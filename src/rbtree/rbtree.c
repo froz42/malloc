@@ -319,10 +319,7 @@ block_ptr find_best_fit(size_t size, block_ptr *root)
 void insert_free_block(block_ptr block, block_ptr *root)
 {
 	if (is_allocated(block))
-	{
-		printf("error: insert_free_block: block is allocated\n");
 		return ;
-	}
 
 	*get_parent(block) = get_nil_node();
 	*get_left_child(block) = get_nil_node();
@@ -340,10 +337,7 @@ void insert_free_block(block_ptr block, block_ptr *root)
 void delete_free_block(block_ptr block, block_ptr *root)
 {
 	if (is_allocated(block))
-	{
-		printf("error: insert_free_block: block is allocated\n");
 		return ;
-	}
 
 	delete_node(block, root);
 }
