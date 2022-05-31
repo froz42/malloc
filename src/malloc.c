@@ -74,7 +74,7 @@ void *malloc(size_t size)
 	if (size < MINIMAL_SIZE)
 		size = MINIMAL_SIZE;
 
-	write(1, "malloc\n", 7);
+	//write(1, "malloc\n", 7);
 
 	area_ptr area = get_or_create_area();
 
@@ -97,10 +97,48 @@ void *malloc(size_t size)
 	return get_block_data(best_fit);
 }
 
+void *calloc(size_t nmemb, size_t size)
+{
+	size_t total_size = nmemb * size;
+	if (total_size == 0)
+		total_size = 1;
+	//write(1, "calloc\n", 7);
+	void *data = malloc(total_size);
+	if (data)
+		memset(data, 0, total_size);
+	return data;
+}
+
+void *realloc(void *ptr, size_t size)
+{
+	if (ptr == NULL)
+		return malloc(size);
+	block_ptr block = get_block_from_data(ptr);
+	size_t old_size = get_block_size(block);
+
+	if (size == 0)
+	{
+		free(ptr);
+		return NULL;
+	}
+	if (size <= old_size)
+		return ptr;
+	
+	void *new_ptr = malloc(size);
+	if (new_ptr)
+	{
+		memcpy(new_ptr, ptr, old_size);
+		free(ptr);
+	}
+	return new_ptr;
+}
+
 void free(void *data)
 {
 	if (data == NULL)
 		return;
+
+	//write(1, "free\n", 5);
 
 	area_ptr area = get_or_create_area();
 	block_ptr block = get_block_from_data(data);
