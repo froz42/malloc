@@ -5,7 +5,7 @@ block_ptr unfrag_block(block_ptr block, void *area_end, block_ptr *root)
 {
 	if (is_allocated(block))
 	{
-		printf("unfrag_block: block is allocated\n");
+		error_write("unfrag_block: block is allocated");
 		return (NULL);
 	}
 

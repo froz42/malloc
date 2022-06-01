@@ -9,7 +9,7 @@ block_ptr split_block(block_ptr block, size_t size, void *areaend)
 
 	if (new_size_block_a < MINIMAL_SIZE || new_size_block_b < MINIMAL_SIZE)
 	{
-		printf("Error: block is too small for split\n");
+		error_write("split_block: block too small");
 		return (NULL);
 	}
 

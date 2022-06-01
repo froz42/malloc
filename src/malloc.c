@@ -5,6 +5,15 @@
 #include <string.h>
 
 
+void error_write(char *str)
+{
+	size_t len = 0;
+	while (str[len] != '\0')
+		len++;
+	write(2, str, len);
+	write(2, "\n", 1);
+}
+
 void init_area(area_ptr area, size_t size)
 {
 	set_raw_block_size(area, size - sizeof(void *) * 2);
@@ -74,8 +83,6 @@ void *malloc(size_t size)
 	if (size < MINIMAL_SIZE)
 		size = MINIMAL_SIZE;
 
-	//write(1, "malloc\n", 7);
-
 	area_ptr area = get_or_create_area();
 
 	block_ptr *root = get_proper_root(size);
@@ -102,7 +109,6 @@ void *calloc(size_t nmemb, size_t size)
 	size_t total_size = nmemb * size;
 	if (total_size == 0)
 		total_size = 1;
-	//write(1, "calloc\n", 7);
 	void *data = malloc(total_size);
 	if (data)
 		memset(data, 0, total_size);
@@ -138,7 +144,6 @@ void free(void *data)
 	if (data == NULL)
 		return;
 
-	//write(1, "free\n", 5);
 
 	area_ptr area = get_or_create_area();
 	block_ptr block = get_block_from_data(data);
@@ -152,6 +157,11 @@ void free(void *data)
 	set_free(block);
 
 	block_ptr *root = get_proper_root(get_block_size(block));
+	if (!root)
+	{
+		error_write("free: failed to find root");
+		return;
+	}
 
 	block_ptr new_block = unfrag_block(block, get_large_area(area), root);
 	insert_free_block(new_block, root);

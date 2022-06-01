@@ -95,7 +95,10 @@ block_ptr *get_off_map_next_block(block_ptr block)
 block_ptr *get_left_child(block_ptr block)
 {
 	if (is_allocated(block))
+	{
+		error_write("get_left_child: block is allocated");
 		return NULL;
+	}
 	return (block_ptr *)((char *)block + sizeof(size_t));
 }
 
@@ -108,7 +111,10 @@ block_ptr *get_left_child(block_ptr block)
 block_ptr *get_right_child(block_ptr block)
 {
 	if (is_allocated(block))
+	{
+		error_write("get_right_child: block is allocated");
 		return NULL;
+	}
 	return (block_ptr *)((char *)block + sizeof(size_t) + sizeof(void *));
 }
 
@@ -121,7 +127,10 @@ block_ptr *get_right_child(block_ptr block)
 block_ptr *get_parent(block_ptr block)
 {
 	if (is_allocated(block))
+	{
+		error_write("get_parent: block is allocated");
 		return NULL;
+	}
 	return (block_ptr *)((char *)block + sizeof(size_t) + sizeof(void *) * 2);
 }
 
@@ -134,7 +143,10 @@ block_ptr *get_parent(block_ptr block)
 int *get_color(block_ptr block)
 {
 	if (is_allocated(block))
+	{
+		error_write("get_color: block is allocated");
 		return NULL;
+	}
 	return (int *)((char *)block + sizeof(size_t) + sizeof(void *) * 3);
 }
 
