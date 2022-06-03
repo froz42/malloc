@@ -101,7 +101,7 @@ void insert_recursive(block_ptr *root, block_ptr n)
 	else
 	{
 		*root = n;
-		return ;
+		return;
 	}
 	*get_parent(n) = *root;
 }
@@ -120,7 +120,7 @@ void insert_fixup(block_ptr *root, block_ptr k)
 				*get_color(u) = BLACK;
 				*get_color(*get_parent(k)) = BLACK;
 				*get_color(*get_parent(*get_parent(k))) = RED;
-				k = *get_parent(*get_parent(k));	
+				k = *get_parent(*get_parent(k));
 			}
 			else
 			{
@@ -157,7 +157,7 @@ void insert_fixup(block_ptr *root, block_ptr k)
 			}
 		}
 		if (*root == k)
-			break ;
+			break;
 	}
 	*get_color(*root) = BLACK;
 }
@@ -293,6 +293,19 @@ block_ptr *get_proper_root(size_t size)
 		return (NULL);
 }
 
+block_ptr *find_proper_root(area_ptr area, block_ptr block)
+{
+	free_tree_t *free_trees = get_free_trees();
+
+	if (block < area)
+		return NULL;
+	if (block < get_small_area(area))
+		return (&free_trees->tiny);
+	else if (block < get_large_area(area))
+		return (&free_trees->small);
+	return (NULL);
+}
+
 block_ptr find_best_fit(size_t size, block_ptr *root)
 {
 	block_ptr best_fit = NULL;
@@ -319,7 +332,7 @@ block_ptr find_best_fit(size_t size, block_ptr *root)
 void insert_free_block(block_ptr block, block_ptr *root)
 {
 	if (is_allocated(block))
-		return ;
+		return;
 
 	*get_parent(block) = get_nil_node();
 	*get_left_child(block) = get_nil_node();
@@ -337,7 +350,7 @@ void insert_free_block(block_ptr block, block_ptr *root)
 void delete_free_block(block_ptr block, block_ptr *root)
 {
 	if (is_allocated(block))
-		return ;
+		return;
 
 	delete_node(block, root);
 }

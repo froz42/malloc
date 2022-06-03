@@ -112,7 +112,7 @@ block_ptr *get_right_child(block_ptr block)
 {
 	if (is_allocated(block))
 	{
-		error_write("get_right_child: block is allocated");
+		error_write("get_right_child: block is allocated\n");
 		return NULL;
 	}
 	return (block_ptr *)((char *)block + sizeof(size_t) + sizeof(void *));
@@ -156,12 +156,12 @@ area_ptr get_tiny_area(void *start)
 }
 area_ptr get_small_area(void *start)
 {
-	return ((char *)start + TINY_CAPACITY);
+	return (&((char *)start)[TINY_CAPACITY]);
 }
 
 area_ptr get_large_area(void *start)
 {
-	return ((char *)start + TINY_CAPACITY + SMALL_CAPACITY);
+	return (&((char *)start)[TINY_CAPACITY + SMALL_CAPACITY]);
 }
 
 /*

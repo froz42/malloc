@@ -16,6 +16,7 @@ block_ptr get_nil_node(void);
 free_tree_t *get_free_trees(void);
 block_ptr find_best_fit(size_t size, block_ptr *root);
 block_ptr *get_proper_root(size_t size);
+block_ptr *find_proper_root(area_ptr area, block_ptr block);
 void insert_free_block(block_ptr block, block_ptr *root);
 void delete_free_block(block_ptr block, block_ptr *root);
 

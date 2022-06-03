@@ -3,7 +3,7 @@
 
 # include "malloc.h"
 
-block_ptr new_off_map_block(size_t size, void *area_end);
+block_ptr new_off_map_block(size_t size);
 void remove_off_map_block(block_ptr block);
 
 #endif

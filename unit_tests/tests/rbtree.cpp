@@ -1,4 +1,5 @@
 #include "../car.hpp"
+#include <stdio.h>
 
 car_test tree_access(void)
 {
@@ -25,15 +26,6 @@ car_test dummy_node(void)
 	car_assert_cmp(*get_color(nil), BLACK);
 }
 
-car_test get_free_trees_tests(void)
-{
-	block_ptr nil = get_nil_node();
-	free_tree_t *trees = get_free_trees();
-
-	car_assert_cmp(trees->small, nil);
-	car_assert_cmp(trees->tiny, nil);
-}
-
 car_test test_insertion(void)
 {
 	char block[128];
@@ -46,11 +38,13 @@ car_test test_insertion(void)
 
 	free_tree_t *trees = get_free_trees();
 	block_ptr *root = get_proper_root(128);
+	block_ptr nil = get_nil_node();
+
+	trees->tiny = nil;
+	trees->small = nil;
 
 	insert_free_block(block, root);
 
-	block_ptr nil = get_nil_node();
-	
 	car_assert_cmp(trees->tiny, (block_ptr)block);
 	car_assert_cmp(*get_parent(block), nil);
 	car_assert_cmp(*get_left_child(block), nil);
@@ -201,7 +195,63 @@ car_test test_find_fit(void)
 
 	free_tree_t *trees = get_free_trees();
 	block_ptr nil = get_nil_node();
-	
+
 	trees->tiny = nil;
 	trees->small = nil;
+}
+
+
+void check_tree(block_ptr block)
+{
+	if (block == get_nil_node())
+		return;
+
+	check_tree(*get_left_child(block));
+	check_tree(*get_right_child(block));
+	
+}
+
+car_test rb_tree_stree_test(void)
+{
+	char block[128][128];
+
+	
+	for (int i = 0; i < 128; i++)
+	{
+		init_area(block[i], ALLIGN_16(i));
+	}
+
+	block_ptr *root = get_proper_root(128);
+
+	for (int i = 0; i < 128; i++)
+	{
+		insert_free_block(block[i], root);
+		check_tree(*root);
+	}
+
+	free_tree_t *trees = get_free_trees();
+	block_ptr nil = get_nil_node();
+
+	for (int i = 0; i < 64; i++)
+	{
+		delete_free_block(block[i], root);
+		check_tree(*root);
+	}
+
+	for (int i = 0; i < 64; i++)
+	{
+		insert_free_block(block[i], root);
+		check_tree(*root);
+	}
+
+	for (int i = 0; i < 128; i++)
+	{
+		delete_free_block(block[i], root);
+		check_tree(*root);
+	}
+
+
+
+	car_assert_cmp(trees->tiny, nil);
+
 }

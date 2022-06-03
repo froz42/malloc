@@ -6,7 +6,7 @@
 #    By: tmatis <tmatis@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2022/06/01 14:46:54 by tmatis           ###   ########.fr        #
+#    Updated: 2022/06/03 22:10:13 by tmatis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,6 +54,9 @@ DEPS				= $(addprefix objs/, ${SRCS:$(FILE_EXTENSION)=.d})
 ################################################################################
 #                                 Makefile logic                               #
 ################################################################################
+
+
+DEFINE =
 
 COM_COLOR   = \033[0;34m
 OBJ_COLOR   = \033[0;36m
@@ -199,7 +202,6 @@ endef
 ################################################################################
 
 all: header setup $(NAME)
-	@rm -rf .files_changed
 
 header:
 	@printf "%b" "$(OK_COLOR)"
@@ -227,6 +229,7 @@ $(NAME):	${OBJS}
 			@$(call display_progress_bar)
 			@$(call run_and_test,$(CC) $(CFLAGS) $(DFLAGS) -I$(INCLUDE_PATH) -shared -o $@ ${OBJS})
 			@echo "                                                              "
+			@rm -rf .files_changed
 
 setup:
 	@$(call save_files_changed)
@@ -234,7 +237,7 @@ setup:
 objs/%.o: 	$(SRCS_PATH)/%$(FILE_EXTENSION)
 			@mkdir -p $(dir $@)
 			@$(call display_progress_bar)
-			@$(call run_and_test,$(CC) $(CFLAGS) $(DFLAGS) -c $< -o $@ -I$(INCLUDE_PATH))
+			@$(call run_and_test,$(CC) $(CFLAGS) $(DFLAGS) ${DEFINE} -c $< -o $@ -I$(INCLUDE_PATH))
 
 clean:		header
 			@rm -rf objs unit_tests/objs unit_tests/collected.cpp unit_tests/collected.hpp
@@ -246,10 +249,20 @@ fclean:		header clean
 
 re:			fclean all
 
-unit:		all
-			@cd unit_tests && bash CAR.sh ${OBJS} && ../bin_test $$FILTER 2> unit_errors.log
 
-unit_all: 	all
+set_define:
+			$(eval DEFINE += -DTEST_MALLOC)
+
+unit:		set_define header setup ${OBJS}
+			@echo "                                                              "
+			@cd unit_tests && bash CAR.sh ${OBJS} && ../bin_test $$FILTER 2> unit_errors.log
+			@rm -rf .files_changed
+
+unit_all: 	set_define header setup ${OBJS}
+			@echo "                                                              "
 			@cd unit_tests && bash CAR.sh ${OBJS} && ../bin_test --show-all
+			@rm -rf .files_changed
+
+
 
 .PHONY:		all clean fclean re header

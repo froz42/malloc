@@ -34,9 +34,9 @@ void remove_off_map(block_ptr block)
 }
 
 
-block_ptr new_off_map_block(size_t size, void *area_end)
+block_ptr new_off_map_block(size_t size)
 {
-	block_ptr block = mmap(area_end, size + 32, PROT_READ | PROT_WRITE,
+	block_ptr block = mmap(NULL, size + 32, PROT_READ | PROT_WRITE,
 			MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
 	if (block == MAP_FAILED)
 		return NULL;

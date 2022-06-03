@@ -54,7 +54,7 @@ area_ptr get_or_create_area(void)
 	return area;
 }
 
-void *get_area_end(area_ptr area, size_t size)
+area_ptr get_area_end(area_ptr area, size_t size)
 {
 	if (size <= TINY_CAPACITY)
 		return get_small_area(area);
@@ -63,9 +63,20 @@ void *get_area_end(area_ptr area, size_t size)
 	return NULL;
 }
 
-void *handle_off_map(size_t size, void *area_end)
+area_ptr find_area_end(area_ptr area, block_ptr block)
 {
-	const block_ptr new_block = new_off_map_block(size, area_end);
+	if (block < area)
+		return NULL;
+	if (block < get_small_area(area))
+		return get_small_area(area);
+	if (block < get_large_area(area))
+		return get_large_area(area);
+	return NULL;
+}
+
+void *handle_off_map(size_t size)
+{
+	const block_ptr new_block = new_off_map_block(size);
 	if (new_block == NULL)
 		return NULL;
 	return get_block_data(new_block);
@@ -76,7 +87,7 @@ int is_off_map(void *data, area_ptr area)
 	return (data < area || data >= get_large_area(area));
 }
 
-void *malloc(size_t size)
+void *MALLOC_NAME(size_t size)
 {
 	size = ALLIGN_16(size);
 	
@@ -88,11 +99,11 @@ void *malloc(size_t size)
 	block_ptr *root = get_proper_root(size);
 	
 	if (!root)
-		return handle_off_map(size, get_large_area(area));
+		return handle_off_map(size);
 
 	block_ptr best_fit = find_best_fit(size, root);
 	if (!best_fit)
-		return handle_off_map(size, get_large_area(area));
+		return handle_off_map(size);
 
 	delete_free_block(best_fit, root);
 	if (get_block_size(best_fit) - size > MINIMAL_SIZE)
@@ -104,42 +115,42 @@ void *malloc(size_t size)
 	return get_block_data(best_fit);
 }
 
-void *calloc(size_t nmemb, size_t size)
+void *CALLOC_NAME(size_t nmemb, size_t size)
 {
 	size_t total_size = nmemb * size;
 	if (total_size == 0)
 		total_size = 1;
-	void *data = malloc(total_size);
+	void *data = MALLOC_NAME(total_size);
 	if (data)
 		memset(data, 0, total_size);
 	return data;
 }
 
-void *realloc(void *ptr, size_t size)
+void *REALLOC_NAME(void *ptr, size_t size)
 {
 	if (ptr == NULL)
-		return malloc(size);
+		return MALLOC_NAME(size);
 	block_ptr block = get_block_from_data(ptr);
 	size_t old_size = get_block_size(block);
 
 	if (size == 0)
 	{
-		free(ptr);
+		FREE_NAME(ptr);
 		return NULL;
 	}
 	if (size <= old_size)
 		return ptr;
 	
-	void *new_ptr = malloc(size);
+	void *new_ptr = MALLOC_NAME(size);
 	if (new_ptr)
 	{
 		memcpy(new_ptr, ptr, old_size);
-		free(ptr);
+		FREE_NAME(ptr);
 	}
 	return new_ptr;
 }
 
-void free(void *data)
+void FREE_NAME(void *data)
 {
 	if (data == NULL)
 		return;
@@ -149,20 +160,23 @@ void free(void *data)
 	block_ptr block = get_block_from_data(data);
 
 	if (!is_allocated(block))
+	{
+		error_write("free(): double free detected");
 		return;
+	}
 	
 	if (is_off_map(block, area))
 		return remove_off_map_block(block);
 
 	set_free(block);
 
-	block_ptr *root = get_proper_root(get_block_size(block));
+	block_ptr *root = find_proper_root(area, block);
 	if (!root)
 	{
 		error_write("free: failed to find root");
 		return;
 	}
 
-	block_ptr new_block = unfrag_block(block, get_large_area(area), root);
+	block_ptr new_block = unfrag_block(block, find_area_end(area, block), root);
 	insert_free_block(new_block, root);
 }
