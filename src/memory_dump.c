@@ -17,6 +17,8 @@ void dump_area(void *area_start, void *area_end, int scale)
 		const size_t size = get_block_size(block);
 		const int allocated = is_allocated(block);
 		size_t block_to_draw = size / scale;
+		if (block_to_draw == 0)
+			block_to_draw = 1;
 
 		if (allocated)
 			ft_putstr("\033[31m");
