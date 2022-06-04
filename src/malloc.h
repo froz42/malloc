@@ -53,5 +53,6 @@ void ft_free(void *data);
 void *ft_realloc(void *ptr, size_t size);
 void *ft_calloc(size_t nmemb, size_t size);
 size_t sum_of_block(void *area_start, void *area_end);
+void check_prev(void *area_start, void *area_end);
 
 #endif

@@ -180,7 +180,7 @@ car_test tiny_alloc_stress_test(void)
 	for (int i = 0; i < 300; i++)
 	{
 		alloc[i] = ft_malloc(TINY_MAX_SIZE);
-		memset(alloc[i], 0, TINY_MAX_SIZE);
+		memset(alloc[i], 0xFF, TINY_MAX_SIZE);
 	}
 
 	for (int i = 0; i < 300; i++)
@@ -200,7 +200,7 @@ car_test small_alloc_stress_test(void)
 	for (int i = 0; i < 300; i++)
 	{
 		alloc[i] = ft_malloc(SMALL_MAX_SIZE);
-		memset(alloc[i], 0, SMALL_MAX_SIZE);
+		memset(alloc[i], 0xFF, SMALL_MAX_SIZE);
 	}
 
 	car_assert(get_free_trees()->small == get_nil_node());
@@ -226,10 +226,10 @@ car_test stress_test_mixed(void)
 	for (int i = 0; i < 256; i++)
 	{
 		allocs_tiny[i] = ft_malloc(TINY_MAX_SIZE);
-		memset(allocs_tiny[i], 0, TINY_MAX_SIZE);
+		memset(allocs_tiny[i], 0xFF, TINY_MAX_SIZE);
 
 		allocs_small[i] = ft_malloc(SMALL_MAX_SIZE);
-		memset(allocs_small[i], 0, SMALL_MAX_SIZE);
+		memset(allocs_small[i], 0xFF, SMALL_MAX_SIZE);
 	}
 
 	int i;
