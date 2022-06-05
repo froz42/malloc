@@ -8,8 +8,8 @@ car_test define_sizes(void)
 	car_assert_cmp(page_size % TINY_MAX_SIZE, 0);
 	car_assert_cmp(page_size % SMALL_MAX_SIZE, 0);
 
-	car_assert_cmp(TINY_CAPACITY, (TINY_MAX_SIZE * 256 + sizeof(size_t) * 256 * 2));
-	car_assert_cmp(SMALL_CAPACITY, (SMALL_MAX_SIZE * 256 + sizeof(size_t) * 256 * 2));
+	car_assert_cmp(TINY_CAPACITY, (TINY_MAX_SIZE * TINY_MAX_SIZE + sizeof(size_t) * 2 * TINY_MAX_SIZE));
+	car_assert_cmp(SMALL_CAPACITY, (SMALL_MAX_SIZE * SMALL_MAX_SIZE + sizeof(size_t) * 2 * SMALL_MAX_SIZE));
 	
 	car_assert_cmp(TINY_MAX_SIZE, ALLIGN_16(TINY_MAX_SIZE));
 	car_assert_cmp(SMALL_MAX_SIZE, ALLIGN_16(SMALL_MAX_SIZE));

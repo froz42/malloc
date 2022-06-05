@@ -6,9 +6,9 @@ car_test data_access(void)
 	void *block_ptr = block;
 	size_t *head = (size_t *)block_ptr;
 	*head = 64;
-	void *data = (char *)head + sizeof(size_t);
-	void *next = (char *)data + 64 + sizeof(void *);
-	void **prev = (void **)((char *)data + 64);
+	void *data = (char *)head + sizeof(size_t) + sizeof(void *);
+	void *next = (char *)data + 64;
+	void **prev = (void **)((char *)head + sizeof(size_t));
 	*prev = NULL;
 
 	car_assert_cmp(get_block_size(block_ptr), 64U);
