@@ -119,6 +119,13 @@ void nil_node_status(void)
 void fancy_memory_dump(void)
 {
 	area_ptr area = get_or_create_area();
+	if (area == NULL)
+	{
+		ft_putstr("\033[31marea error\033[0m\n");
+		return ;
+	}
+	else
+		ft_putstr("\033[32marea ok\033[0m\n");
 	ft_putstr("tiny: \n");
 	check_sum(area, get_small_area(area), TINY_CAPACITY);
 	check_prev(area, get_small_area(area));

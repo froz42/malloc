@@ -95,6 +95,8 @@ void *MALLOC_NAME(size_t size)
 		size = MINIMAL_SIZE;
 
 	area_ptr area = get_or_create_area();
+	if (area == NULL)
+		return NULL;
 
 	block_ptr *root = get_proper_root(size);
 	
@@ -157,6 +159,8 @@ void FREE_NAME(void *data)
 
 
 	area_ptr area = get_or_create_area();
+	if (area == NULL)
+		return;
 	block_ptr block = get_block_from_data(data);
 
 	if (!is_allocated(block))

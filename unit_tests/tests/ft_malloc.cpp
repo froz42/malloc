@@ -234,8 +234,6 @@ car_test stress_test_mixed(void)
 		allocs_small[i] = ft_malloc(SMALL_MAX_SIZE);
 		memset(allocs_small[i], 0xFF, SMALL_MAX_SIZE);
 	}
-	fancy_memory_dump();
-
 
 	int i;
 	for (i = 0; i < 255; i++)
@@ -243,8 +241,6 @@ car_test stress_test_mixed(void)
 		ft_free(allocs_tiny[i]);
 		ft_free(allocs_small[i]);
 	}
-	fancy_memory_dump();
-
 
 	ft_free(allocs_tiny[i]);
 	ft_free(allocs_small[i]);
@@ -256,5 +252,4 @@ car_test stress_test_mixed(void)
 
 	car_assert(sum_of_block(area, get_small_area(area)) == TINY_CAPACITY);
 	car_assert(sum_of_block(get_small_area(area), get_large_area(area)) == SMALL_CAPACITY);
-	fancy_memory_dump();
 }
