@@ -1,12 +1,34 @@
+/**
+ * @file off_map.c
+ * @author tmatis (tmatis@student.42.fr)
+ * @brief this file contains utilities to handle off map allocation
+ * each block allocated is add to a double linked list
+ * @date 2022-06-06
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
 #include "malloc.h"
 #include <sys/mman.h>
 
+
+/**
+ * @brief Get the off map list object
+ * 
+ * @return block_ptr* return the head of the list
+ */
 block_ptr *get_off_map_list(void)
 {
 	static block_ptr off_map = NULL;
 	return &off_map;
 }
 
+/**
+ * @brief add a block to the off map list
+ * O(1) insertion
+ * @param block the block to add
+ */
 void add_off_map(block_ptr block)
 {
 	block_ptr *off_map = get_off_map_list();
@@ -19,6 +41,11 @@ void add_off_map(block_ptr block)
 	*off_map = block;
 }
 
+/**
+ * @brief remove a block from the off map list
+ * O(1) removal
+ * @param block the block to remove
+ */
 void remove_off_map(block_ptr block)
 {
 	block_ptr *off_map = get_off_map_list();
@@ -33,7 +60,12 @@ void remove_off_map(block_ptr block)
 		*off_map = next;
 }
 
-
+/**
+ * @brief Manage the allocation of an off map block
+ * 
+ * @param size 
+ * @return block_ptr 
+ */
 block_ptr new_off_map_block(size_t size)
 {
 	block_ptr block = mmap(NULL, size + 32, PROT_READ | PROT_WRITE,
@@ -46,6 +78,12 @@ block_ptr new_off_map_block(size_t size)
 	return block;
 }
 
+
+/**
+ * @brief Free an off map block
+ * 
+ * @param block 
+ */
 void remove_off_map_block(block_ptr block)
 {
 	set_free(block);

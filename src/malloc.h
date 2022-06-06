@@ -1,3 +1,13 @@
+/**
+ * @file malloc.h
+ * @author tmatis (tmatis@student.42.fr)
+ * @brief malloc header file
+ * @date 2022-06-06
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
 #ifndef MALLOC_H
 # define MALLOC_H
 
@@ -21,11 +31,13 @@
 typedef void* block_ptr;
 typedef void* area_ptr;
 
+
+# include "utils.h"
 # include "data_access.h"
+# include "area_utils.h"
 # include "rbtree/rbtree.h"
 # include "split_block.h"
 # include "off_map.h"
-# include "unfrag.h"
 
 # define TINY_MAX_SIZE 256 // max size in bytes for tiny area
 # define SMALL_MAX_SIZE 1024 // max size in bytes for small area
@@ -53,6 +65,5 @@ void ft_free(void *data);
 void *ft_realloc(void *ptr, size_t size);
 void *ft_calloc(size_t nmemb, size_t size);
 size_t sum_of_block(void *area_start, void *area_end);
-void check_prev(void *area_start, void *area_end);
 
 #endif

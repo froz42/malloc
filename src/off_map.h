@@ -1,3 +1,11 @@
+/**
+ * @file off_map.h
+ * @author tmatis (tmatis@student.42.fr)
+ * @brief header file for off map allocation
+ * @date 2022-06-06
+ * 
+ */
+
 #ifndef OFF_MAP_H
 # define OFF_MAP_H
 

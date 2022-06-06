@@ -1,8 +1,9 @@
-#include <stdlib.h>
-#include "rbtree.h"
-#include <stdio.h>
-
 /**
+ * @file rbtree.c
+ * @author tmatis (tmatis@student.42.fr)
+ * @date 2022-06-06
+ * 
+ * @brief This file contains the implementation of the rbtree.
  * The rbtree is a red-black tree.
  * It is used to store free blocks and to find the best fit block.
  * The rbtree is implemented as a binary tree.
@@ -19,6 +20,10 @@
  * The color field is used to indicate the color of the node.
  * The color field is either RED or BLACK.
  */
+
+#include <stdlib.h>
+#include "rbtree.h"
+#include <stdio.h>
 
 
 /**

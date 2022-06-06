@@ -1,3 +1,11 @@
+/**
+ * @file rbtree.h
+ * @author tmatis (tmatis@student.42.fr)
+ * @brief rbtree header file
+ * @date 2022-06-06
+ * 
+ */
+
 #ifndef RBTREE_H
 # define RBTREE_H
 

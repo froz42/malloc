@@ -1,24 +1,24 @@
+/**
+ * @file memory_dump.c
+ * @author tmatis (tmatis@student.42.fr)
+ * @brief this file contains tools to dump the memory in a fancy way
+ * it allow to check if the memory is allocated correctly
+ * @date 2022-06-06
+ * 
+ */
+
 #include "malloc.h"
 #include <unistd.h>
 
-void ft_putstr(char *str)
-{
-	size_t i = 0;
-	while (str[i])
-		i++;
-	write(1, str, i);
-}
 
-void ft_putnbr(size_t n)
-{
-	if (n >= 10)
-		ft_putnbr(n / 10);
-	char c;
-	c = n % 10 + '0';
-	write(1, &c, 1);
-}
-
-void dump_area(void *area_start, void *area_end, int scale)
+/**
+ * @brief this function print the memory in a fancy way
+ * an allocated block is printed in red and a free block is printed in green
+ * @param area_start the start of the area
+ * @param area_end the end of the area
+ * @param scale the scale of the area, nbrs of block = size / scale
+ */
+static void dump_area(void *area_start, void *area_end, int scale)
 {
 	block_ptr block = area_start;
 	while (block < area_end)
@@ -46,6 +46,13 @@ void dump_area(void *area_start, void *area_end, int scale)
 	ft_putstr("\n");
 }
 
+/**
+ * @brief Sum the size of all the blocks in the area
+ * 
+ * @param area_start the start of the area
+ * @param area_end the end of the area
+ * @return size_t the sum of the size of all the blocks in the area
+ */
 size_t sum_of_block(void *area_start, void *area_end)
 {
 	size_t sum = 0;
@@ -58,8 +65,14 @@ size_t sum_of_block(void *area_start, void *area_end)
 	return (sum);
 }
 
-
-void check_sum(void *area_start, void *area_end, size_t expected)
+/**
+ * @brief check if the sum of the blocks is equal to the size of the area
+ * 
+ * @param area_start the start of the area
+ * @param area_end the end of the area
+ * @param expected the expected size of the area
+ */
+static void check_sum(void *area_start, void *area_end, size_t expected)
 {
 	size_t sum = sum_of_block(area_start, area_end);
 	if (sum != expected)
@@ -68,7 +81,14 @@ void check_sum(void *area_start, void *area_end, size_t expected)
 		ft_putstr("\033[32mchecksum ok\033[0m\n");
 }
 
-void check_prev(void *area_start, void *area_end)
+
+/**
+ * @brief Check if the prev of each block is correct
+ * 
+ * @param area_start the start of the area
+ * @param area_end the end of the area
+ */
+static void check_prev(void *area_start, void *area_end)
 {
 	block_ptr block = area_start;
 	block_ptr prev = NULL;
@@ -91,7 +111,12 @@ void check_prev(void *area_start, void *area_end)
 	ft_putstr("\033[32mprev ok\033[0m\n");
 }
 
-void nil_node_status(void)
+
+/**
+ * @brief check if the nil node has every attribute well set
+ * 
+ */
+static void nil_node_status(void)
 {
 	block_ptr nil = get_nil_node();
 
@@ -116,6 +141,10 @@ void nil_node_status(void)
 		ft_putstr("\033[32mcolor ok\033[0m\n");
 }
 
+/**
+ * @brief This function print the memory in a fancy way
+ * and perform some checks on the memory
+ */
 void fancy_memory_dump(void)
 {
 	area_ptr area = get_or_create_area();

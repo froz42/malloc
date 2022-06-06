@@ -1,92 +1,22 @@
+/**
+ * @file malloc.c
+ * @author tmatis (tmatis@student.42.fr)
+ * @brief The malloc functions
+ * @date 2022-06-06
+ * 
+ */
+
 #include <unistd.h>
-#include <sys/mman.h>
 #include "malloc.h"
 #include <stdio.h>
 #include <string.h>
 
-
-void error_write(char *str)
-{
-	size_t len = 0;
-	while (str[len] != '\0')
-		len++;
-	write(2, str, len);
-	write(2, "\n", 1);
-}
-
-void init_area(area_ptr area, size_t size)
-{
-	set_raw_block_size(area, size - sizeof(void *) * 2);
-	*get_prev_block(area) = NULL;
-}
-
-/*
-** get_or_create_area
-** create a area to store small and medium allocation
-** if the area is exist, return the area
-** if the area is not exist, create it and return the area
-** return NULL if failed
-*/
-area_ptr get_or_create_area(void)
-{
-	static area_ptr area = NULL;
-
-	if (area == NULL)
-	{
-		area = mmap(NULL, TOTAL_CAPACITY, PROT_READ | PROT_WRITE,
-				MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-		if (area == MAP_FAILED)
-			area = NULL;
-		else
-		{
-			block_ptr const tiny_area = get_tiny_area(area);
-			block_ptr const small_area = get_small_area(area);
-
-			init_area(tiny_area, TINY_CAPACITY);
-			init_area(small_area, SMALL_CAPACITY);
-
-			free_tree_t *trees = get_free_trees();
-			
-			insert_free_block(tiny_area, &trees->tiny);
-			insert_free_block(small_area, &trees->small);
-		}
-	}
-	return area;
-}
-
-area_ptr get_area_end(area_ptr area, size_t size)
-{
-	if (size <= TINY_CAPACITY)
-		return get_small_area(area);
-	else if (size <= SMALL_CAPACITY)
-		return get_large_area(area);
-	return NULL;
-}
-
-area_ptr find_area_end(area_ptr area, block_ptr block)
-{
-	if (block < area)
-		return NULL;
-	if (block < get_small_area(area))
-		return get_small_area(area);
-	if (block < get_large_area(area))
-		return get_large_area(area);
-	return NULL;
-}
-
-void *handle_off_map(size_t size)
-{
-	const block_ptr new_block = new_off_map_block(size);
-	if (new_block == NULL)
-		return NULL;
-	return get_block_data(new_block);
-}
-
-int is_off_map(void *data, area_ptr area)
-{
-	return (data < area || data >= get_large_area(area));
-}
-
+/**
+ * @brief Custom malloc function
+ * This function is named ft_malloc or malloc
+ * @param size size of the block
+ * @return void* The allocated memory or NULL if failed
+ */
 void *MALLOC_NAME(size_t size)
 {
 	size = ALLIGN_16(size);
@@ -117,6 +47,13 @@ void *MALLOC_NAME(size_t size)
 	return get_block_data(best_fit);
 }
 
+/**
+ * @brief Custom calloc function
+ * This function is named ft_calloc or calloc
+ * @param nmemb number of elements
+ * @param size size of the element
+ * @return void* The allocated memory or NULL if failed
+ */
 void *CALLOC_NAME(size_t nmemb, size_t size)
 {
 	size_t total_size = nmemb * size;
@@ -128,6 +65,15 @@ void *CALLOC_NAME(size_t nmemb, size_t size)
 	return data;
 }
 
+/**
+ * @brief Custom realloc function
+ * This function is named ft_realloc or realloc
+ * this function try to expand the block or allocate a new block
+ * and copy the data to the new block
+ * @param ptr the block to reallocate
+ * @param size the new size of the block
+ * @return void* The allocated memory or NULL if failed
+ */
 void *REALLOC_NAME(void *ptr, size_t size)
 {
 	if (ptr == NULL)
@@ -152,6 +98,11 @@ void *REALLOC_NAME(void *ptr, size_t size)
 	return new_ptr;
 }
 
+/**
+ * @brief Custom free function
+ * This function is named ft_free or free
+ * @param data the data ptr to free
+ */
 void FREE_NAME(void *data)
 {
 	if (data == NULL)
