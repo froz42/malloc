@@ -2,9 +2,30 @@
 #include "rbtree.h"
 #include <stdio.h>
 
-/*
-** this function return the sentinel node
-*/
+/**
+ * The rbtree is a red-black tree.
+ * It is used to store free blocks and to find the best fit block.
+ * The rbtree is implemented as a binary tree.
+ * The nil node points to itself.
+ * the block structure is as follows:
+ * ----------------------------------------------------------
+ * | size | prev | left | right | parent | padding |  color |
+ * ----------------------------------------------------------
+ * The size field is the size of the block.
+ * The prev field points to the previous block.
+ * The left field points to the left child.
+ * The right field points to the right child.
+ * The parent field points to the parent node.
+ * The color field is used to indicate the color of the node.
+ * The color field is either RED or BLACK.
+ */
+
+
+/**
+ * @brief Get the nil node object
+ * parent, left and right -> nil
+ * @return block_ptr 
+ */
 block_ptr get_nil_node(void)
 {
 	static char nil_node[MINIMAL_SIZE];
@@ -21,7 +42,11 @@ block_ptr get_nil_node(void)
 	}
 	return (nil_node);
 }
-
+/**
+ * @brief Get the free trees object
+ * 
+ * @return free_tree_t* 
+ */
 free_tree_t *get_free_trees(void)
 {
 	static free_tree_t free_trees = {NULL, NULL};
@@ -34,6 +59,13 @@ free_tree_t *get_free_trees(void)
 	return (&free_trees);
 }
 
+/**
+ * @brief transplant the node u with node v
+ * 
+ * @param u the node to be transplant
+ * @param v the node to be transplanted
+ * @param root the root of the tree
+ */
 void transplant(block_ptr u, block_ptr v, block_ptr *root)
 {
 	if (*get_parent(u) == get_nil_node())
@@ -46,6 +78,13 @@ void transplant(block_ptr u, block_ptr v, block_ptr *root)
 		*get_parent(v) = *get_parent(u);
 }
 
+
+/**
+ * @brief rotate the tree to the left
+ * 
+ * @param x the node to be rotated
+ * @param root the root of the tree
+ */
 void rotate_left(block_ptr x, block_ptr *root)
 {
 	block_ptr const y = *get_right_child(x);
@@ -64,6 +103,13 @@ void rotate_left(block_ptr x, block_ptr *root)
 	*get_parent(x) = y;
 }
 
+
+/**
+ * @brief rotate the tree to the right
+ * 
+ * @param x the node to be rotated
+ * @param root the root of the tree
+ */
 void rotate_right(block_ptr x, block_ptr *root)
 {
 	block_ptr const y = *get_left_child(x);
@@ -82,6 +128,13 @@ void rotate_right(block_ptr x, block_ptr *root)
 	*get_parent(x) = y;
 }
 
+
+/**
+ * @brief insert a node to the tree
+ * 
+ * @param root the root of the tree
+ * @param n the node to be inserted
+ */
 void insert_recursive(block_ptr *root, block_ptr n)
 {
 	if (*root != get_nil_node() && get_block_size(*root) > get_block_size(n))
@@ -106,6 +159,12 @@ void insert_recursive(block_ptr *root, block_ptr n)
 	*get_parent(n) = *root;
 }
 
+/**
+ * @brief fix the tree after insertion
+ * 
+ * @param root the root of the tree
+ * @param k the node to be inserted
+ */
 void insert_fixup(block_ptr *root, block_ptr k)
 {
 	block_ptr u;
@@ -162,6 +221,12 @@ void insert_fixup(block_ptr *root, block_ptr k)
 	*get_color(*root) = BLACK;
 }
 
+/**
+ * @brief return the minimum node of the tree
+ * 
+ * @param x the root of the tree
+ * @return the minimum node of the tree 
+ */
 block_ptr minimum(block_ptr x)
 {
 	while (*get_left_child(x) != get_nil_node())
@@ -169,6 +234,12 @@ block_ptr minimum(block_ptr x)
 	return (x);
 }
 
+/**
+ * @brief fix the tree after deletion
+ * 
+ * @param x the pivot node
+ * @param root the root of the tree
+ */
 void delete_fixup(block_ptr x, block_ptr *root)
 {
 	block_ptr s;
@@ -241,6 +312,12 @@ void delete_fixup(block_ptr x, block_ptr *root)
 	*get_color(x) = BLACK;
 }
 
+/**
+ * @brief delete a node from the tree
+ * 
+ * @param z the node to delete
+ * @param root the root of the tree
+ */
 void delete_node(block_ptr z, block_ptr *root)
 {
 	block_ptr y = z;
@@ -281,6 +358,12 @@ void delete_node(block_ptr z, block_ptr *root)
 		delete_fixup(x, root);
 }
 
+/**
+ * @brief Get the root of the tree by block size
+ * 
+ * @param size the block size
+ * @return block_ptr* the root of the tree
+ */
 block_ptr *get_proper_root(size_t size)
 {
 	free_tree_t *free_trees = get_free_trees();
@@ -293,6 +376,13 @@ block_ptr *get_proper_root(size_t size)
 		return (NULL);
 }
 
+/**
+ * @brief find the root by where the node is
+ * 
+ * @param area the area start pointer
+ * @param block the block
+ * @return block_ptr* 
+ */
 block_ptr *find_proper_root(area_ptr area, block_ptr block)
 {
 	free_tree_t *free_trees = get_free_trees();
@@ -305,6 +395,14 @@ block_ptr *find_proper_root(area_ptr area, block_ptr block)
 		return (&free_trees->small);
 	return (NULL);
 }
+
+/**
+ * @brief find the best fit block in the tree
+ * 
+ * @param size the size to fit
+ * @param root the root of the tree 
+ * @return block_ptr the best fit block
+ */
 
 block_ptr find_best_fit(size_t size, block_ptr *root)
 {
@@ -329,6 +427,12 @@ block_ptr find_best_fit(size_t size, block_ptr *root)
 	return (best_fit);
 }
 
+/**
+ * @brief insert a free block into the tree
+ * 
+ * @param block the block to insert
+ * @param root the root of the tree
+ */
 void insert_free_block(block_ptr block, block_ptr *root)
 {
 	if (is_allocated(block))
@@ -347,6 +451,12 @@ void insert_free_block(block_ptr block, block_ptr *root)
 		insert_fixup(root, block);
 }
 
+/**
+ * @brief delete a free block from the tree
+ * 
+ * @param block the block to delete
+ * @param root the root of the tree 
+ */
 void delete_free_block(block_ptr block, block_ptr *root)
 {
 	if (is_allocated(block))
