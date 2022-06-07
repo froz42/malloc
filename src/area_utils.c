@@ -3,7 +3,7 @@
  * @author tmatis (tmatis@student.42.fr)
  * @brief this file contains the area utils functions
  * @date 2022-06-06
- * 
+ *
  */
 
 #include "malloc.h"
@@ -34,7 +34,7 @@ area_ptr get_or_create_area(void)
 	if (area == NULL)
 	{
 		area = mmap(NULL, TOTAL_CAPACITY, PROT_READ | PROT_WRITE,
-				MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+					MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
 		if (area == MAP_FAILED)
 			area = NULL;
 		else
@@ -46,7 +46,7 @@ area_ptr get_or_create_area(void)
 			init_area(small_area, SMALL_CAPACITY);
 
 			free_tree_t *trees = get_free_trees();
-			
+
 			insert_free_block(tiny_area, &trees->tiny);
 			insert_free_block(small_area, &trees->small);
 		}
@@ -55,43 +55,22 @@ area_ptr get_or_create_area(void)
 }
 
 /**
- * @brief Get the area end by size
- * 
- * @param area area start ptr
- * @param size size of the block
- * @return area_ptr The area end
- */
-area_ptr get_area_end(area_ptr area, size_t size)
-{
-	if (size <= TINY_CAPACITY)
-		return get_small_area(area);
-	else if (size <= SMALL_CAPACITY)
-		return get_large_area(area);
-	return NULL;
-}
-
-/**
  * @brief Find area end by where the block is
- * 
+ *
  * @param area area start ptr
  * @param block block ptr
  * @return area_ptr The area end
  */
 area_ptr find_area_end(area_ptr area, block_ptr block)
 {
-	if (block < area)
-		return NULL;
 	if (block < get_small_area(area))
 		return get_small_area(area);
-	if (block < get_large_area(area))
-		return get_large_area(area);
-	return NULL;
+	return get_large_area(area);
 }
-
 
 /**
  * @brief Handle allocation of off-map memory
- * 
+ *
  * @param size size of the block
  * @return void* The allocated memory or NULL if failed
  */
@@ -105,7 +84,7 @@ void *handle_off_map(size_t size)
 
 /**
  * @brief check if the block is in the area
- * 
+ *
  * @param data data ptr
  * @param area area start ptr
  * @return int 1 if in the area, 0 if not
@@ -113,4 +92,18 @@ void *handle_off_map(size_t size)
 int is_off_map(void *data, area_ptr area)
 {
 	return (data < area || data >= get_large_area(area));
+}
+
+/**
+ * @brief Get the minimal size a block can have in the area
+ *  undefined if off map
+ * @param block the block ptr
+ * @param area the area ptr
+ * @return size_t the minimal size
+ */
+size_t get_minimal_size(block_ptr block, area_ptr area)
+{
+	if (block < get_small_area(area))
+		return MINIMAL_SIZE;
+	return TINY_MAX_SIZE + 1;
 }

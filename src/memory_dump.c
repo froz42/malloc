@@ -142,6 +142,47 @@ static void nil_node_status(void)
 }
 
 /**
+ * @brief this function count the number of free block in the area
+ * 
+ * @param area_start the start of the area
+ * @param area_end the end of the area
+ * @return size_t the number of free block in the area
+ */
+static size_t count_free_blocks(void *area_start, void *area_end)
+{
+	size_t i = 0;
+	block_ptr block = area_start;
+	while (block < area_end)
+	{
+		if (!is_allocated(block))
+			i++;
+		block = get_next_block(block);
+	}
+	return (i);
+}
+
+static void check_trees(area_ptr area)
+{
+	free_tree_t *tree = get_free_trees();
+
+	size_t sum_of_tiny_tree = count_nodes(&tree->tiny);
+	size_t sum_of_small_tree = count_nodes(&tree->small);
+
+	size_t sum_of_tiny_free_blocks = count_free_blocks(area, get_small_area(area));
+	size_t sum_of_small_free_blocks = count_free_blocks(get_small_area(area), get_large_area(area));
+
+	if (sum_of_tiny_tree != sum_of_tiny_free_blocks)
+		ft_putstr("\033[31mTiny tree error\033[0m\n");
+	else
+		ft_putstr("\033[32mTiny tree ok\033[0m\n");
+	
+	if (sum_of_small_tree != sum_of_small_free_blocks)
+		ft_putstr("\033[31mSmall tree error\033[0m\n");
+	else
+		ft_putstr("\033[32mSmall tree ok\033[0m\n");
+}
+
+/**
  * @brief This function print the memory in a fancy way
  * and perform some checks on the memory
  */
@@ -167,4 +208,7 @@ void fancy_memory_dump(void)
 
 	ft_putstr("nil node status: \n");
 	nil_node_status();
+
+	ft_putstr("free tree status: \n");
+	check_trees(area);
 }

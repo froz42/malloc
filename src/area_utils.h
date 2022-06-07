@@ -17,5 +17,6 @@ area_ptr get_area_end(area_ptr area, size_t size);
 area_ptr find_area_end(area_ptr area, block_ptr block);
 void *handle_off_map(size_t size);
 int is_off_map(void *data, area_ptr area);
+size_t get_minimal_size(block_ptr block, area_ptr area);
 
 #endif

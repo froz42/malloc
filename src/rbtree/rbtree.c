@@ -12,13 +12,7 @@
  * ----------------------------------------------------------
  * | size | prev | left | right | parent | padding |  color |
  * ----------------------------------------------------------
- * The size field is the size of the block.
- * The prev field points to the previous block.
- * The left field points to the left child.
- * The right field points to the right child.
- * The parent field points to the parent node.
- * The color field is used to indicate the color of the node.
- * The color field is either RED or BLACK.
+32er RED or BLACK.
  */
 
 #include <stdlib.h>
@@ -361,6 +355,24 @@ void delete_node(block_ptr z, block_ptr *root)
 	}
 	if (y_original_color == BLACK)
 		delete_fixup(x, root);
+}
+
+/**
+ * @brief count the number of nodes in the tree
+ * 
+ * @param root the root of the tree
+ * @return size_t the number of nodes in the tree
+ */
+size_t count_nodes(block_ptr *root)
+{
+	size_t count = 0;
+	if (*root != get_nil_node())
+	{
+		count++;
+		count += count_nodes(get_left_child(*root));
+		count += count_nodes(get_right_child(*root));
+	}
+	return (count);
 }
 
 /**
