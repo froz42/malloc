@@ -253,3 +253,52 @@ car_test stress_test_mixed(void)
 	car_assert(sum_of_block(area, get_small_area(area)) == TINY_CAPACITY);
 	car_assert(sum_of_block(get_small_area(area), get_large_area(area)) == SMALL_CAPACITY);
 }
+
+
+car_test spam_minimal_size(void)
+{
+	reset_area();
+
+	void *alloc_table[10000];
+
+	free_tree_t *trees = get_free_trees();
+	block_ptr nil = get_nil_node();
+
+	size_t i = 0;
+	while (trees->tiny != nil)
+	{
+		alloc_table[i] = ft_malloc(1);
+		i++;
+	}
+
+	fancy_memory_dump();
+
+	for (size_t y = 0; y < i; y++)
+		ft_free(alloc_table[y]);
+
+	fancy_memory_dump();
+}
+
+car_test spam_minimal_size_2(void)
+{
+	reset_area();
+
+	void *alloc_table[10000];
+
+	free_tree_t *trees = get_free_trees();
+	block_ptr nil = get_nil_node();
+
+	size_t i = 0;
+	while (trees->small != nil)
+	{
+		alloc_table[i] = ft_malloc(TINY_MAX_SIZE + 1);
+		i++;
+	}
+	
+	fancy_memory_dump();
+
+	for (size_t y = 0; y < i; y++)
+		ft_free(alloc_table[y]);
+
+	fancy_memory_dump();
+}

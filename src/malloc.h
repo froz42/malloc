@@ -53,7 +53,7 @@ typedef void* area_ptr;
 # define ALLIGN_16(x) ((x + 15) & ~15)
 
 // minimal size is the size minimal to store rbtree node
-# define MINIMAL_SIZE ALLIGN_16(sizeof(size_t) + (sizeof(void *) * 4) + sizeof(int))
+# define MINIMAL_SIZE ALLIGN_16((sizeof(void *) * 3) + sizeof(int))
 
 void init_area(area_ptr area, size_t size);
 area_ptr get_or_create_area(void);

@@ -95,7 +95,7 @@ int is_off_map(void *data, area_ptr area)
 }
 
 /**
- * @brief Get the minimal size a block can have in the area
+ * @brief Get the minimal size of a block can have in the area
  *  undefined if off map
  * @param block the block ptr
  * @param area the area ptr
@@ -106,4 +106,18 @@ size_t get_minimal_size(block_ptr block, area_ptr area)
 	if (block < get_small_area(area))
 		return MINIMAL_SIZE;
 	return TINY_MAX_SIZE + 1;
+}
+
+/**
+ * @brief Get the maximal size of a block can have in the area
+ * 
+ * @param block the block ptr
+ * @param area the area ptr
+ * @return size_t the maximal size
+ */
+size_t get_maximal_size(block_ptr block, area_ptr area)
+{
+	if (block < get_small_area(area))
+		return TINY_MAX_SIZE;
+	return SMALL_MAX_SIZE;
 }

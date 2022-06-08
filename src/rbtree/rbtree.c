@@ -27,12 +27,12 @@
  */
 block_ptr get_nil_node(void)
 {
-	static char nil_node[MINIMAL_SIZE];
+	static char nil_node[MINIMAL_SIZE + sizeof(void *) + sizeof(size_t)];
 	static int is_init = 0;
 
 	if (is_init == 0)
 	{
-		init_area(nil_node, MINIMAL_SIZE);
+		init_area(nil_node, MINIMAL_SIZE + sizeof(void *) + sizeof(size_t));
 		*get_parent(nil_node) = nil_node;
 		*get_left_child(nil_node) = nil_node;
 		*get_right_child(nil_node) = nil_node;

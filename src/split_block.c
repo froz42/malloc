@@ -23,12 +23,6 @@ block_ptr split_block(block_ptr block, size_t size, void *areaend)
 	size_t const new_size_block_a = size;
 	size_t const new_size_block_b = get_block_size(block) - size;
 
-	if (new_size_block_a < MINIMAL_SIZE || new_size_block_b < MINIMAL_SIZE)
-	{
-		error_write("split_block: block too small");
-		return (NULL);
-	}
-
 	block_ptr const next = get_next_block(block);
 	block_ptr const prev = *get_prev_block(block);
 
@@ -98,3 +92,49 @@ block_ptr unfrag_block(block_ptr block, void *area_end, block_ptr *root)
 	}
 	return (block);
 }
+
+
+/**
+ * @brief This function try to extend a block
+ * 
+ * @param block the block to extend
+ * @param wanted_size the wanted size for the block
+ * @param area the area start
+ * @return int 1 if the block was extended, 0 otherwise
+ */
+/*int extend_block(block_ptr block, size_t wanted_size, area_ptr area)
+{
+	block_ptr const next = get_next_block(block);
+	size_t const size = get_block_size(block);
+	size_t next_size = get_block_size(next);
+	void *const area_end = find_area_end(block, area);
+
+	if (next >= area_end)
+		return (0);
+	
+	if (is_allocated(next))
+		return (0);
+
+	size_t minimum_size = get_minimal_size(block, area);
+
+	if (minimum_size > wanted_size)
+		return (0);
+
+	if (get_maximal_size(block, area) < wanted_size)
+		return (0);
+
+	if (next_size + sizeof(size_t) + sizeof(void *) + size < wanted_size)
+		return (0);
+
+	if (next_size + sizeof(size_t) + sizeof(void *) - (wanted_size - size) <= minimum_size)
+	{
+		merge_next_block(block, area_end);
+		set_allocated(block);
+		return (1);
+	}
+
+	set_raw_block_size(block, wanted_size);
+
+	block_ptr const new_block = get_next_block(block);
+
+}*/
