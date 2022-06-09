@@ -254,7 +254,6 @@ car_test stress_test_mixed(void)
 	car_assert(sum_of_block(get_small_area(area), get_large_area(area)) == SMALL_CAPACITY);
 }
 
-
 car_test spam_minimal_size(void)
 {
 	reset_area();
@@ -271,14 +270,17 @@ car_test spam_minimal_size(void)
 		i++;
 	}
 
-	fancy_memory_dump();
-
 	for (size_t y = 0; y < i; y++)
 		ft_free(alloc_table[y]);
+	
+	area_ptr area = get_or_create_area();
 
-	fancy_memory_dump();
+	car_assert(trees->tiny == area);
+	car_assert(trees->small == get_small_area(area));
+
+	car_assert(sum_of_block(area, get_small_area(area)) == TINY_CAPACITY);
+	car_assert(sum_of_block(get_small_area(area), get_large_area(area)) == SMALL_CAPACITY);
 }
-
 car_test spam_minimal_size_2(void)
 {
 	reset_area();
@@ -294,11 +296,16 @@ car_test spam_minimal_size_2(void)
 		alloc_table[i] = ft_malloc(TINY_MAX_SIZE + 1);
 		i++;
 	}
-	
-	fancy_memory_dump();
+
 
 	for (size_t y = 0; y < i; y++)
 		ft_free(alloc_table[y]);
 
-	fancy_memory_dump();
+	area_ptr area = get_or_create_area();
+
+	car_assert(trees->tiny == area);
+	car_assert(trees->small == get_small_area(area));
+
+	car_assert(sum_of_block(area, get_small_area(area)) == TINY_CAPACITY);
+	car_assert(sum_of_block(get_small_area(area), get_large_area(area)) == SMALL_CAPACITY);
 }

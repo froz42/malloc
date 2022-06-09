@@ -13,7 +13,6 @@
 
 void init_area(area_ptr area, size_t size);
 area_ptr get_or_create_area(void);
-area_ptr get_area_end(area_ptr area, size_t size);
 area_ptr find_area_end(area_ptr area, block_ptr block);
 void *handle_off_map(size_t size);
 int is_off_map(void *data, area_ptr area);

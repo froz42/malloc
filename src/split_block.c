@@ -107,7 +107,7 @@ int extend_block(block_ptr block, size_t wanted_size, area_ptr area)
 	block_ptr const next = get_next_block(block);
 	size_t const size = get_block_size(block);
 	size_t next_size = get_block_size(next);
-	void *const area_end = find_area_end(block, area);
+	void *const area_end = find_area_end(area, block);
 
 	if (next >= area_end)
 		return (0);
@@ -143,7 +143,9 @@ int extend_block(block_ptr block, size_t wanted_size, area_ptr area)
 	set_raw_block_size(new_block, remaining_size);
 	*get_prev_block(new_block) = block;
 
-	*get_prev_block(get_next_block(new_block)) = new_block;
+	block_ptr const new_next = get_next_block(new_block);
+	if (new_next < area_end)
+		*get_prev_block(new_next) = new_block;
 	insert_free_block(new_block, find_proper_root(area, new_block));
 	return (1);
 }

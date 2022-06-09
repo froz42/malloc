@@ -26,6 +26,8 @@ typedef void car_test;
 #define UNDERLINE "\033[4m"
 #define RESET "\033[0m"
 
+void reset_area(void);
+
 typedef void test_function(void);
 
 int run_tests(test_function *tests[]);
