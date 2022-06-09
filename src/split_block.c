@@ -102,7 +102,7 @@ block_ptr unfrag_block(block_ptr block, void *area_end, block_ptr *root)
  * @param area the area start
  * @return int 1 if the block was extended, 0 otherwise
  */
-/*int extend_block(block_ptr block, size_t wanted_size, area_ptr area)
+int extend_block(block_ptr block, size_t wanted_size, area_ptr area)
 {
 	block_ptr const next = get_next_block(block);
 	size_t const size = get_block_size(block);
@@ -126,15 +126,24 @@ block_ptr unfrag_block(block_ptr block, void *area_end, block_ptr *root)
 	if (next_size + sizeof(size_t) + sizeof(void *) + size < wanted_size)
 		return (0);
 
-	if (next_size + sizeof(size_t) + sizeof(void *) - (wanted_size - size) <= minimum_size)
+	delete_free_block(next, find_proper_root(area, next));
+
+	const size_t remaining_size = next_size - (wanted_size - size);
+
+	if (remaining_size < minimum_size)
 	{
 		merge_next_block(block, area_end);
 		set_allocated(block);
 		return (1);
 	}
 
-	set_raw_block_size(block, wanted_size);
+	set_block_size(block, wanted_size);
 
 	block_ptr const new_block = get_next_block(block);
+	set_raw_block_size(new_block, remaining_size);
+	*get_prev_block(new_block) = block;
 
-}*/
+	*get_prev_block(get_next_block(new_block)) = new_block;
+	insert_free_block(new_block, find_proper_root(area, new_block));
+	return (1);
+}
