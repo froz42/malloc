@@ -365,3 +365,21 @@ car_test realloc_test(void)
 
 	car_assert(is_allocated(block_5) == 0);
 }
+
+car_test off_map_spam(void)
+{
+	reset_area();
+
+	void *allocs[300];
+
+	for (int i = 0; i < 300; i++)
+	{
+		allocs[i] = ft_malloc(2048);
+		memset(allocs[i], 0xFF, 2048);
+	}
+
+	for (int i = 0; i < 300; i++)
+		ft_free(allocs[i]);
+
+	car_assert(1 == 1);
+}
