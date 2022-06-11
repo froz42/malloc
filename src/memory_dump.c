@@ -9,6 +9,7 @@
 
 #include "malloc.h"
 #include <unistd.h>
+#include <stdio.h>
 
 
 /**
@@ -59,8 +60,10 @@ size_t sum_of_block(void *area_start, void *area_end)
 	block_ptr block = area_start;
 	while (block < area_end)
 	{
+		//printf("%p\n", block);
 		sum += get_block_size(block) + sizeof(void *) + sizeof(size_t);
 		block = get_next_block(block);
+		//printf("%p\n", block);
 	}
 	return (sum);
 }
@@ -172,12 +175,28 @@ static void check_trees(area_ptr area)
 	size_t sum_of_small_free_blocks = count_free_blocks(get_small_area(area), get_large_area(area));
 
 	if (sum_of_tiny_tree != sum_of_tiny_free_blocks)
+	{
 		ft_putstr("\033[31mTiny tree error\033[0m\n");
+		ft_putstr("\033[31mTiny tree size: \033[0m");	
+		ft_putnbr(sum_of_tiny_tree);
+		ft_putstr("\n");
+		ft_putstr("\033[31mTiny free blocks: \033[0m");
+		ft_putnbr(sum_of_tiny_free_blocks);
+		ft_putstr("\n");
+	}
 	else
 		ft_putstr("\033[32mTiny tree ok\033[0m\n");
 	
 	if (sum_of_small_tree != sum_of_small_free_blocks)
+	{
 		ft_putstr("\033[31mSmall tree error\033[0m\n");
+		ft_putstr("\033[31mSmall tree size: \033[0m");
+		ft_putnbr(sum_of_small_tree);
+		ft_putstr("\n");
+		ft_putstr("\033[31mSmall free blocks: \033[0m");
+		ft_putnbr(sum_of_small_free_blocks);
+		ft_putstr("\n");
+	}
 	else
 		ft_putstr("\033[32mSmall tree ok\033[0m\n");
 }
@@ -196,10 +215,10 @@ void fancy_memory_dump(void)
 	}
 	else
 		ft_putstr("\033[32marea ok\033[0m\n");
+	dump_area(area, get_small_area(area), TINY_MAX_SIZE / 2);
 	ft_putstr("tiny: \n");
 	check_sum(area, get_small_area(area), TINY_CAPACITY);
 	check_prev(area, get_small_area(area));
-	dump_area(area, get_small_area(area), TINY_MAX_SIZE / 2);
 
 	ft_putstr("small: \n");
 	check_sum(get_small_area(area), get_large_area(area), SMALL_CAPACITY);
