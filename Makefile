@@ -6,7 +6,7 @@
 #    By: tmatis <tmatis@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2022/06/11 18:29:50 by tmatis           ###   ########.fr        #
+#    Updated: 2022/06/11 22:37:32 by tmatis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -228,6 +228,7 @@ endif
 $(NAME):	${OBJS}
 			@$(call display_progress_bar)
 			@$(call run_and_test,$(CC) $(CFLAGS) $(DFLAGS) -I$(INCLUDE_PATH) -shared -o $@ ${OBJS})
+			@ln -s $(NAME) libft_malloc.so
 			@echo "                                                              "
 			@rm -rf .files_changed
 
@@ -244,7 +245,7 @@ clean:		header
 			@printf "%-53b%b" "$(COM_COLOR)clean:" "$(OK_COLOR)[✓]$(NO_COLOR)\n"
 
 fclean:		header clean
-			@rm -rf $(NAME) unit_tests/collected ./bin_test
+			@rm -rf $(NAME) unit_tests/collected ./bin_test libft_malloc.so
 			@printf "%-53b%b" "$(COM_COLOR)fclean:" "$(OK_COLOR)[✓]$(NO_COLOR)\n"
 
 re:			fclean all
