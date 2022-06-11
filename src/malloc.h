@@ -28,9 +28,48 @@
 #  define CALLOC_NAME ft_calloc
 #endif
 
+/**
+ * @brief A block of memory
+ * The block has the following structure:
+ * ---------------------------------
+ * | size | prev | data + padding |
+ * ---------------------------------
+ * size: the size of the block in bytes
+ * prev: the previous block in the area
+ * data + padding: the data of the block
+ * The data of the block is aligned to 16 bytes 
+ * 
+ * The off map block has the following structure:
+ * ----------------------------------------
+ * | size | prev | data + padding | next |
+ * ----------------------------------------
+ * size: the size of the block in bytes
+ * prev: the previous block in the area
+ * data + padding: the data of the block
+ * next: the next block in the area (only for off map blocks)
+ * 
+ * The rbtree is a red-black tree.
+ * It is used to store free blocks and to find the best fit block.
+ * The rbtree is implemented as a binary tree.
+ * The nil node points to itself.
+ * the block structure is as follows:
+ * ----------------------------------------------------------
+ * | size | prev | left | right | parent | padding |  color |
+ * ----------------------------------------------------------
+ * The size field is the size of the block.
+ * The prev field points to the previous block.
+ * The left field points to the left child.
+ * The right field points to the right child.
+ * The parent field points to the parent node.
+ * The color field is used to indicate the color of the node.
+ * The color field is either RED or BLACK.
+ */
 typedef void* block_ptr;
-typedef void* area_ptr;
 
+/**
+ * @brief Area ptr
+ */
+typedef void* area_ptr;
 
 # include "utils.h"
 # include "data_access.h"
