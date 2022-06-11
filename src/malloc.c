@@ -137,10 +137,7 @@ void FREE_NAME(void *data)
 	block_ptr block = get_block_from_data(data);
 
 	if (!is_allocated(block))
-	{
-		error_write("free(): double free detected");
 		return;
-	}
 
 	if (is_off_map(block, area))
 		return remove_off_map_block(block);
