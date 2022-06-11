@@ -1,12 +1,12 @@
 /**
- * @file split_block.h
+ * @file block_manipulation.h
  * @author tmatis (tmatis@student.42.fr)
- * @brief header file for split block and defragmentation
+ * @brief header file for various block manipulation functions
  * @date 2022-06-06
  * 
  */
-#ifndef SPLIT_BLOCK_H
-# define SPLIT_BLOCK_H
+#ifndef BLOCK_MANIPULATION_H
+# define BLOCK_MANIPULATION_H
 
 #include "malloc.h"
 

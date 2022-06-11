@@ -6,7 +6,7 @@
 #    By: tmatis <tmatis@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2022/06/07 19:03:15 by tmatis           ###   ########.fr        #
+#    Updated: 2022/06/11 18:29:50 by tmatis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,8 +37,8 @@ SRCS_PATH		= ./src
 
 INCLUDE_PATH	= ./src
 
-SRCS			= malloc.c data_access.c rbtree/rbtree.c split_block.c off_map.c \
-				  memory_dump.c area_utils.c utils.c
+SRCS			= malloc.c data_access.c rbtree/rbtree.c off_map.c \
+				  memory_dump.c area_utils.c utils.c block_manipulation.c
 
 
 ################################################################################

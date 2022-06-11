@@ -1,7 +1,7 @@
 /**
- * @file split_block.c
+ * @file block_manipulation.c
  * @author tmatis (tmatis@student.42.fr)
- * @brief This file conatins utilities to handle split block and defragmentation
+ * @brief This file contains the functions used to manipulate blocks
  * @date 2022-06-06
  *
  */
