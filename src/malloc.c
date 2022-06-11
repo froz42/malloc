@@ -93,7 +93,7 @@ void *REALLOC_NAME(void *ptr, size_t size)
 	block_ptr block = get_block_from_data(ptr);
 	size_t old_size = get_block_size(block);
 
-	if (size <= old_size)
+	if (size == old_size)
 		return ptr;
 
 	area_ptr area = get_or_create_area();
@@ -103,18 +103,19 @@ void *REALLOC_NAME(void *ptr, size_t size)
 	if (!is_off_map(block, area))
 	{
 		if (size < old_size && !shrink_block(block, size, area))
-		{
+			// if we succeed to shrink the block, we return the data
 			return (ptr);
-		}
 
 		if (size > old_size && !extend_block(block, size, area))
 			// if we succeed to extend the block, we return the data
 			return (ptr);
 	}
+	// select lower size
+	size_t to_copy = old_size < size ? old_size : size;
 	void *new_ptr = MALLOC_NAME(size);
 	if (new_ptr)
 	{
-		memcpy(new_ptr, ptr, old_size);
+		ft_memcpy(new_ptr, ptr, to_copy);
 		FREE_NAME(ptr);
 	}
 	return new_ptr;
