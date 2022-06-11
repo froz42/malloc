@@ -65,3 +65,17 @@ void ft_memcpy(void *dst, void *src, size_t n)
 		i++;
 	}
 }
+
+/**
+ * @brief count the number of characters in a string
+ * 
+ * @param str string to count
+ * @return size_t number of characters
+ */
+size_t ft_strlen(char const *str)
+{
+	size_t i = 0;
+	while (str[i])
+		i++;
+	return i;
+}

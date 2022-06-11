@@ -90,6 +90,7 @@ typedef void* area_ptr;
 # define TOTAL_CAPACITY (TINY_CAPACITY + SMALL_CAPACITY)
 
 # define ALLIGN_16(x) ((x + 15) & ~15)
+# define ALLIGN_PAGE(x) ((x + getpagesize() - 1) & ~(getpagesize() - 1))
 
 // minimal size is the size minimal to store rbtree node
 # define MINIMAL_SIZE ALLIGN_16((sizeof(void *) * 3) + sizeof(int))

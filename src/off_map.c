@@ -61,6 +61,24 @@ void remove_off_map(block_ptr block)
 }
 
 /**
+ * @brief Get the off map count of blocks
+ * 
+ * @return size_t the number of blocks in the off map
+ */
+size_t get_off_map_size(void)
+{
+	block_ptr *off_map = get_off_map_list();
+	size_t size = 0;
+	block_ptr block = *off_map;
+	while (block != NULL)
+	{
+		size++;
+		block = *get_off_map_next_block(block);
+	}
+	return size;
+}
+
+/**
  * @brief Manage the allocation of an off map block
  * 
  * @param size 
@@ -68,7 +86,7 @@ void remove_off_map(block_ptr block)
  */
 block_ptr new_off_map_block(size_t size)
 {
-	block_ptr block = mmap(NULL, size + 32, PROT_READ | PROT_WRITE,
+	block_ptr block = mmap(NULL, ALLIGN_PAGE(size + 32), PROT_READ | PROT_WRITE,
 			MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
 	if (block == MAP_FAILED)
 		return NULL;
@@ -88,5 +106,5 @@ void remove_off_map_block(block_ptr block)
 {
 	set_free(block);
 	remove_off_map(block);
-	munmap(block, get_block_size(block) + 16);
+	munmap(block, ALLIGN_PAGE(get_block_size(block) + 16));
 }
