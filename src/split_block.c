@@ -99,7 +99,7 @@ block_ptr unfrag_block(block_ptr block, void *area_end, block_ptr *root)
  * @param block the block to extend
  * @param wanted_size the wanted size for the block
  * @param area the area start
- * @return int 0 if the block was extended, 1 otherwise
+ * @return int 1 if the block need to be moved, 0 otherwise
  */
 int extend_block(block_ptr block, size_t wanted_size, area_ptr area)
 {

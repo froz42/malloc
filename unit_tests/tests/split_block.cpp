@@ -287,7 +287,4 @@ car_test test_shrink_block(void)
 	car_assert_cmp(ret, 0);
 	car_assert_cmp(get_block_size(last_block), 112u);
 
-	ft_free(get_block_data(get_next_block(last_block)));
-	fancy_memory_dump();
-
 }

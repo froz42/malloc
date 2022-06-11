@@ -3,7 +3,7 @@
  * @author tmatis (tmatis@student.42.fr)
  * @brief The malloc functions
  * @date 2022-06-06
- * 
+ *
  */
 
 #include <unistd.h>
@@ -20,7 +20,7 @@
 void *MALLOC_NAME(size_t size)
 {
 	size = ALLIGN_16(size);
-	
+
 	if (size < MINIMAL_SIZE)
 		size = MINIMAL_SIZE;
 
@@ -29,7 +29,7 @@ void *MALLOC_NAME(size_t size)
 		return NULL;
 
 	block_ptr *root = get_proper_root(size);
-	
+
 	if (!root)
 		return handle_off_map(size);
 
@@ -86,9 +86,18 @@ void *REALLOC_NAME(void *ptr, size_t size)
 		FREE_NAME(ptr);
 		return NULL;
 	}
-	if (size <= old_size)
-		return ptr;
+	/*if (size == old_size)
+		return ptr;*/
+
+	/*area_ptr area = get_or_create_area();
+	if (size < old_size && !shrink_block(block, size, area))
+		// if we succeed to shrink the block, we return the data
+		return (ptr);
 	
+	if (size > old_size && !extend_block(block, size, area))
+		// if we succeed to extend the block, we return the data
+		return (ptr);*/
+
 	void *new_ptr = MALLOC_NAME(size);
 	if (new_ptr)
 	{
@@ -108,7 +117,6 @@ void FREE_NAME(void *data)
 	if (data == NULL)
 		return;
 
-
 	area_ptr area = get_or_create_area();
 	if (area == NULL)
 		return;
@@ -119,7 +127,7 @@ void FREE_NAME(void *data)
 		error_write("free(): double free detected");
 		return;
 	}
-	
+
 	if (is_off_map(block, area))
 		return remove_off_map_block(block);
 

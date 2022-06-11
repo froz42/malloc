@@ -22,6 +22,11 @@ void error_write(char *str)
 	write(STDERR_FILENO, "\n", 1);
 }
 
+/**
+ * @brief write a message to STDOUT
+ * 
+ * @param str message to write
+ */
 void ft_putstr(char *str)
 {
 	size_t i = 0;
@@ -30,6 +35,11 @@ void ft_putstr(char *str)
 	write(1, str, i);
 }
 
+/**
+ * @brief Put a nbr to STDOUT
+ * 
+ * @param n nbr to print
+ */
 void ft_putnbr(size_t n)
 {
 	if (n >= 10)
@@ -37,4 +47,21 @@ void ft_putnbr(size_t n)
 	char c;
 	c = n % 10 + '0';
 	write(1, &c, 1);
+}
+
+/**
+ * @brief copy the content of src to dst
+ * 
+ * @param dst destination
+ * @param src source
+ * @param n number of bytes to copy
+ */
+void ft_memcpy(void *dst, void *src, size_t n)
+{
+	size_t i = 0;
+	while (i < n)
+	{
+		((char *)dst)[i] = ((char *)src)[i];
+		i++;
+	}
 }

@@ -13,5 +13,6 @@
 void ft_putstr(char *str);
 void ft_putnbr(size_t n);
 void error_write(char *str);
+void ft_memcpy(void *dst, void *src, size_t n);
 
 #endif
