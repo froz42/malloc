@@ -76,28 +76,41 @@ void *CALLOC_NAME(size_t nmemb, size_t size)
  */
 void *REALLOC_NAME(void *ptr, size_t size)
 {
-	if (ptr == NULL)
-		return MALLOC_NAME(size);
-	block_ptr block = get_block_from_data(ptr);
-	size_t old_size = get_block_size(block);
-
 	if (size == 0)
 	{
 		FREE_NAME(ptr);
 		return NULL;
 	}
-	/*if (size == old_size)
-		return ptr;*/
 
-	/*area_ptr area = get_or_create_area();
-	if (size < old_size && !shrink_block(block, size, area))
-		// if we succeed to shrink the block, we return the data
-		return (ptr);
-	
-	if (size > old_size && !extend_block(block, size, area))
-		// if we succeed to extend the block, we return the data
-		return (ptr);*/
+	size = ALLIGN_16(size);
 
+	if (size < MINIMAL_SIZE)
+		size = MINIMAL_SIZE;
+
+	if (ptr == NULL)
+		return MALLOC_NAME(size);
+
+	block_ptr block = get_block_from_data(ptr);
+	size_t old_size = get_block_size(block);
+
+	if (size <= old_size)
+		return ptr;
+
+	area_ptr area = get_or_create_area();
+	if (area == NULL)
+		return NULL;
+
+	if (!is_off_map(block, area))
+	{
+		if (size < old_size && !shrink_block(block, size, area))
+		{
+			return (ptr);
+		}
+
+		if (size > old_size && !extend_block(block, size, area))
+			// if we succeed to extend the block, we return the data
+			return (ptr);
+	}
 	void *new_ptr = MALLOC_NAME(size);
 	if (new_ptr)
 	{

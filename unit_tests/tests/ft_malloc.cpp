@@ -272,7 +272,7 @@ car_test spam_minimal_size(void)
 
 	for (size_t y = 0; y < i; y++)
 		ft_free(alloc_table[y]);
-	
+
 	area_ptr area = get_or_create_area();
 
 	car_assert(trees->tiny == area);
@@ -297,7 +297,6 @@ car_test spam_minimal_size_2(void)
 		i++;
 	}
 
-
 	for (size_t y = 0; y < i; y++)
 		ft_free(alloc_table[y]);
 
@@ -308,4 +307,61 @@ car_test spam_minimal_size_2(void)
 
 	car_assert(sum_of_block(area, get_small_area(area)) == TINY_CAPACITY);
 	car_assert(sum_of_block(get_small_area(area), get_large_area(area)) == SMALL_CAPACITY);
+}
+
+car_test realloc_test(void)
+{
+	reset_area();
+
+	void *alloc = ft_malloc(128);
+	memset(alloc, 0xFF, 128);
+
+	void *realloc_a = ft_realloc(alloc, 256);
+
+	car_assert(realloc_a == alloc);
+
+	realloc_a = ft_realloc(alloc, 128);
+
+	car_assert(realloc_a == alloc);
+
+	realloc_a = ft_realloc(alloc, 50);
+
+	car_assert(realloc_a == alloc);
+
+	realloc_a = ft_realloc(alloc, 0);
+
+	car_assert_cmp(realloc_a, (void *)NULL);
+
+	alloc = ft_malloc(128);
+
+	realloc_a = ft_realloc(alloc, 257);
+
+	car_assert(realloc_a != alloc);
+
+	realloc_a = ft_realloc(alloc, 128);
+
+	car_assert(realloc_a == alloc);
+	reset_area();
+
+	free_tree_t *trees = get_free_trees();
+	block_ptr nil = get_nil_node();
+	size_t i = 0;
+	void *allocs[10000];
+	while (trees->tiny != nil)
+	{
+		allocs[i] = ft_malloc(256);
+		i++;
+	}
+
+	alloc = ft_realloc(allocs[5], 128);
+
+	car_assert(alloc == allocs[5]);
+
+	alloc = ft_realloc(allocs[5], 257);
+
+	car_assert(alloc != allocs[5]);
+
+	block_ptr block_5 = get_block_from_data(allocs[5]);
+
+	car_assert(is_allocated(block_5) == 0);
 }

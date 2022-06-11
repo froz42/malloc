@@ -287,4 +287,15 @@ car_test test_shrink_block(void)
 	car_assert_cmp(ret, 0);
 	car_assert_cmp(get_block_size(last_block), 112u);
 
+	while (i > 0)
+	{
+		ft_free(allocs[i - 1]);
+		i--;
+	}
+
+	car_assert(trees->tiny == area);
+	car_assert(trees->small == get_small_area(area));
+
+	car_assert(sum_of_block(area, get_small_area(area)) == TINY_CAPACITY);
+	car_assert(sum_of_block(get_small_area(area), get_large_area(area)) == SMALL_CAPACITY);	
 }
