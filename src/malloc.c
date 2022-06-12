@@ -10,6 +10,9 @@
 #include "malloc.h"
 #include <stdio.h>
 #include <string.h>
+#include <pthread.h>
+
+static pthread_mutex_t g_malloc_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 /**
  * @brief Custom malloc function
@@ -17,7 +20,7 @@
  * @param size size of the block
  * @return void* The allocated memory or NULL if failed
  */
-void *MALLOC_NAME(size_t size)
+static void *_malloc(size_t size)
 {
 	size = ALLIGN_16(size);
 
@@ -54,71 +57,15 @@ void *MALLOC_NAME(size_t size)
  * @param size size of the element
  * @return void* The allocated memory or NULL if failed
  */
-void *CALLOC_NAME(size_t nmemb, size_t size)
+static void *_calloc(size_t nmemb, size_t size)
 {
 	size_t total_size = nmemb * size;
 	if (total_size == 0)
 		total_size = 1;
-	void *data = MALLOC_NAME(total_size);
+	void *data = _malloc(total_size);
 	if (data)
 		memset(data, 0, total_size);
 	return data;
-}
-
-/**
- * @brief Custom realloc function
- * This function is named ft_realloc or realloc
- * this function try to expand the block or allocate a new block
- * and copy the data to the new block
- * @param ptr the block to reallocate
- * @param size the new size of the block
- * @return void* The allocated memory or NULL if failed
- */
-void *REALLOC_NAME(void *ptr, size_t size)
-{
-	if (size == 0)
-	{
-		FREE_NAME(ptr);
-		return NULL;
-	}
-
-	size = ALLIGN_16(size);
-
-	if (size < MINIMAL_SIZE)
-		size = MINIMAL_SIZE;
-
-	if (ptr == NULL)
-		return MALLOC_NAME(size);
-
-	block_ptr block = get_block_from_data(ptr);
-	size_t old_size = get_block_size(block);
-
-	if (size == old_size)
-		return ptr;
-
-	area_ptr area = get_or_create_area();
-	if (area == NULL)
-		return NULL;
-
-	if (!is_off_map(block, area))
-	{
-		if (size < old_size && !shrink_block(block, size, area))
-			// if we succeed to shrink the block, we return the data
-			return (ptr);
-
-		if (size > old_size && !extend_block(block, size, area))
-			// if we succeed to extend the block, we return the data
-			return (ptr);
-	}
-	// select lower size
-	size_t to_copy = old_size < size ? old_size : size;
-	void *new_ptr = MALLOC_NAME(size);
-	if (new_ptr)
-	{
-		ft_memcpy(new_ptr, ptr, to_copy);
-		FREE_NAME(ptr);
-	}
-	return new_ptr;
 }
 
 /**
@@ -126,7 +73,7 @@ void *REALLOC_NAME(void *ptr, size_t size)
  * This function is named ft_free or free
  * @param data the data ptr to free
  */
-void FREE_NAME(void *data)
+static void _free(void *data)
 {
 	if (data == NULL)
 		return;
@@ -153,4 +100,91 @@ void FREE_NAME(void *data)
 
 	block_ptr new_block = unfrag_block(block, find_area_end(area, block), root);
 	insert_free_block(new_block, root);
+}
+
+/**
+ * @brief Custom realloc function
+ * This function is named ft_realloc or realloc
+ * this function try to expand the block or allocate a new block
+ * and copy the data to the new block
+ * @param ptr the block to reallocate
+ * @param size the new size of the block
+ * @return void* The allocated memory or NULL if failed
+ */
+static void *_realloc(void *ptr, size_t size)
+{
+	if (size == 0)
+	{
+		_free(ptr);
+		return NULL;
+	}
+
+	size = ALLIGN_16(size);
+
+	if (size < MINIMAL_SIZE)
+		size = MINIMAL_SIZE;
+
+	if (ptr == NULL)
+		return _malloc(size);
+
+	block_ptr block = get_block_from_data(ptr);
+	size_t old_size = get_block_size(block);
+
+	if (size == old_size)
+		return ptr;
+
+	area_ptr area = get_or_create_area();
+	if (area == NULL)
+		return NULL;
+
+	if (!is_off_map(block, area))
+	{
+		if (size < old_size && !shrink_block(block, size, area))
+			// if we succeed to shrink the block, we return the data
+			return (ptr);
+
+		if (size > old_size && !extend_block(block, size, area))
+			// if we succeed to extend the block, we return the data
+			return (ptr);
+	}
+	// select lower size
+	size_t to_copy = old_size < size ? old_size : size;
+	void *new_ptr = _malloc(size);
+	if (new_ptr)
+	{
+		ft_memcpy(new_ptr, ptr, to_copy);
+		_free(ptr);
+	}
+	return new_ptr;
+}
+
+void *MALLOC_NAME(size_t size)
+{
+	pthread_mutex_lock(&g_malloc_mutex);
+	void *data = _malloc(size);
+	pthread_mutex_unlock(&g_malloc_mutex);
+	return data;
+}
+
+void *CALLOC_NAME(size_t nmemb, size_t size)
+{
+	pthread_mutex_lock(&g_malloc_mutex);
+	void *data = _calloc(nmemb, size);
+	pthread_mutex_unlock(&g_malloc_mutex);
+	return data;
+}
+
+void *REALLOC_NAME(void *ptr, size_t size)
+{
+	pthread_mutex_lock(&g_malloc_mutex);
+	void *data = _realloc(ptr, size);
+	pthread_mutex_unlock(&g_malloc_mutex);
+	return data;
+}
+
+void FREE_NAME(void *data)
+{
+	pthread_mutex_lock(&g_malloc_mutex);
+	_free(data);
+	pthread_mutex_unlock(&g_malloc_mutex);
 }
