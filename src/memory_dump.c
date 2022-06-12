@@ -205,7 +205,7 @@ static void check_trees(area_ptr area)
  * @brief This function print the memory in a fancy way
  * and perform some checks on the memory
  */
-void fancy_memory_dump(void)
+void show_alloc_mem_ex(void)
 {
 	area_ptr area = get_or_create_area();
 	if (area == NULL)

@@ -98,7 +98,7 @@ typedef void* area_ptr;
 void init_area(area_ptr area, size_t size);
 area_ptr get_or_create_area(void);
 void error_write(char *str);
-void fancy_memory_dump(void);
+void show_alloc_mem_ex(void);
 
 void *ft_malloc(size_t size);
 void ft_free(void *data);
