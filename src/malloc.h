@@ -77,6 +77,7 @@ typedef void* area_ptr;
 # include "rbtree/rbtree.h"
 # include "block_manipulation.h"
 # include "off_map.h"
+# include "config.h"
 
 # define TINY_MAX_SIZE 256 // max size in bytes for tiny area
 # define SMALL_MAX_SIZE 1024 // max size in bytes for small area
@@ -99,6 +100,7 @@ void init_area(area_ptr area, size_t size);
 area_ptr get_or_create_area(void);
 void error_write(char *str);
 void show_alloc_mem_ex(void);
+void dump_block(block_ptr block);
 
 void *ft_malloc(size_t size);
 void ft_free(void *data);

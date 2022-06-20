@@ -79,3 +79,18 @@ size_t ft_strlen(char const *str)
 		i++;
 	return i;
 }
+
+/**
+ * @brief compare two strings
+ * 
+ * @param s1 first string
+ * @param s2 second string
+ * @return int 0 if equal, the difference between the first different character otherwise
+ */
+int ft_strcmp(char *s1, char *s2)
+{
+	size_t i = 0;
+	while (s1[i] && s2[i] && s1[i] == s2[i])
+		i++;
+	return s1[i] - s2[i];
+}

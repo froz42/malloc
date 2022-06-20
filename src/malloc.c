@@ -161,7 +161,16 @@ static void *_realloc(void *ptr, size_t size)
 void *MALLOC_NAME(size_t size)
 {
 	pthread_mutex_lock(&g_malloc_mutex);
+	t_config const *config = get_config();
 	void *data = _malloc(size);
+	if (config->verbose)
+	{
+		ft_putstr("malloc: ");
+		if (data)
+			dump_block(get_block_from_data(data));
+		else
+			ft_putstr("NULL\n");
+	}
 	pthread_mutex_unlock(&g_malloc_mutex);
 	return data;
 }
@@ -169,7 +178,13 @@ void *MALLOC_NAME(size_t size)
 void *CALLOC_NAME(size_t nmemb, size_t size)
 {
 	pthread_mutex_lock(&g_malloc_mutex);
+	t_config const *config = get_config();
+	if (config->verbose)
+	{
+		ft_putstr("calloc: ");
+	}
 	void *data = _calloc(nmemb, size);
+	
 	pthread_mutex_unlock(&g_malloc_mutex);
 	return data;
 }
@@ -177,7 +192,16 @@ void *CALLOC_NAME(size_t nmemb, size_t size)
 void *REALLOC_NAME(void *ptr, size_t size)
 {
 	pthread_mutex_lock(&g_malloc_mutex);
+	t_config const *config = get_config();
 	void *data = _realloc(ptr, size);
+	if (config->verbose)
+	{
+		ft_putstr("realloc: ");
+		if (data)
+			dump_block(get_block_from_data(data));
+		else
+			ft_putstr("NULL\n");
+	}
 	pthread_mutex_unlock(&g_malloc_mutex);
 	return data;
 }
@@ -185,6 +209,15 @@ void *REALLOC_NAME(void *ptr, size_t size)
 void FREE_NAME(void *data)
 {
 	pthread_mutex_lock(&g_malloc_mutex);
+	t_config const *config = get_config();
+	if (config->verbose)
+	{
+		ft_putstr("free: ");
+		if (data)
+			dump_block(get_block_from_data(data));
+		else
+			ft_putstr("NULL\n");
+	}
 	_free(data);
 	pthread_mutex_unlock(&g_malloc_mutex);
 }

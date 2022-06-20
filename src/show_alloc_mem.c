@@ -5,7 +5,7 @@
  *
  * @param ptr
  */
-static void putptr(void *ptr)
+void putptr(void *ptr)
 {
 	static char const hex[] = "0123456789ABCDEF";
 	char buf[sizeof(size_t) * 2 + 1];
@@ -21,7 +21,7 @@ static void putptr(void *ptr)
 	ft_putstr(buf);
 }
 
-static void dump_block(block_ptr block)
+void dump_block(block_ptr block)
 {
 	size_t size = get_block_size(block);
 	putptr(block);
