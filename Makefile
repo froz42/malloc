@@ -6,7 +6,7 @@
 #    By: tmatis <tmatis@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2022/06/20 14:53:59 by tmatis           ###   ########.fr        #
+#    Updated: 2022/06/20 15:34:35 by tmatis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,8 @@ endif
 NAME 	= libft_malloc_$(HOSTTYPE).so
 CC 		= gcc
 CFLAGS	= -Wall -Wextra -Werror -g -fPIC
+LIBMLX	= minilibx/libmlx.a
+LIBFLAG	= -lXext -lX11 -lm -L./minilibx -lmlx
 DFLAGS	= -MMD -MF $(@:.o=.d)
 AUTHOR	= tmatis
 DATE	= 13/04/2022
@@ -39,7 +41,7 @@ INCLUDE_PATH	= ./src
 
 SRCS			= malloc.c data_access.c rbtree/rbtree.c off_map.c \
 				  memory_dump.c area_utils.c utils.c block_manipulation.c \
-				  show_alloc_mem.c config.c
+				  show_alloc_mem.c config.c memory_view.c
 
 
 ################################################################################
@@ -226,9 +228,9 @@ endif
 
 
 -include $(DEPS) $(DEPS_MAIN)
-$(NAME):	${OBJS}
+$(NAME):	${OBJS} $(LIBMLX)
 			@$(call display_progress_bar)
-			@$(call run_and_test,$(CC) $(CFLAGS) $(DFLAGS) -I$(INCLUDE_PATH) -shared -o $@ ${OBJS})
+			@$(call run_and_test,$(CC) $(CFLAGS) $(DFLAGS) -I$(INCLUDE_PATH) -shared -o $@ ${OBJS} $(LIBFLAG))
 			@ln -sf $(NAME) libft_malloc.so
 			@echo "                                                              "
 			@rm -rf .files_changed
@@ -241,8 +243,12 @@ objs/%.o: 	$(SRCS_PATH)/%$(FILE_EXTENSION)
 			@$(call display_progress_bar)
 			@$(call run_and_test,$(CC) $(CFLAGS) $(DFLAGS) ${DEFINE} -c $< -o $@ -I$(INCLUDE_PATH))
 
+$(LIBMLX):
+			@$(call run_and_test,make -sC ./minilibx)
+
 clean:		header
 			@rm -rf objs unit_tests/objs unit_tests/collected.cpp unit_tests/collected.hpp
+			@$(call run_and_test,make -sC ./minilibx clean)
 			@printf "%-53b%b" "$(COM_COLOR)clean:" "$(OK_COLOR)[✓]$(NO_COLOR)\n"
 
 fclean:		header clean

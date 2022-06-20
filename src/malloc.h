@@ -78,6 +78,7 @@ typedef void* area_ptr;
 # include "block_manipulation.h"
 # include "off_map.h"
 # include "config.h"
+# include "memory_view.h"
 
 # define TINY_MAX_SIZE 256 // max size in bytes for tiny area
 # define SMALL_MAX_SIZE 1024 // max size in bytes for small area

@@ -4,6 +4,7 @@
 typedef struct s_config
 {
 	char verbose;
+	char visual;
 } t_config;
 
 t_config const *get_config(void);

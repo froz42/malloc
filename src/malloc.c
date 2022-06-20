@@ -160,8 +160,8 @@ static void *_realloc(void *ptr, size_t size)
 
 void *MALLOC_NAME(size_t size)
 {
-	pthread_mutex_lock(&g_malloc_mutex);
 	t_config const *config = get_config();
+	pthread_mutex_lock(&g_malloc_mutex);
 	void *data = _malloc(size);
 	if (config->verbose)
 	{
@@ -177,8 +177,8 @@ void *MALLOC_NAME(size_t size)
 
 void *CALLOC_NAME(size_t nmemb, size_t size)
 {
-	pthread_mutex_lock(&g_malloc_mutex);
 	t_config const *config = get_config();
+	pthread_mutex_lock(&g_malloc_mutex);
 	if (config->verbose)
 	{
 		ft_putstr("calloc: ");
@@ -191,8 +191,8 @@ void *CALLOC_NAME(size_t nmemb, size_t size)
 
 void *REALLOC_NAME(void *ptr, size_t size)
 {
-	pthread_mutex_lock(&g_malloc_mutex);
 	t_config const *config = get_config();
+	pthread_mutex_lock(&g_malloc_mutex);
 	void *data = _realloc(ptr, size);
 	if (config->verbose)
 	{
@@ -208,8 +208,8 @@ void *REALLOC_NAME(void *ptr, size_t size)
 
 void FREE_NAME(void *data)
 {
-	pthread_mutex_lock(&g_malloc_mutex);
 	t_config const *config = get_config();
+	pthread_mutex_lock(&g_malloc_mutex);
 	if (config->verbose)
 	{
 		ft_putstr("free: ");

@@ -2,7 +2,7 @@
 #include "malloc.h"
 #include <stdlib.h>
 
-t_config parse_config(char const* str)
+t_config parse_config(char const *str)
 {
 	char buf[1024];
 	char const *ptr = str;
@@ -18,7 +18,7 @@ t_config parse_config(char const* str)
 			ptr++;
 		if (*ptr == '\0')
 			break;
-		
+
 		// get the value check for buffer overflow
 		end = buf;
 		while (*ptr != ' ' && *ptr != '\t' && *ptr != '\0')
@@ -31,6 +31,8 @@ t_config parse_config(char const* str)
 		// strcmp buf with the flag name
 		if (ft_strcmp(buf, "verbose") == 0)
 			config.verbose = 1;
+		if (ft_strcmp(buf, "visual") == 0)
+			config.visual = 1;
 	}
 	return (config);
 }
@@ -47,7 +49,8 @@ t_config const *get_config(void)
 			config = "";
 		store = parse_config(config);
 		is_init = 1;
+		if (store.visual)
+			launch_thread();
 	}
 	return (&store);
 }
-
