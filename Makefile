@@ -6,7 +6,7 @@
 #    By: tmatis <tmatis@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2022/06/20 15:34:35 by tmatis           ###   ########.fr        #
+#    Updated: 2022/06/21 14:10:28 by tmatis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,9 @@ INCLUDE_PATH	= ./src
 
 SRCS			= malloc.c data_access.c rbtree/rbtree.c off_map.c \
 				  memory_dump.c area_utils.c utils.c block_manipulation.c \
-				  show_alloc_mem.c config.c memory_view.c
+				  show_alloc_mem.c config.c \
+				  memory_view/graphic.c memory_view/draw_utils.c \
+				  memory_view/view_controler.c memory_view/mlx_hooks.c
 
 
 ################################################################################

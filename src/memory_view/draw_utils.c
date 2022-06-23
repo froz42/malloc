@@ -2,7 +2,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include "../../minilibx/mlx.h"
-#include "memory_view.h"
+#include "graphic.h"
 
 
 int rgb_to_color(int r, int g, int b)
@@ -36,7 +36,7 @@ void draw_rectangle(t_frame *f, int x, int y, int w, int h, int color)
 	}
 }
 
-static int sign(x)
+static int sign(int x)
 {
 	if (x > 0)
 		return 1;
