@@ -6,7 +6,7 @@
 
 #define WINDOW_X 1000
 #define WINDOW_Y 800
-#define SHOW_KEY_PRESSED 1
+#define SHOW_KEY_PRESSED 0
 
 #define max(a, b) \
 	({ __typeof__ (a) _a = (a); \
@@ -44,6 +44,7 @@ typedef struct s_app_state
 {
 	t_app_mode mode;
 	t_app_block block;
+	void *block_selected;
 	ssize_t scroll_offset;
 } t_app_state;
 

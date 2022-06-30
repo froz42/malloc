@@ -19,10 +19,10 @@ ifeq ($(HOSTTYPE),)
 endif
 
 NAME 	= libft_malloc_$(HOSTTYPE).so
-CC 		= gcc
+CC 		= clang
 CFLAGS	= -Wall -Wextra -Werror -g -fPIC
 LIBMLX	= minilibx/libmlx.a
-LIBFLAG	= -lXext -lX11 -lm -L./minilibx -lmlx
+LIBFLAG	= -lXext -lX11 -lm -lpthread -L./minilibx -lmlx
 DFLAGS	= -MMD -MF $(@:.o=.d)
 AUTHOR	= tmatis
 DATE	= 13/04/2022
@@ -232,7 +232,7 @@ endif
 -include $(DEPS) $(DEPS_MAIN)
 $(NAME):	${OBJS} $(LIBMLX)
 			@$(call display_progress_bar)
-			@$(call run_and_test,$(CC) $(CFLAGS) $(DFLAGS) -I$(INCLUDE_PATH) -shared -o $@ ${OBJS} $(LIBFLAG))
+			$(CC) $(CFLAGS) $(DFLAGS) -I$(INCLUDE_PATH) -shared -o $@ ${OBJS} $(LIBFLAG)
 			@ln -sf $(NAME) libft_malloc.so
 			@echo "                                                              "
 			@rm -rf .files_changed
@@ -243,7 +243,7 @@ setup:
 objs/%.o: 	$(SRCS_PATH)/%$(FILE_EXTENSION)
 			@mkdir -p $(dir $@)
 			@$(call display_progress_bar)
-			@$(call run_and_test,$(CC) $(CFLAGS) $(DFLAGS) ${DEFINE} -c $< -o $@ -I$(INCLUDE_PATH))
+			$(CC) $(CFLAGS) $(DFLAGS) ${DEFINE} -c $< -o $@ -I$(INCLUDE_PATH)
 
 $(LIBMLX):
 			@$(call run_and_test,make -sC ./minilibx)
