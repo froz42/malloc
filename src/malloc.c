@@ -10,9 +10,8 @@
 #include "malloc.h"
 #include <stdio.h>
 #include <string.h>
-#include <pthread.h>
 
-static pthread_mutex_t g_malloc_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t g_malloc_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 /**
  * @brief Custom malloc function
@@ -20,7 +19,7 @@ static pthread_mutex_t g_malloc_mutex = PTHREAD_MUTEX_INITIALIZER;
  * @param size size of the block
  * @return void* The allocated memory or NULL if failed
  */
-static void *_malloc(size_t size)
+void *_malloc(size_t size)
 {
 	size = ALLIGN_16(size);
 
@@ -57,7 +56,7 @@ static void *_malloc(size_t size)
  * @param size size of the element
  * @return void* The allocated memory or NULL if failed
  */
-static void *_calloc(size_t nmemb, size_t size)
+void *_calloc(size_t nmemb, size_t size)
 {
 	size_t total_size = nmemb * size;
 	if (total_size == 0)
@@ -73,7 +72,7 @@ static void *_calloc(size_t nmemb, size_t size)
  * This function is named ft_free or free
  * @param data the data ptr to free
  */
-static void _free(void *data)
+void _free(void *data)
 {
 	if (data == NULL)
 		return;
@@ -111,7 +110,7 @@ static void _free(void *data)
  * @param size the new size of the block
  * @return void* The allocated memory or NULL if failed
  */
-static void *_realloc(void *ptr, size_t size)
+void *_realloc(void *ptr, size_t size)
 {
 	if (size == 0)
 	{

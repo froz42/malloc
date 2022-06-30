@@ -58,6 +58,8 @@ static void *thread_routine(void *arg)
 		return (NULL);
 	}
 
+	init_app_state(&mlx_infos.state);
+
 	mlx_hook(mlx_infos.win, 2, 1L, key_press_hook, &mlx_infos);
 	mlx_hook(mlx_infos.win, 3, 1L << 1, key_release_hook, &mlx_infos);
 	mlx_mouse_hook(mlx_infos.win, mouse_hook, &mlx_infos);
@@ -66,7 +68,6 @@ static void *thread_routine(void *arg)
 
 	return (NULL);
 }
-
 
 
 

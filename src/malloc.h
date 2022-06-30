@@ -71,6 +71,7 @@ typedef void* block_ptr;
  */
 typedef void* area_ptr;
 
+# include <pthread.h>
 # include "utils.h"
 # include "data_access.h"
 # include "area_utils.h"
@@ -79,6 +80,9 @@ typedef void* area_ptr;
 # include "off_map.h"
 # include "config.h"
 # include "memory_view/graphic.h"
+
+extern pthread_mutex_t g_malloc_mutex;
+
 
 # define TINY_MAX_SIZE 256 // max size in bytes for tiny area
 # define SMALL_MAX_SIZE 1024 // max size in bytes for small area
@@ -108,5 +112,10 @@ void ft_free(void *data);
 void *ft_realloc(void *ptr, size_t size);
 void *ft_calloc(size_t nmemb, size_t size);
 size_t sum_of_block(void *area_start, void *area_end);
+
+void *_malloc(size_t size);
+void _free(void *data);
+void *_realloc(void *ptr, size_t size);
+void *_calloc(size_t nmemb, size_t size);
 
 #endif

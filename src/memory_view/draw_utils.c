@@ -86,6 +86,18 @@ void draw_line(t_frame *f, int x1, int y1, int x2, int y2, int color)
 	frame_put_pixel(f, x2, y2, color);
 }
 
+size_t get_text_width(char *string)
+{
+	size_t width = 0;
+
+	while (*string)
+	{
+		width += 5;
+		string++;
+	}
+	return (width);
+}
+
 void put_string(t_mlx *mlx, int x, int y, int color, char *string)
 {
 	mlx_string_put(mlx->mlx, mlx->win, x, y, color, string);

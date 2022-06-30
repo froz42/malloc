@@ -1,8 +1,12 @@
 #include "graphic.h"
 #include <stdio.h>
 #include <unistd.h>
-int	loop_hook(t_mlx *mlx)
+#include "../malloc.h"
+
+int loop_hook(t_mlx *mlx)
 {
+	pthread_mutex_lock(&g_malloc_mutex);
+	draw_rectangle(&mlx->frame, 0, 0, WINDOW_X, WINDOW_Y, 0);
 	frame_render(mlx);
 	mlx_put_image_to_window(
 		mlx->mlx,
@@ -11,8 +15,8 @@ int	loop_hook(t_mlx *mlx)
 		0,
 		0);
 	post_frame_render(mlx);
-	// sleep 1 ms
-	usleep(1000);
+	pthread_mutex_unlock(&g_malloc_mutex);
+	usleep(10000);
 	return (0);
 }
 
