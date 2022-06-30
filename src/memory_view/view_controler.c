@@ -1,5 +1,6 @@
 #include "graphic.h"
 #include "../malloc.h"
+#include <stdio.h>
 
 void init_app_state(t_app_state *app_state)
 {
@@ -77,6 +78,10 @@ void draw_block(t_mlx *mlx,
 					 int size_to_draw_in_this_line,
 					 block_ptr block)
 {
+	if (mlx->state.block_selected == block)
+	{
+		draw_rectangle(&mlx->frame, x - 1, y - 1, size_to_draw_in_this_line + 2, 10 + 2, 0xFFFFFF);
+	}
 	unsigned int color = is_allocated(block) ? 0xFF0000 : 0x00FF00;
 	draw_rectangle(&mlx->frame, x, y, size_to_draw_in_this_line, 10, color);
 }
@@ -100,6 +105,31 @@ void block_infos(t_mlx *mlx)
 	if (!mlx->state.block_selected)
 		return;
 	draw_rectangle(&mlx->frame, 20, 20, 150, 250, 0x2e2e2e);
+
+	if (is_allocated(mlx->state.block_selected))
+	{
+		
+	}
+}
+
+void size_to_string(char *str, size_t size)
+{
+	size_t nbr_size = 0;
+	size_t nbr = size;
+	while (nbr > 0)
+	{
+		nbr /= 10;
+		nbr_size++;
+	}
+	if (nbr_size == 0)
+		nbr_size = 1;
+	str[nbr_size] = '\0';
+	while (nbr_size > 0)
+	{
+		str[nbr_size - 1] = '0' + (size % 10);
+		size /= 10;
+		nbr_size--;
+	}
 }
 
 void ptr_to_string(char *str, void *ptr)
@@ -117,15 +147,7 @@ void ptr_to_string(char *str, void *ptr)
 	str[sizeof(size_t) * 2] = '\0';
 }
 
-void size_to_string(char *str, size_t size)
-{
-	for (int i = sizeof(size_t) * 2 - 1; i >= 0; i--)
-	{
-		str[i] = size % 10 + '0';
-		size /= 10;
-	}
-	str[sizeof(size_t) * 2] = '\0';
-}
+
 
 void block_infos_text(t_mlx *mlx)
 {
@@ -135,9 +157,20 @@ void block_infos_text(t_mlx *mlx)
 	put_string(mlx, 160, 35, 0xff0000, "X");
 	put_string(mlx, 50, 40, 0xFFFFFF, "Block's infos");
 	put_string(mlx, 30, 60, 0xe3e3e3, "Block's address : ");
-	// print address of block
 	ptr_to_string(buff, mlx->state.block_selected);
 	put_string(mlx, 35, 75, 0xFFFFFF, buff);
+	put_string(mlx, 30, 90, 0xe3e3e3, "Block's size : ");
+	size_to_string(buff, get_block_size(mlx->state.block_selected));
+	put_string(mlx, 35, 105, 0xFFFFFF, buff);
+	put_string(mlx, 30, 120, 0xe3e3e3, "Block's previous : ");
+	ptr_to_string(buff, *get_prev_block(mlx->state.block_selected));
+	put_string(mlx, 35, 135, 0xFFFFFF, buff);
+	put_string(mlx, 30, 150, 0xe3e3e3, "Block's next : ");
+	ptr_to_string(buff, get_next_block(mlx->state.block_selected));
+	put_string(mlx, 35, 165, 0xFFFFFF, buff);
+	put_string(mlx, 30, 180, 0xe3e3e3, "Block allocated : ");
+	int allocated = is_allocated(mlx->state.block_selected);
+	put_string(mlx, 35, 195, !allocated ? 0x00FF00 : 0xFF0000, allocated ? "true" : "false");
 }
 
 void frame_render(t_mlx *mlx)
