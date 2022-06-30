@@ -46,6 +46,8 @@ typedef struct s_app_state
 	t_app_block block;
 	void *block_selected;
 	ssize_t scroll_offset;
+	int x_click;
+	int y_click;
 } t_app_state;
 
 typedef struct s_mlx
