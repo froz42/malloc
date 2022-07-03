@@ -6,7 +6,7 @@
 #    By: tmatis <tmatis@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2022/06/21 14:10:28 by tmatis           ###   ########.fr        #
+#    Updated: 2022/07/01 17:46:30 by tmatis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,8 +43,8 @@ SRCS			= malloc.c data_access.c rbtree/rbtree.c off_map.c \
 				  memory_dump.c area_utils.c utils.c block_manipulation.c \
 				  show_alloc_mem.c config.c \
 				  memory_view/graphic.c memory_view/draw_utils.c \
-				  memory_view/view_controler.c memory_view/mlx_hooks.c
-
+				  memory_view/view_controler.c memory_view/mlx_hooks.c \
+				  memory_view/tree_view.c
 
 ################################################################################
 #                                  Makefile  objs                              #
@@ -232,7 +232,7 @@ endif
 -include $(DEPS) $(DEPS_MAIN)
 $(NAME):	${OBJS} $(LIBMLX)
 			@$(call display_progress_bar)
-			$(CC) $(CFLAGS) $(DFLAGS) -I$(INCLUDE_PATH) -shared -o $@ ${OBJS} $(LIBFLAG)
+			@$(call run_and_test,$(CC) $(CFLAGS) $(DFLAGS) -I$(INCLUDE_PATH) -shared -o $@ ${OBJS} $(LIBFLAG))
 			@ln -sf $(NAME) libft_malloc.so
 			@echo "                                                              "
 			@rm -rf .files_changed
@@ -243,7 +243,7 @@ setup:
 objs/%.o: 	$(SRCS_PATH)/%$(FILE_EXTENSION)
 			@mkdir -p $(dir $@)
 			@$(call display_progress_bar)
-			$(CC) $(CFLAGS) $(DFLAGS) ${DEFINE} -c $< -o $@ -I$(INCLUDE_PATH)
+			@$(call run_and_test,$(CC) $(CFLAGS) $(DFLAGS) ${DEFINE} -c $< -o $@ -I$(INCLUDE_PATH))
 
 $(LIBMLX):
 			@$(call run_and_test,make -sC ./minilibx)

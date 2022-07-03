@@ -98,6 +98,11 @@ size_t get_text_width(char *string)
 	return (width);
 }
 
+int is_in(int x, int y, int w, int h, int x2, int y2)
+{
+	return (x2 >= x && x2 < x + w && y2 >= y && y2 < y + h);
+}
+
 void put_string(t_mlx *mlx, int x, int y, int color, char *string)
 {
 	mlx_string_put(mlx->mlx, mlx->win, x, y, color, string);

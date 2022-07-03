@@ -1,5 +1,4 @@
 #include <pthread.h>
-#include "../malloc.h"
 #include <math.h>
 #include "graphic.h"
 #include <errno.h>
@@ -68,8 +67,6 @@ static void *thread_routine(void *arg)
 
 	return (NULL);
 }
-
-
 
 void launch_thread(void)
 {

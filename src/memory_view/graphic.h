@@ -3,6 +3,7 @@
 
 #include "../../minilibx/mlx.h"
 #include <stdlib.h>
+#include "../malloc.h"
 
 #define WINDOW_X 1000
 #define WINDOW_Y 800
@@ -32,6 +33,7 @@ typedef struct s_frame
 typedef enum e_app_mode
 {
 	DISPLAY_BLOCKS,
+	DISPLAY_TREE
 } t_app_mode;
 
 typedef enum e_app_block
@@ -77,5 +79,11 @@ void draw_rectangle(t_frame *f, int x, int y, int w, int h, int color);
 void draw_line(t_frame *f, int x1, int y1, int x2, int y2, int color);
 void put_string(t_mlx *mlx, int x, int y, int color, char *string);
 size_t get_text_width(char *string);
+int is_in(int x, int y, int w, int h, int x2, int y2);
+
+void tree_logic(t_mlx *mlx, void (callback)(t_mlx *mlx, block_ptr block, int x, int y));
+void render_node(t_mlx *mlx, block_ptr block, int x, int y);
+void render_node_text(t_mlx *mlx, block_ptr block, int x, int y);
+void click_node(t_mlx *mlx, block_ptr block, int x, int y);
 
 #endif

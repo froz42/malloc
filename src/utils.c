@@ -94,3 +94,38 @@ int ft_strcmp(char *s1, char *s2)
 		i++;
 	return s1[i] - s2[i];
 }
+
+void size_to_string(char *str, size_t size)
+{
+	size_t nbr_size = 0;
+	size_t nbr = size;
+	while (nbr > 0)
+	{
+		nbr /= 10;
+		nbr_size++;
+	}
+	if (nbr_size == 0)
+		nbr_size = 1;
+	str[nbr_size] = '\0';
+	while (nbr_size > 0)
+	{
+		str[nbr_size - 1] = '0' + (size % 10);
+		size /= 10;
+		nbr_size--;
+	}
+}
+
+void ptr_to_string(char *str, void *ptr)
+{
+	static char const hex[] = "0123456789ABCDEF";
+	size_t size = (size_t)ptr;
+
+	str[0] = '0';
+	str[1] = 'x';
+	for (int i = sizeof(size_t) * 2 - 1; i >= 2; i--)
+	{
+		str[i] = hex[size & 0xF];
+		size >>= 4;
+	}
+	str[sizeof(size_t) * 2] = '\0';
+}
