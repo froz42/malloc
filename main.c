@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define n_block 40
+#define n_block 20
 
 int main(void)
 {

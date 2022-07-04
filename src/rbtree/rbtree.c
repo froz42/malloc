@@ -481,3 +481,22 @@ void delete_free_block(block_ptr block, block_ptr *root)
 
 	delete_node(block, root);
 }
+
+size_t longest_branch_size(block_ptr root)
+{
+	size_t longest = 0;
+	size_t current = 0;
+	block_ptr const nil = get_nil_node();
+
+	if (root == nil)
+		return (0);
+	if (*get_left_child(root) == nil && *get_right_child(root) == nil)
+		return (1);
+	current = longest_branch_size(*get_left_child(root));
+	if (current > longest)
+		longest = current;
+	current = longest_branch_size(*get_right_child(root));
+	if (current > longest)
+		longest = current;
+	return (longest + 1);
+}

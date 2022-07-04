@@ -3,7 +3,7 @@
  * @author tmatis (tmatis@student.42.fr)
  * @brief This file contain the tree view functions
  * @date 2022-07-04
- * 
+ *
  */
 
 #ifdef BONUS
@@ -13,7 +13,7 @@
 
 /**
  * @brief This function is called to render the text of a node
- * 
+ *
  * @param mlx the mlx structure
  * @param block the node
  * @param x x where the node is drawn
@@ -39,7 +39,7 @@ void render_node_text(t_mlx *mlx, block_ptr block, int x, int y)
 
 /**
  * @brief Render a node of the tree
- * 
+ *
  * @param mlx the mlx structure
  * @param block the node
  * @param x x where the node is drawn
@@ -51,14 +51,20 @@ void render_node(t_mlx *mlx, block_ptr block, int x, int y)
 				   block == mlx->state.block_selected ? 0x3464eb : 0x2e2e2e);
 	draw_rectangle(&mlx->frame, x, y, 125, 75, 0xFFFFFF);
 	if (*get_left_child(block) != get_nil_node())
-		draw_line(&mlx->frame, x + 62.5, y + 75, x - 80 + 62.5, y + 90, 0xFFFFFF);
+	{
+		size_t offset = longest_branch_size(*get_left_child(block)) * 40;
+		draw_line(&mlx->frame, x + 62.5, y + 75, x - 80 - offset + 62.5, y + 90, 0xFFFFFF);
+	}
 	if (*get_right_child(block) != get_nil_node())
-		draw_line(&mlx->frame, x + 62.5, y + 75, x + 80 + 62.5, y + 90, 0xFFFFFF);
+	{
+		size_t offset = longest_branch_size(*get_right_child(block)) * 40;
+		draw_line(&mlx->frame, x + 62.5, y + 75, x + 80 + offset + 62.5, y + 90, 0xFFFFFF);
+	}
 }
 
 /**
  * @brief This function is called to render to determine if the user clicked on a node
- * 
+ *
  * @param mlx the mlx structure
  * @param block the node to select if the user clicked on it
  * @param x x where the node is drawn
@@ -75,7 +81,7 @@ void click_node(t_mlx *mlx, block_ptr block, int x, int y)
 
 /**
  * @brief Render a tree recursively
- * 
+ *
  * @param mlx the mlx structure
  * @param root the node of the tree
  * @param x x where the tree is drawn
@@ -94,15 +100,21 @@ static void render_tree_recursive(
 		int y))
 {
 	if (*get_left_child(*root) != get_nil_node())
-		render_tree_recursive(mlx, get_left_child(*root), x - 80, y + 90, callback);
+	{
+		size_t offset = longest_branch_size(*get_left_child(*root)) * 40;
+		render_tree_recursive(mlx, get_left_child(*root), x - 80 - offset, y + 90, callback);
+	}
 	if (*get_right_child(*root) != get_nil_node())
-		render_tree_recursive(mlx, get_right_child(*root), x + 80, y + 90, callback);
+	{
+		size_t offset = longest_branch_size(*get_right_child(*root)) * 40;
+		render_tree_recursive(mlx, get_right_child(*root), x + 80 + offset, y + 90, callback);
+	}
 	callback(mlx, *root, x, y);
 }
 
 /**
  * @brief Draw the tree
- * 
+ *
  * @param mlx the mlx structure
  * @param callback the callback function to draw / click on a node
  */

@@ -28,5 +28,6 @@ block_ptr *find_proper_root(area_ptr area, block_ptr block);
 void insert_free_block(block_ptr block, block_ptr *root);
 void delete_free_block(block_ptr block, block_ptr *root);
 size_t count_nodes(block_ptr *root);
+size_t longest_branch_size(block_ptr root);
 
 #endif //RBTREE_H

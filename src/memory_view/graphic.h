@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include "../malloc.h"
 
-#define WINDOW_X 1000
+#define WINDOW_X 1300
 #define WINDOW_Y 800
 
 #define max(a, b) \
