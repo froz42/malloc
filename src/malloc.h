@@ -84,6 +84,9 @@ typedef void* area_ptr;
 extern pthread_mutex_t g_malloc_mutex;
 
 
+// this define allow to export the functions because of -fvisibility=hidden
+# define EXPORT __attribute__((visibility("default")))
+
 # define TINY_MAX_SIZE 256 // max size in bytes for tiny area
 # define SMALL_MAX_SIZE 1024 // max size in bytes for small area
 

@@ -157,7 +157,7 @@ void *_realloc(void *ptr, size_t size)
 	return new_ptr;
 }
 
-void *MALLOC_NAME(size_t size)
+void EXPORT *MALLOC_NAME(size_t size)
 {
 	t_config const *config = get_config();
 	pthread_mutex_lock(&g_malloc_mutex);
@@ -174,7 +174,7 @@ void *MALLOC_NAME(size_t size)
 	return data;
 }
 
-void *CALLOC_NAME(size_t nmemb, size_t size)
+void EXPORT *CALLOC_NAME(size_t nmemb, size_t size)
 {
 	t_config const *config = get_config();
 	pthread_mutex_lock(&g_malloc_mutex);
@@ -188,7 +188,7 @@ void *CALLOC_NAME(size_t nmemb, size_t size)
 	return data;
 }
 
-void *REALLOC_NAME(void *ptr, size_t size)
+void EXPORT *REALLOC_NAME(void *ptr, size_t size)
 {
 	t_config const *config = get_config();
 	pthread_mutex_lock(&g_malloc_mutex);
@@ -205,7 +205,7 @@ void *REALLOC_NAME(void *ptr, size_t size)
 	return data;
 }
 
-void FREE_NAME(void *data)
+void EXPORT FREE_NAME(void *data)
 {
 	t_config const *config = get_config();
 	pthread_mutex_lock(&g_malloc_mutex);
