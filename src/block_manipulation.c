@@ -52,9 +52,7 @@ void merge_next_block(block_ptr block_a, void *area_end)
 	block_ptr const next = get_next_block(block_b);
 
 	set_raw_block_size(block_a,
-					   get_block_size(block_a)
-					   + get_block_size(block_b)
-					   + sizeof(size_t) + sizeof(void *));
+					   get_block_size(block_a) + get_block_size(block_b) + sizeof(size_t) + sizeof(void *));
 	*get_prev_block(block_a) = prev;
 	if (next < area_end)
 		*get_prev_block(next) = block_a;
@@ -104,9 +102,13 @@ block_ptr unfrag_block(block_ptr block, void *area_end, block_ptr *root)
 int extend_block(block_ptr block, size_t wanted_size, area_ptr area)
 {
 	block_ptr const next = get_next_block(block);
-	size_t const size = get_block_size(block);
+	size_t size = get_block_size(block);
 	size_t next_size = get_block_size(next);
 	void *const area_end = find_area_end(area, block);
+	block_ptr *const root = find_proper_root(area, block);
+
+	if (size > wanted_size)
+		return (1);
 
 	if (next >= area_end)
 		return (1);
@@ -125,30 +127,16 @@ int extend_block(block_ptr block, size_t wanted_size, area_ptr area)
 	if (next_size + sizeof(size_t) + sizeof(void *) + size < wanted_size)
 		return (1);
 
-	delete_free_block(next, find_proper_root(area, next));
+	delete_free_block(next, root);
+	merge_next_block(block, area_end);
 
-	const size_t remaining_size = next_size + sizeof(void *) + sizeof(size_t) - (wanted_size - size);
-
-	if (remaining_size < minimum_size + sizeof(void *) + sizeof(size_t))
+	size = get_block_size(block);
+	if (size - wanted_size > minimum_size + sizeof(size_t) + sizeof(void *))
 	{
-		// int the case we don't have enough space afor new block we just merge the two
-		merge_next_block(block, area_end);
-		set_allocated(block);
-		return (0);
+		block_ptr const new_block = split_block(block, wanted_size, area_end);
+		insert_free_block(new_block, root);
 	}
-
-	// we have enough space for a new block
-
-	set_block_size(block, wanted_size);
-
-	block_ptr const new_block = get_next_block(block);
-	set_raw_block_size(new_block, remaining_size - sizeof(void *) - sizeof(size_t));
-	*get_prev_block(new_block) = block;
-
-	block_ptr const new_next = get_next_block(new_block);
-	if (new_next < area_end)
-		*get_prev_block(new_next) = new_block;
-	insert_free_block(new_block, find_proper_root(area, new_block));
+	set_allocated(block);
 	return (0);
 }
 
@@ -164,7 +152,7 @@ int extend_block(block_ptr block, size_t wanted_size, area_ptr area)
  */
 int shrink_block(block_ptr block, size_t wanted_size, area_ptr area)
 {
-	size_t const size = get_block_size(block);
+	size_t size = get_block_size(block);
 	void *const area_end = find_area_end(area, block);
 	size_t minimum_size = get_minimal_size(block, area);
 	block_ptr *const root = find_proper_root(area, block);
@@ -179,42 +167,17 @@ int shrink_block(block_ptr block, size_t wanted_size, area_ptr area)
 		return (1);
 
 	block_ptr const next = get_next_block(block);
-	if (next >= area_end || is_allocated(next))
+	if (next < area_end && !is_allocated(next))
 	{
-		// in that case we can't access the next block
-		// we have to compose with the size of the actual block
-
-		if (size - wanted_size < minimum_size)
-		// we don't have enough space for a new block, we dont change the block
-			return (0);
-		set_block_size(block, wanted_size);
-
-		// we create a new block with the remaining size
-		block_ptr const new_block = get_next_block(block);
-		set_raw_block_size(new_block, size - wanted_size - sizeof(size_t) - sizeof(void *));
-		*get_prev_block(new_block) = block;
-
-		// we can access the next block we set the prev
-		if (next < area_end)
-			*get_prev_block(next) = new_block;
-		insert_free_block(new_block, root);
-		return (0);
+		delete_free_block(next, root);
+		merge_next_block(block, area_end);
+		size = get_block_size(block);
 	}
-	// in that case we can access the next block
-
-	// we remove the next block from the tree
-	delete_free_block(next, root);
-	const size_t next_size = get_block_size(next);
-	set_block_size(block, wanted_size);
-
-	// we merge the next block with the remaining size
-	block_ptr const new_block = get_next_block(block);
-	set_raw_block_size(new_block, size - wanted_size + next_size);
-	*get_prev_block(new_block) = block;
-
-	block_ptr const new_next = get_next_block(new_block);
-	if (new_next < area_end)
-		*get_prev_block(new_next) = new_block;
-	insert_free_block(new_block, root);
+	if (size - wanted_size > minimum_size + sizeof(void *) + sizeof(size_t))
+	{
+		block_ptr const n = split_block(block, wanted_size, area_end);
+		insert_free_block(n, root);
+	}
+	set_allocated(block);
 	return (0);
 }

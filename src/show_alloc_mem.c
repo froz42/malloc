@@ -51,7 +51,7 @@ static void dump_larges(void **blocks)
 void **get_sorted_ptrs(void)
 {
 	block_ptr block = *get_off_map_list();
-	void **ptrs = malloc(sizeof(void *) * (get_off_map_size() + 1));
+	void **ptrs = _malloc(sizeof(void *) * (get_off_map_size() + 1));
 
 	// take the second block because the first is the off map list
 	if (block != NULL)

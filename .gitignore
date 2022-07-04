@@ -12,3 +12,4 @@ vscode/
 *.log
 *.so
 .files_changed
+*a.out*
