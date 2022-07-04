@@ -6,7 +6,7 @@
 #    By: tmatis <tmatis@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2022/07/04 12:32:36 by tmatis           ###   ########.fr        #
+#    Updated: 2022/07/04 13:26:10 by tmatis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,7 @@ SRCS			= malloc.c data_access.c rbtree/rbtree.c off_map.c \
 				  show_alloc_mem.c config.c \
 				  memory_view/graphic.c memory_view/draw_utils.c \
 				  memory_view/view_controler.c memory_view/mlx_hooks.c \
-				  memory_view/tree_view.c memory_view/area_view.c
+				  memory_view/tree_view.c memory_view/area_view.c memory_view/info_view.c
 
 ################################################################################
 #                                  Makefile  objs                              #

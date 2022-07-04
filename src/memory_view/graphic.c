@@ -1,9 +1,25 @@
+/**
+ * @file graphic.c
+ * @author tmatis (tmatis@student.42.fr)
+ * @brief This file contain initilization of graphic library
+ * @date 2022-07-04
+ * 
+ */
+
 #include <pthread.h>
 #include <math.h>
 #include "graphic.h"
 #include <errno.h>
 #include <string.h>
 
+/**
+ * @brief Frame constructor
+ * 
+ * @param mlx the mlx ptr
+ * @param x the x position of the frame
+ * @param y the y position of the frame
+ * @return t_frame 
+ */
 static t_frame	frame_init(void *mlx, int x, int y)
 {
 	t_frame	frame;
@@ -26,6 +42,12 @@ static t_frame	frame_init(void *mlx, int x, int y)
 	return (frame);
 }
 
+/**
+ * @brief the thread routine that  launch the window
+ * 
+ * @param arg the arg (unused)
+ * @return void* the thread return value (NULL)
+ */
 static void *thread_routine(void *arg)
 {
 	(void)arg;
@@ -58,7 +80,7 @@ static void *thread_routine(void *arg)
 	}
 
 	init_app_state(&mlx_infos.state);
-	
+
 	mlx_mouse_hook(mlx_infos.win, mouse_hook, &mlx_infos);
 	mlx_loop_hook(mlx_infos.mlx, loop_hook, &mlx_infos);
 	mlx_loop(mlx_infos.mlx);
@@ -66,10 +88,12 @@ static void *thread_routine(void *arg)
 	return (NULL);
 }
 
+/**
+ * @brief Launch the graphic thread
+ * 
+ */
 void launch_thread(void)
 {
 	pthread_t thread;
-	ft_putstr("launch_thread\n");
 	pthread_create(&thread, NULL, &thread_routine, NULL);
-	ft_putstr("launch thread done\n");
 }

@@ -1,6 +1,22 @@
+/**
+ * @file view_controler.c
+ * @author tmatis (tmatis@student.42.fr)
+ * @brief this file contains the main logic of the view
+ * @date 2022-07-04
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
 #include "graphic.h"
 #include <stdio.h>
 
+
+/**
+ * @brief This function init the app state
+ * 
+ * @param app_state the app state ptr
+ */
 void init_app_state(t_app_state *app_state)
 {
 	app_state->mode = DISPLAY_BLOCKS;
@@ -11,46 +27,27 @@ void init_app_state(t_app_state *app_state)
 	app_state->y_click = -1;
 }
 
+/**
+ * @brief Render a button to the frame
+ * 
+ * @param mlx the mlx structure
+ * @param x x position
+ * @param y y position
+ * @param w width
+ * @param h height
+ * @param pressed is the button pressed: 0 or 1
+ */
 void button(t_mlx *mlx, int x, int y, int w, int h, int pressed)
 {
 	draw_rectangle(&mlx->frame, x, y, w, h, 0x888888);
 	draw_rectangle(&mlx->frame, x + 1, y + 1, w - 2, h - 2, pressed ? 0xFFFFFF : 0xc7c7c7);
 }
 
-void block_infos(t_mlx *mlx)
-{
-	if (!mlx->state.block_selected)
-		return;
-	draw_rectangle(&mlx->frame, 20, 20, 150, 250, 0x2e2e2e);
-}
-
-void block_infos_text(t_mlx *mlx)
-{
-	if (!mlx->state.block_selected)
-		return;
-	char buff[50];
-	put_string(mlx, 160, 35, 0xff0000, "X");
-	put_string(mlx, 50, 40, 0xFFFFFF, "Block's infos");
-	put_string(mlx, 30, 60, 0xe3e3e3, "Block's address : ");
-	ptr_to_string(buff, mlx->state.block_selected);
-	put_string(mlx, 35, 75, 0xFFFFFF, buff);
-	put_string(mlx, 30, 90, 0xe3e3e3, "Block's size : ");
-	size_to_string(buff, get_block_size(mlx->state.block_selected));
-	put_string(mlx, 35, 105, 0xFFFFFF, buff);
-	put_string(mlx, 30, 120, 0xe3e3e3, "Block's previous : ");
-	ptr_to_string(buff, *get_prev_block(mlx->state.block_selected));
-	put_string(mlx, 35, 135, 0xFFFFFF, buff);
-	put_string(mlx, 30, 150, 0xe3e3e3, "Block's next : ");
-	ptr_to_string(buff, get_next_block(mlx->state.block_selected));
-	put_string(mlx, 35, 165, 0xFFFFFF, buff);
-	put_string(mlx, 30, 180, 0xe3e3e3, "Block allocated : ");
-	int allocated = is_allocated(mlx->state.block_selected);
-	put_string(mlx, 35, 195, !allocated ? 0x00FF00 : 0xFF0000, allocated ? "true" : "false");
-	put_string(mlx, 30, 210, 0xe3e3e3, "Block's data ptr: ");
-	ptr_to_string(buff, get_block_data(mlx->state.block_selected));
-	put_string(mlx, 35, 225, 0xFFFFFF, buff);
-}
-
+/**
+ * @brief Called each loop to draw the frame
+ * 
+ * @param mlx the mlx structure
+ */
 void frame_render(t_mlx *mlx)
 {
 	if (mlx->state.mode == DISPLAY_BLOCKS)
@@ -64,6 +61,9 @@ void frame_render(t_mlx *mlx)
 	block_infos(mlx);
 }
 
+/**
+ * @brief Called after rendthe appcture
+ */
 void post_frame_render(t_mlx *mlx)
 {
 	put_string(mlx, WINDOW_X - 80 + get_text_width("Small"), 32, 0x0, "Small");
@@ -75,6 +75,15 @@ void post_frame_render(t_mlx *mlx)
 		tree_logic(mlx, &render_node_text);
 }
 
+
+/**
+ * @brief Called each time the window is clicked
+ * 
+ * @param button the button pressed
+ * @param x the x position
+ * @param y the y position
+ * @param mlx the mlx structure
+ */
 void mouse_click_event(int button, int x, int y, t_mlx *mlx)
 {
 	if (button == 4)

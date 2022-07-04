@@ -1,3 +1,13 @@
+/**
+ * @file views.h
+ * @author tmatis (tmatis@student.42.fr)
+ * @brief This file contain prototypes and defines of graphic library
+ * @date 2022-07-04
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
 #ifndef VIEW_H
 # define VIEW_H
 
@@ -27,5 +37,8 @@ void area_logic(
 				   int y,
 				   int size_to_draw_in_this_line,
 				   block_ptr block));
+
+void block_infos(t_mlx *mlx);
+void block_infos_text(t_mlx *mlx);
 
 #endif

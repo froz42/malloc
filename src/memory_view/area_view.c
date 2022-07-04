@@ -1,5 +1,22 @@
+/**
+ * @file area_view.c
+ * @author tmatis (tmatis@student.42.fr)
+ * @brief This file contain the area view functions
+ * @date 2022-07-04
+ * 
+ */
+
 #include "graphic.h"
 
+/**
+ * @brief this function is used to draw a block of memory
+ * 
+ * @param mlx the mlx structure
+ * @param x the x position of the block
+ * @param y the y position of the block
+ * @param size_to_draw_in_this_line the size of the block
+ * @param block the block to draw
+ */
 void render_block(t_mlx *mlx,
 				int x,
 				int y,
@@ -7,13 +24,20 @@ void render_block(t_mlx *mlx,
 				block_ptr block)
 {
 	if (mlx->state.block_selected == block)
-	{
 		draw_rectangle(&mlx->frame, x - 1, y - 1, size_to_draw_in_this_line + 2, 10 + 2, 0xFFFFFF);
-	}
 	unsigned int color = is_allocated(block) ? 0xFF0000 : 0x00FF00;
 	draw_rectangle(&mlx->frame, x, y, size_to_draw_in_this_line, 10, color);
 }
 
+/**
+ * @brief this function is used to detect if the user clicked on a block of memory
+ * 
+ * @param mlx the mlx structure
+ * @param x the x position of the block
+ * @param y the y position of the block
+ * @param size_to_draw_in_this_line the size of the block
+ * @param block the block to select if the user clicked on it
+ */
 void click_block(t_mlx *mlx,
 				 int x,
 				 int y,
@@ -27,6 +51,12 @@ void click_block(t_mlx *mlx,
 	}
 }
 
+/**
+ * @brief this function is used as a logic function to draw / detect a block of memory
+ * 
+ * @param mlx the mlx structure
+ * @param callback the callback function to call on each block
+ */
 void area_logic(
 	t_mlx *mlx,
 	void(callback)(t_mlx *mlx,

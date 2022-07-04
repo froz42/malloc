@@ -1,3 +1,13 @@
+/**
+ * @file graphic.h
+ * @author tmatis (tmatis@student.42.fr)
+ * @brief This file contain prototypes and defines of graphic library
+ * @date 2022-07-04
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
 #ifndef GRAPHIC_H
 #define GRAPHIC_H
 
@@ -18,44 +28,157 @@
 	   __typeof__ (b) _b = (b); \
 	 _a < _b ? _a : _b; })
 
+
+/**
+ * @brief The frame struct
+ * 
+ */
 typedef struct s_frame
 {
+	/**
+	 * @brief img the mlx image
+	 * 
+	 */
 	void *img;
+
+	/**
+	 * @brief addr the mlx image address
+	 * 
+	 */
 	char *addr;
+
+	/**
+	 * @brief the number of bits per pixel
+	 * 
+	 */
 	int bits_per_pixel;
+
+	/**
+	 * @brief the number of bytes per line
+	 * 
+	 */
 	int line_length;
+
+	/**
+	 * @brief the endian
+	 * 
+	 */
 	int endian;
+
+	/**
+	 * @brief the x size
+	 * 
+	 */
 	int x;
+
+	/**
+	 * @brief the y size
+	 * 
+	 */
 	int y;
 } t_frame;
 
+
+/**
+ * @brief The app mode: display blocks or display tree
+ * 
+ */
 typedef enum e_app_mode
 {
+	/**
+	 * @brief display blocks
+	 * 
+	 */
 	DISPLAY_BLOCKS,
+
+	/**
+	 * @brief Display tree
+	 * 
+	 */
 	DISPLAY_TREE
 } t_app_mode;
 
+/**
+ * @brief Area choice: tiny or small
+ * 
+ */
 typedef enum e_app_block
 {
 	BLOCK_TINY,
 	BLOCK_SMALL,
 } t_app_block;
 
+/**
+ * @brief App state
+ * 
+ */
 typedef struct s_app_state
 {
+	/**
+	 * @brief The mode selected
+	 * 
+	 */
 	t_app_mode mode;
+
+	/**
+	 * @brief The tiny or small block selected
+	 * 
+	 */
 	t_app_block block;
+
+	/**
+	 * @brief The block selected
+	 * 
+	 */
 	void *block_selected;
+
+	/**
+	 * @brief Scroll offset Y
+	 * 
+	 */
 	ssize_t scroll_offset;
+
+	/**
+	 * @brief The x where the user clicked
+	 * 
+	 */
 	int x_click;
+
+	/**
+	 * @brief The y where the user clicked
+	 * 
+	 */
 	int y_click;
 } t_app_state;
 
+/**
+ * @brief The mlx structure
+ * 
+ */
 typedef struct s_mlx
 {
+	/**
+	 * @brief The mlx ptr
+	 * 
+	 */
 	void *mlx;
+
+	/**
+	 * @brief Window ptr
+	 * 
+	 */
 	void *win;
+
+	/**
+	 * @brief The main frame
+	 * 
+	 */
 	t_frame frame;
+
+	/**
+	 * @brief App state
+	 * 
+	 */
 	t_app_state state;
 } t_mlx;
 
