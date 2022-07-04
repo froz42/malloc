@@ -4,13 +4,12 @@
  * @brief this file contains the main logic of the view
  * @date 2022-07-04
  * 
- * @copyright Copyright (c) 2022
- * 
  */
+
+#ifdef BONUS
 
 #include "graphic.h"
 #include <stdio.h>
-
 
 /**
  * @brief This function init the app state
@@ -116,3 +115,5 @@ void mouse_click_event(int button, int x, int y, t_mlx *mlx)
 		}
 	}
 }
+
+#endif

@@ -6,12 +6,14 @@
  *
  */
 
+#ifdef BONUS
+
 #include "graphic.h"
 
 /**
- * @brief 
- * 
- * @param mlx 
+ * @brief
+ *
+ * @param mlx
  */
 void block_infos(t_mlx *mlx)
 {
@@ -46,3 +48,5 @@ void block_infos_text(t_mlx *mlx)
 	ptr_to_string(buff, get_block_data(mlx->state.block_selected));
 	put_string(mlx, 35, 225, 0xFFFFFF, buff);
 }
+
+#endif

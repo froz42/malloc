@@ -6,9 +6,10 @@
  * 
  */
 
+#ifdef BONUS
+
 #include "graphic.h"
 #include "../malloc.h"
-
 
 /**
  * @brief This function is called to render the text of a node
@@ -113,3 +114,5 @@ void tree_logic(t_mlx *mlx, void(callback)(t_mlx *mlx, block_ptr block, int x, i
 						  : &tree->small;
 	render_tree_recursive(mlx, root, WINDOW_X / 2 - 62.5, 30 + mlx->state.scroll_offset, callback);
 }
+
+#endif

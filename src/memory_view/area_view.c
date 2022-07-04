@@ -3,14 +3,16 @@
  * @author tmatis (tmatis@student.42.fr)
  * @brief This file contain the area view functions
  * @date 2022-07-04
- * 
+ *
  */
+
+# ifdef BONUS
 
 #include "graphic.h"
 
 /**
  * @brief this function is used to draw a block of memory
- * 
+ *
  * @param mlx the mlx structure
  * @param x the x position of the block
  * @param y the y position of the block
@@ -18,10 +20,10 @@
  * @param block the block to draw
  */
 void render_block(t_mlx *mlx,
-				int x,
-				int y,
-				int size_to_draw_in_this_line,
-				block_ptr block)
+				  int x,
+				  int y,
+				  int size_to_draw_in_this_line,
+				  block_ptr block)
 {
 	if (mlx->state.block_selected == block)
 		draw_rectangle(&mlx->frame, x - 1, y - 1, size_to_draw_in_this_line + 2, 10 + 2, 0xFFFFFF);
@@ -31,7 +33,7 @@ void render_block(t_mlx *mlx,
 
 /**
  * @brief this function is used to detect if the user clicked on a block of memory
- * 
+ *
  * @param mlx the mlx structure
  * @param x the x position of the block
  * @param y the y position of the block
@@ -53,7 +55,7 @@ void click_block(t_mlx *mlx,
 
 /**
  * @brief this function is used as a logic function to draw / detect a block of memory
- * 
+ *
  * @param mlx the mlx structure
  * @param callback the callback function to call on each block
  */
@@ -107,3 +109,5 @@ void area_logic(
 		start = get_next_block(start);
 	}
 }
+
+#endif

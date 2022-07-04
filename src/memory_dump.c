@@ -11,6 +11,29 @@
 #include <unistd.h>
 #include <stdio.h>
 
+/**
+ * @brief Sum the size of all the blocks in the area
+ * 
+ * @param area_start the start of the area
+ * @param area_end the end of the area
+ * @return size_t the sum of the size of all the blocks in the area
+ */
+size_t sum_of_block(void *area_start, void *area_end)
+{
+	size_t sum = 0;
+	block_ptr block = area_start;
+	while (block < area_end)
+	{
+		//printf("%p\n", block);
+		sum += get_block_size(block) + sizeof(void *) + sizeof(size_t);
+		block = get_next_block(block);
+		//printf("%p\n", block);
+	}
+	return (sum);
+}
+
+
+#ifdef BONUS
 
 /**
  * @brief this function print the memory in a fancy way
@@ -45,27 +68,6 @@ static void dump_area(void *area_start, void *area_end, int scale)
 		block = get_next_block(block);
 	}
 	ft_putstr("\n");
-}
-
-/**
- * @brief Sum the size of all the blocks in the area
- * 
- * @param area_start the start of the area
- * @param area_end the end of the area
- * @return size_t the sum of the size of all the blocks in the area
- */
-size_t sum_of_block(void *area_start, void *area_end)
-{
-	size_t sum = 0;
-	block_ptr block = area_start;
-	while (block < area_end)
-	{
-		//printf("%p\n", block);
-		sum += get_block_size(block) + sizeof(void *) + sizeof(size_t);
-		block = get_next_block(block);
-		//printf("%p\n", block);
-	}
-	return (sum);
 }
 
 /**
@@ -205,7 +207,7 @@ static void check_trees(area_ptr area)
  * @brief This function print the memory in a fancy way
  * and perform some checks on the memory
  */
-void show_alloc_mem_ex(void)
+void EXPORT show_alloc_mem_ex(void)
 {
 	area_ptr area = get_or_create_area();
 	if (area == NULL)
@@ -231,3 +233,4 @@ void show_alloc_mem_ex(void)
 	ft_putstr("free tree status: \n");
 	check_trees(area);
 }
+#endif

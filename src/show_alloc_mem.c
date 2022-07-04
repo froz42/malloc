@@ -84,7 +84,7 @@ void **get_sorted_ptrs(void)
  * @brief This function show all allocated blocks
  * 
  */
-void show_alloc_mem(void)
+void EXPORT show_alloc_mem(void)
 {
 	area_ptr start = get_or_create_area();
 	area_ptr small = get_small_area(start);

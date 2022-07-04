@@ -6,6 +6,8 @@
  * 
  */
 
+#ifdef BONUS
+
 #include "graphic.h"
 #include <stdio.h>
 #include <unistd.h>
@@ -48,3 +50,5 @@ int mouse_hook(int button, int x, int y, t_mlx *mlx)
 	mouse_click_event(button, x, y, mlx);
 	return (0);
 }
+
+#endif

@@ -6,6 +6,8 @@
  *
  */
 
+#ifdef BONUS
+
 #include "../malloc.h"
 #include <math.h>
 #include <stdlib.h>
@@ -15,7 +17,7 @@
 
 /**
  * @brief convert rgb to int
- * 
+ *
  * @param r red
  * @param g green
  * @param b blue
@@ -28,7 +30,7 @@ int rgb_to_color(int r, int g, int b)
 
 /**
  * @brief Put a pixel on a frame and check boundaries
- * 
+ *
  * @param f the frame ptr
  * @param x x position
  * @param y y position
@@ -47,13 +49,13 @@ void frame_put_pixel(t_frame *f, int x, int y, int color)
 
 /**
  * @brief Draw a rectangle on a frame
- * 
+ *
  * @param f the frame ptr
  * @param x x position
  * @param y y position
  * @param w width
  * @param h height
- * @param color 
+ * @param color
  */
 void draw_rectangle(t_frame *f, int x, int y, int w, int h, int color)
 {
@@ -72,7 +74,7 @@ void draw_rectangle(t_frame *f, int x, int y, int w, int h, int color)
 
 /**
  * @brief return sign of a number
- * 
+ *
  * @param x the number
  * @return int 0, 1 or -1
  */
@@ -88,7 +90,7 @@ static int sign(int x)
 
 /**
  * @brief return the absolute value of a number
- * 
+ *
  * @param x the number
  * @return int the absolute value
  */
@@ -101,7 +103,7 @@ static int ft_abs(int x)
 
 /**
  * @brief Draw a line using Bresenham algorithm
- * 
+ *
  * @param f the frame ptr
  * @param x1 x position of the first point
  * @param y1 y position of the first point
@@ -120,7 +122,7 @@ void draw_line(t_frame *f, int x1, int y1, int x2, int y2, int color)
 	s1 = sign(x2 - x1);
 	s2 = sign(y2 - y1);
 	swap = 0;
-	
+
 	if (dy > dx)
 	{
 		temp = dx;
@@ -149,10 +151,9 @@ void draw_line(t_frame *f, int x1, int y1, int x2, int y2, int color)
 	frame_put_pixel(f, x2, y2, color);
 }
 
-
 /**
  * @brief Get the text width
- * 
+ *
  * @param string the string
  * @return size_t the width
  */
@@ -170,7 +171,7 @@ size_t get_text_width(char *string)
 
 /**
  * @brief Check if a point is in a rectangle
- * 
+ *
  * @param x x position of rectangle
  * @param y y position of rectangle
  * @param w width of rectangle
@@ -186,7 +187,7 @@ int is_in(int x, int y, int w, int h, int x2, int y2)
 
 /**
  * @brief put a string on a the window
- * 
+ *
  * @param mlx the mlx ptr
  * @param x x position
  * @param y y position
@@ -197,3 +198,5 @@ void put_string(t_mlx *mlx, int x, int y, int color, char *string)
 {
 	mlx_string_put(mlx->mlx, mlx->win, x, y, color, string);
 }
+
+#endif

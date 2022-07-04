@@ -6,6 +6,8 @@
  * 
  */
 
+#ifdef BONUS
+
 #include <pthread.h>
 #include <math.h>
 #include "graphic.h"
@@ -97,3 +99,5 @@ void launch_thread(void)
 	pthread_t thread;
 	pthread_create(&thread, NULL, &thread_routine, NULL);
 }
+
+#endif

@@ -67,6 +67,23 @@ void ft_memcpy(void *dst, void *src, size_t n)
 }
 
 /**
+ * @brief set the content of the memory to c
+ * 
+ * @param dst destination
+ * @param c value to set
+ * @param n number of bytes to set
+ */
+void ft_memset(void *dst, int c, size_t n)
+{
+	size_t i = 0;
+	while (i < n)
+	{
+		((char *)dst)[i] = c;
+		i++;
+	}
+}
+
+/**
  * @brief count the number of characters in a string
  * 
  * @param str string to count

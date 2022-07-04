@@ -2,6 +2,8 @@
 #include "malloc.h"
 #include <stdlib.h>
 
+#ifdef BONUS
+
 t_config parse_config(char const *str)
 {
 	char buf[1024];
@@ -54,3 +56,5 @@ t_config const *get_config(void)
 	}
 	return (&store);
 }
+
+#endif

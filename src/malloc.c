@@ -63,7 +63,7 @@ void *_calloc(size_t nmemb, size_t size)
 		total_size = 1;
 	void *data = _malloc(total_size);
 	if (data)
-		memset(data, 0, total_size);
+		ft_memset(data, 0, total_size);
 	return data;
 }
 
@@ -159,9 +159,12 @@ void *_realloc(void *ptr, size_t size)
 
 void EXPORT *MALLOC_NAME(size_t size)
 {
+#ifdef BONUS
 	t_config const *config = get_config();
 	pthread_mutex_lock(&g_malloc_mutex);
+#endif
 	void *data = _malloc(size);
+#ifdef BONUS
 	if (config->verbose)
 	{
 		ft_putstr("malloc: ");
@@ -171,28 +174,36 @@ void EXPORT *MALLOC_NAME(size_t size)
 			ft_putstr("NULL\n");
 	}
 	pthread_mutex_unlock(&g_malloc_mutex);
+#endif
 	return data;
 }
 
 void EXPORT *CALLOC_NAME(size_t nmemb, size_t size)
 {
+#ifdef BONUS
 	t_config const *config = get_config();
 	pthread_mutex_lock(&g_malloc_mutex);
+
 	if (config->verbose)
 	{
 		ft_putstr("calloc: ");
 	}
+#endif
 	void *data = _calloc(nmemb, size);
-	
+#ifdef BONUS
 	pthread_mutex_unlock(&g_malloc_mutex);
+#endif
 	return data;
 }
 
 void EXPORT *REALLOC_NAME(void *ptr, size_t size)
 {
+#ifdef BONUS
 	t_config const *config = get_config();
 	pthread_mutex_lock(&g_malloc_mutex);
+#endif
 	void *data = _realloc(ptr, size);
+#ifdef BONUS
 	if (config->verbose)
 	{
 		ft_putstr("realloc: ");
@@ -202,13 +213,17 @@ void EXPORT *REALLOC_NAME(void *ptr, size_t size)
 			ft_putstr("NULL\n");
 	}
 	pthread_mutex_unlock(&g_malloc_mutex);
+#endif
 	return data;
 }
 
 void EXPORT FREE_NAME(void *data)
 {
+#ifdef BONUS
 	t_config const *config = get_config();
 	pthread_mutex_lock(&g_malloc_mutex);
+#endif
+#ifdef BONUS
 	if (config->verbose)
 	{
 		ft_putstr("free: ");
@@ -217,6 +232,9 @@ void EXPORT FREE_NAME(void *data)
 		else
 			ft_putstr("NULL\n");
 	}
+#endif
 	_free(data);
+#ifdef BONUS
 	pthread_mutex_unlock(&g_malloc_mutex);
+#endif
 }

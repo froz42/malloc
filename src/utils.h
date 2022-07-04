@@ -18,5 +18,6 @@ size_t ft_strlen(char const *str);
 int ft_strcmp(char *s1, char *s2);
 void size_to_string(char *str, size_t size);
 void ptr_to_string(char *str, void *ptr);
+void ft_memset(void *dst, int c, size_t n);
 
 #endif
