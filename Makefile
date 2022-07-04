@@ -6,7 +6,7 @@
 #    By: tmatis <tmatis@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2022/07/04 13:34:51 by tmatis           ###   ########.fr        #
+#    Updated: 2022/07/04 14:28:13 by tmatis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ NAME 	= libft_malloc_$(HOSTTYPE).so
 CC 		= clang
 CFLAGS	= -Wall -Wextra -Werror -g -fPIC -fvisibility=hidden -O0
 LIBMLX	= minilibx/libmlx.a
-LIBFLAG	= -lXext -lX11 -lm -lpthread -L./minilibx -lmlx
+LIBFLAG	=
 DFLAGS	= -MMD -MF $(@:.o=.d)
 AUTHOR	= tmatis
 DATE	= 13/04/2022
@@ -230,7 +230,7 @@ endif
 
 
 -include $(DEPS) $(DEPS_MAIN)
-$(NAME):	${OBJS} $(LIBMLX)
+$(NAME):	${OBJS}
 			@$(call display_progress_bar)
 			@$(call run_and_test,$(CC) $(CFLAGS) $(DFLAGS) -I$(INCLUDE_PATH) -shared -o $@ ${OBJS} $(LIBFLAG))
 			@ln -sf $(NAME) libft_malloc.so
@@ -262,6 +262,12 @@ re:			fclean all
 
 set_define:
 			$(eval DEFINE += -DTEST_MALLOC)
+
+set_define_bonus:
+			$(eval DEFINE += -DBONUS)
+			$(eval LIBFLAG += -lXext -lX11 -lm -lpthread -L./minilibx -lmlx)
+
+bonus:	set_define_bonus header setup $(LIBMLX) $(NAME)
 
 unit:		set_define header setup ${OBJS}
 			@echo "                                                              "
