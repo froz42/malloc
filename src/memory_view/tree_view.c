@@ -1,13 +1,10 @@
 #include "graphic.h"
 #include "../malloc.h"
-/*void render_tree_text(t_mlx *mlx)
-{
-
-}*/
 
 void render_node_text(t_mlx *mlx, block_ptr block, int x, int y)
 {
 	char buff[50];
+	
 	put_string(mlx, x + 5, y + 10, 0x0, "block ptr:");
 	ptr_to_string(buff, block);
 	put_string(mlx, x + 5, y + 25, 0x0, buff);
@@ -62,12 +59,9 @@ void click_node(t_mlx *mlx, block_ptr block, int x, int y)
 
 void tree_logic(t_mlx *mlx, void(callback)(t_mlx *mlx, block_ptr block, int x, int y))
 {
-	/*if (mlx->state.mode != DISPLAY_TREE)
-		return;*/
 	free_tree_t *tree = get_free_trees();
 	block_ptr *root = mlx->state.block == BLOCK_TINY
 						  ? &tree->tiny
 						  : &tree->small;
-	// render rb tree at center of screen
 	render_tree_recursive(mlx, root, WINDOW_X / 2 - 62.5, 30 + mlx->state.scroll_offset, callback);
 }

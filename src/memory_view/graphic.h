@@ -7,7 +7,6 @@
 
 #define WINDOW_X 1000
 #define WINDOW_Y 800
-#define SHOW_KEY_PRESSED 0
 
 #define max(a, b) \
 	({ __typeof__ (a) _a = (a); \
@@ -60,16 +59,14 @@ typedef struct s_mlx
 	t_app_state state;
 } t_mlx;
 
+# include "views.h"
+
 void launch_thread(void);
 int loop_hook(t_mlx *mlx);
-int key_press_hook(int keycode, t_mlx *mlx);
-int key_release_hook(int keycode, t_mlx *mlx);
 int mouse_hook(int button, int x, int y, t_mlx *mlx);
 
 void frame_render(t_mlx *mlx);
 void post_frame_render(t_mlx *mlx);
-void key_press_event(int keycode, t_mlx *mlx);
-void key_release_event(int keycode, t_mlx *mlx);
 void mouse_click_event(int button, int x, int y, t_mlx *mlx);
 void init_app_state(t_app_state *app_state);
 
@@ -80,10 +77,5 @@ void draw_line(t_frame *f, int x1, int y1, int x2, int y2, int color);
 void put_string(t_mlx *mlx, int x, int y, int color, char *string);
 size_t get_text_width(char *string);
 int is_in(int x, int y, int w, int h, int x2, int y2);
-
-void tree_logic(t_mlx *mlx, void (callback)(t_mlx *mlx, block_ptr block, int x, int y));
-void render_node(t_mlx *mlx, block_ptr block, int x, int y);
-void render_node_text(t_mlx *mlx, block_ptr block, int x, int y);
-void click_node(t_mlx *mlx, block_ptr block, int x, int y);
 
 #endif

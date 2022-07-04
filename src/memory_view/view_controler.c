@@ -13,88 +13,8 @@ void init_app_state(t_app_state *app_state)
 
 void button(t_mlx *mlx, int x, int y, int w, int h, int pressed)
 {
-	// grey rectangle
 	draw_rectangle(&mlx->frame, x, y, w, h, 0x888888);
-	// white rectangle or dark grey rectangle
 	draw_rectangle(&mlx->frame, x + 1, y + 1, w - 2, h - 2, pressed ? 0xFFFFFF : 0xc7c7c7);
-}
-
-void area_logic(
-	t_mlx *mlx,
-	void(callback)(t_mlx *mlx,
-				   int x,
-				   int y,
-				   int size_to_draw_in_this_line,
-				   block_ptr block))
-{
-	area_ptr const area = get_or_create_area();
-	if (area == NULL)
-		return;
-	block_ptr start;
-	block_ptr end;
-	double size_divider;
-
-	if (mlx->state.block == BLOCK_TINY)
-	{
-		start = area;
-		end = get_small_area(area);
-		size_divider = 1.5;
-	}
-	else
-	{
-		start = get_small_area(area);
-		end = get_large_area(area);
-		size_divider = 25;
-	}
-
-	ssize_t x = 20;
-	ssize_t y = 60 + mlx->state.scroll_offset;
-
-	while (start < end)
-	{
-		ssize_t size = get_block_size(start) / size_divider;
-		ssize_t size_to_draw = size;
-		while (size_to_draw > 0)
-		{
-			if (x >= WINDOW_X - 20)
-			{
-				x = 20;
-				y += 20;
-			}
-			ssize_t size_to_draw_in_this_line = min(size_to_draw, WINDOW_X - x - 20);
-			callback(mlx, x, y, size_to_draw_in_this_line, start);
-			x += size_to_draw_in_this_line + 5;
-			size_to_draw -= size_to_draw_in_this_line;
-		}
-		start = get_next_block(start);
-	}
-}
-
-void draw_block(t_mlx *mlx,
-				int x,
-				int y,
-				int size_to_draw_in_this_line,
-				block_ptr block)
-{
-	if (mlx->state.block_selected == block)
-	{
-		draw_rectangle(&mlx->frame, x - 1, y - 1, size_to_draw_in_this_line + 2, 10 + 2, 0xFFFFFF);
-	}
-	unsigned int color = is_allocated(block) ? 0xFF0000 : 0x00FF00;
-	draw_rectangle(&mlx->frame, x, y, size_to_draw_in_this_line, 10, color);
-}
-
-void click_block(t_mlx *mlx,
-				 int x,
-				 int y,
-				 int size_to_draw_in_this_line,
-				 block_ptr block)
-{
-	if (mlx->state.x_click >= x && mlx->state.x_click < x + size_to_draw_in_this_line &&
-		mlx->state.y_click >= y && mlx->state.y_click < y + 10)
-	{
-		mlx->state.block_selected = block;
-	}
 }
 
 void block_infos(t_mlx *mlx)
@@ -102,10 +22,6 @@ void block_infos(t_mlx *mlx)
 	if (!mlx->state.block_selected)
 		return;
 	draw_rectangle(&mlx->frame, 20, 20, 150, 250, 0x2e2e2e);
-
-	if (is_allocated(mlx->state.block_selected))
-	{
-	}
 }
 
 void block_infos_text(t_mlx *mlx)
@@ -138,12 +54,11 @@ void block_infos_text(t_mlx *mlx)
 void frame_render(t_mlx *mlx)
 {
 	if (mlx->state.mode == DISPLAY_BLOCKS)
-		area_logic(mlx, &draw_block);
+		area_logic(mlx, &render_block);
 	else
 		tree_logic(mlx, &render_node);
 	button(mlx, WINDOW_X - 80, 5, 75, 50, mlx->state.block == BLOCK_TINY);
 	button(mlx, WINDOW_X - 80 - 75, 5, 75, 50, mlx->state.block == BLOCK_SMALL);
-	// button for display mode
 	button(mlx, WINDOW_X - 80, 65, 75, 50, mlx->state.mode == DISPLAY_BLOCKS);
 	button(mlx, WINDOW_X - 80 - 75, 65, 75, 50, mlx->state.mode == DISPLAY_TREE);
 	block_infos(mlx);
@@ -151,7 +66,6 @@ void frame_render(t_mlx *mlx)
 
 void post_frame_render(t_mlx *mlx)
 {
-	// top right button's text
 	put_string(mlx, WINDOW_X - 80 + get_text_width("Small"), 32, 0x0, "Small");
 	put_string(mlx, WINDOW_X - 80 - 75 + get_text_width("Tiny"), 32, 0x0, "Tiny");
 	put_string(mlx, WINDOW_X - 80 - 90 + get_text_width("Blocks"), 92, 0x0, "Blocks");
@@ -161,22 +75,8 @@ void post_frame_render(t_mlx *mlx)
 		tree_logic(mlx, &render_node_text);
 }
 
-void key_press_event(int keycode, t_mlx *mlx)
-{
-	(void)keycode;
-	(void)mlx;
-}
-
-void key_release_event(int keycode, t_mlx *mlx)
-{
-	(void)keycode;
-	(void)mlx;
-}
-
 void mouse_click_event(int button, int x, int y, t_mlx *mlx)
 {
-	(void)x;
-	(void)y;
 	if (button == 4)
 		mlx->state.scroll_offset += 20;
 	else if (button == 5)
