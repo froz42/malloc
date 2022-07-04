@@ -6,7 +6,7 @@
 #    By: tmatis <tmatis@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 10:00:31 by tmatis            #+#    #+#              #
-#    Updated: 2022/07/04 14:28:13 by tmatis           ###   ########.fr        #
+#    Updated: 2022/07/04 14:36:12 by tmatis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ endif
 
 NAME 	= libft_malloc_$(HOSTTYPE).so
 CC 		= clang
-CFLAGS	= -Wall -Wextra -Werror -g -fPIC -fvisibility=hidden -O0
+CFLAGS	= -Wall -Wextra -Werror -g -fPIC -fvisibility=hidden
 LIBMLX	= minilibx/libmlx.a
 LIBFLAG	=
 DFLAGS	= -MMD -MF $(@:.o=.d)
