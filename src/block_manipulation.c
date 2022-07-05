@@ -18,7 +18,7 @@
  * @param areaend the end of the area
  * @return block_ptr the new block
  */
-block_ptr split_block(block_ptr block, size_t size, void *areaend)
+block_ptr split_block(block_ptr block, size_t size, const block_ptr areaend)
 {
 	size_t const new_size_block_a = size;
 	size_t const new_size_block_b = get_block_size(block) - size;
@@ -45,7 +45,7 @@ block_ptr split_block(block_ptr block, size_t size, void *areaend)
  * @param block_a the first block
  * @param area_end the end of the area
  */
-void merge_next_block(block_ptr block_a, void *area_end)
+void merge_next_block(block_ptr block_a, const area_ptr area_end)
 {
 	block_ptr const block_b = get_next_block(block_a);
 	block_ptr const prev = *get_prev_block(block_a);

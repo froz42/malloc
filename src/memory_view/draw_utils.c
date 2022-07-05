@@ -14,7 +14,6 @@
 #include "../../minilibx/mlx.h"
 #include "graphic.h"
 
-
 /**
  * @brief convert rgb to int
  *
@@ -38,10 +37,10 @@ int rgb_to_color(int r, int g, int b)
  */
 void frame_put_pixel(t_frame *f, int x, int y, int color)
 {
-	char *dst;
-
 	if (x <= f->x && y <= f->y && x >= 0 && y >= 0)
 	{
+		char *dst;
+
 		dst = f->addr + (y * f->line_length + x * (f->bits_per_pixel / 8));
 		*(unsigned int *)dst = color;
 	}
@@ -113,7 +112,7 @@ static int ft_abs(int x)
  */
 void draw_line(t_frame *f, int x1, int y1, int x2, int y2, int color)
 {
-	int x, y, dx, dy, swap, temp, s1, s2, p, i;
+	int x, y, dx, dy, swap, s1, s2, p, i;
 
 	x = x1;
 	y = y1;
@@ -125,7 +124,8 @@ void draw_line(t_frame *f, int x1, int y1, int x2, int y2, int color)
 
 	if (dy > dx)
 	{
-		temp = dx;
+		
+		int temp = dx;
 		dx = dy;
 		dy = temp;
 		swap = 1;

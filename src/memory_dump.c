@@ -18,7 +18,7 @@
  * @param area_end the end of the area
  * @return size_t the sum of the size of all the blocks in the area
  */
-size_t sum_of_block(void *area_start, void *area_end)
+size_t sum_of_block(area_ptr const area_start, const area_ptr area_end)
 {
 	size_t sum = 0;
 	block_ptr block = area_start;
@@ -42,7 +42,7 @@ size_t sum_of_block(void *area_start, void *area_end)
  * @param area_end the end of the area
  * @param scale the scale of the area, nbrs of block = size / scale
  */
-static void dump_area(void *area_start, void *area_end, int scale)
+static void dump_area(area_ptr area_start, const area_ptr area_end, int scale)
 {
 	block_ptr block = area_start;
 	while (block < area_end)
@@ -93,7 +93,7 @@ static void check_sum(void *area_start, void *area_end, size_t expected)
  * @param area_start the start of the area
  * @param area_end the end of the area
  */
-static void check_prev(void *area_start, void *area_end)
+static void check_prev(area_ptr area_start, const area_ptr area_end)
 {
 	block_ptr block = area_start;
 	block_ptr prev = NULL;
@@ -153,7 +153,7 @@ static void nil_node_status(void)
  * @param area_end the end of the area
  * @return size_t the number of free block in the area
  */
-static size_t count_free_blocks(void *area_start, void *area_end)
+static size_t count_free_blocks(area_ptr area_start, const area_ptr area_end)
 {
 	size_t i = 0;
 	block_ptr block = area_start;

@@ -61,7 +61,7 @@ area_ptr get_or_create_area(void)
  * @param block block ptr
  * @return area_ptr The area end
  */
-area_ptr find_area_end(area_ptr area, block_ptr block)
+area_ptr find_area_end(area_ptr area, const block_ptr block)
 {
 	if (block < get_small_area(area))
 		return get_small_area(area);
@@ -101,7 +101,7 @@ int is_off_map(void *data, area_ptr area)
  * @param area the area ptr
  * @return size_t the minimal size
  */
-size_t get_minimal_size(block_ptr block, area_ptr area)
+size_t get_minimal_size(const block_ptr block, const area_ptr area)
 {
 	if (block < get_small_area(area))
 		return MINIMAL_SIZE;
@@ -115,7 +115,7 @@ size_t get_minimal_size(block_ptr block, area_ptr area)
  * @param area the area ptr
  * @return size_t the maximal size
  */
-size_t get_maximal_size(block_ptr block, area_ptr area)
+size_t get_maximal_size(const block_ptr block, area_ptr area)
 {
 	if (block < get_small_area(area))
 		return TINY_MAX_SIZE;

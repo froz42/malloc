@@ -99,7 +99,7 @@ void *get_block_data(block_ptr block)
  */
 block_ptr get_next_block(block_ptr block)
 {
-	return (get_block_data(block)+ get_block_size(block));
+	return ((char *)get_block_data(block)+ get_block_size(block));
 }
 
 /**
@@ -111,7 +111,7 @@ block_ptr get_next_block(block_ptr block)
  */
 block_ptr *get_prev_block(block_ptr block)
 {
-	return (void **)(block + sizeof(size_t));
+	return (void **)((char *)block + sizeof(size_t));
 }
 
 /**
@@ -164,7 +164,7 @@ block_ptr *get_right_child(block_ptr block)
 		error_write("get_right_child: block is allocated\n");
 		return NULL;
 	}
-	return (get_block_data(block) + sizeof(void *));
+	return (void **)((char *)get_block_data(block) + sizeof(void *));
 }
 
 /**
@@ -180,7 +180,7 @@ block_ptr *get_parent(block_ptr block)
 		error_write("get_parent: block is allocated");
 		return NULL;
 	}
-	return (get_block_data(block) + sizeof(void *) * 2);
+	return (void **)((char *)get_block_data(block) + sizeof(void *) * 2);
 }
 
 /**
@@ -196,7 +196,7 @@ int *get_color(block_ptr block)
 		error_write("get_color: block is allocated");
 		return NULL;
 	}
-	return (int *)(get_block_data(block) + sizeof(void *) * 3);
+	return (int *)((char *)get_block_data(block) + sizeof(void *) * 3);
 }
 
 /**

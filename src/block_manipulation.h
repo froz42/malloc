@@ -10,7 +10,7 @@
 
 #include "malloc.h"
 
-block_ptr split_block(block_ptr block, size_t size, void *areaend);
+block_ptr split_block(block_ptr block, size_t size, block_ptr const areaend);
 void merge_next_block(block_ptr block_a, void *areaend);
 block_ptr unfrag_block(block_ptr block, void *area_end, block_ptr *root);
 int extend_block(block_ptr block, size_t wanted_size, area_ptr area);

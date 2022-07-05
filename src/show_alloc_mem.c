@@ -32,7 +32,7 @@ void dump_block(block_ptr block)
 	ft_putstr(" bytes\n");
 }
 
-static void dump_area(area_ptr start, area_ptr end)
+static void dump_area(area_ptr start, const area_ptr end)
 {
 	while (start < end)
 	{
