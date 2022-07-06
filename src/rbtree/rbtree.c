@@ -353,8 +353,8 @@ void delete_node(block_ptr z, block_ptr *root)
 		*get_parent(*get_left_child(y)) = y;
 		*get_color(y) = *get_color(z);
 	}
-	if (y_original_color == BLACK)
-		delete_fixup(x, root);
+	//if (y_original_color == BLACK)
+	//	delete_fixup(x, root);
 }
 
 /**
@@ -462,10 +462,10 @@ void insert_free_block(block_ptr block, block_ptr *root)
 
 	insert_recursive(root, block);
 
-	if (*get_parent(block) == get_nil_node())
+	/*if (*get_parent(block) == get_nil_node())
 		*get_color(block) = BLACK;
 	else
-		insert_fixup(root, block);
+		insert_fixup(root, block);*/
 }
 
 /**

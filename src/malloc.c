@@ -40,7 +40,7 @@ void *_malloc(size_t size)
 		return handle_off_map(size);
 
 	delete_free_block(best_fit, root);
-	if (get_block_size(best_fit) - size > get_minimal_size(best_fit, area))
+	if (get_block_size(best_fit) - size > get_minimal_size(best_fit, area) + sizeof(void *) + sizeof(size_t))
 	{
 		block_ptr new_block = split_block(best_fit, size, find_area_end(area, best_fit));
 		insert_free_block(new_block, root);
