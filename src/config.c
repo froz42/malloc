@@ -16,14 +16,14 @@ t_config parse_config(char const *str)
 		char *end;
 
 		// skip spaces
-		while (*ptr == ' ' || *ptr == '\t')
+		while (*ptr == ' ' || *ptr == ',' || *ptr == '\t')
 			ptr++;
 		if (*ptr == '\0')
 			break;
 
 		// get the value check for buffer overflow
 		end = buf;
-		while (*ptr != ' ' && *ptr != '\t' && *ptr != '\0')
+		while (*ptr != ' ' && *ptr != ',' && *ptr != '\t' && *ptr != '\0')
 		{
 			if (end - buf >= 1023)
 				break;
@@ -32,9 +32,15 @@ t_config parse_config(char const *str)
 		*end = '\0';
 		// strcmp buf with the flag name
 		if (ft_strcmp(buf, "verbose") == 0)
+		{
+			ft_putstr("verbose\n");
 			config.verbose = 1;
+		}
 		if (ft_strcmp(buf, "visual") == 0)
+		{
+			ft_putstr("verbose\n");
 			config.visual = 1;
+		}
 	}
 	return (config);
 }
