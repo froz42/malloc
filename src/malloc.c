@@ -74,6 +74,11 @@ void *_calloc(size_t nmemb, size_t size)
  */
 void _free(void *data)
 {
+	if ((size_t)data % 16 != 0)
+	{
+		error_write("free: invalid pointer");
+		return ;
+	}
 	if (data == NULL)
 		return;
 
@@ -112,6 +117,11 @@ void _free(void *data)
  */
 void *_realloc(void *ptr, size_t size)
 {
+	if ((size_t)ptr % 16 != 0)
+	{
+		error_write("realloc: invalid pointer");
+		return NULL;
+	}
 	if (size == 0)
 	{
 		_free(ptr);

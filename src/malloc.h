@@ -107,6 +107,7 @@ extern pthread_mutex_t g_malloc_mutex;
 void init_area(area_ptr area, size_t size);
 area_ptr get_or_create_area(void);
 void error_write(char *str);
+void show_alloc_mem(void);
 void show_alloc_mem_ex(void);
 void dump_block(block_ptr block);
 
