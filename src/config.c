@@ -34,7 +34,7 @@ t_config parse_config(char const *str)
 		if (ft_strcmp(buf, "verbose") == 0)
 			config.verbose = 1;
 		if (ft_strcmp(buf, "visual") == 0)
-			ft_putstr("verbose\n");
+			config.visual = 1;
 	}
 	return (config);
 }
