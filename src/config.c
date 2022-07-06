@@ -32,15 +32,9 @@ t_config parse_config(char const *str)
 		*end = '\0';
 		// strcmp buf with the flag name
 		if (ft_strcmp(buf, "verbose") == 0)
-		{
-			ft_putstr("verbose\n");
 			config.verbose = 1;
-		}
 		if (ft_strcmp(buf, "visual") == 0)
-		{
 			ft_putstr("verbose\n");
-			config.visual = 1;
-		}
 	}
 	return (config);
 }
