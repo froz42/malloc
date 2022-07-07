@@ -13,6 +13,18 @@ car_test tree_access(void)
 	car_assert_cmp(*get_left_child(block), (void *)18446744073709551615UL);
 	car_assert_cmp(*get_right_child(block), (void *)18446744073709551615UL);
 	car_assert_cmp(*get_parent(block), (void *)18446744073709551615UL);
+	
+	*get_right_child(block) = (void *)0;
+
+	car_assert_cmp(*get_left_child(block), (void *)18446744073709551615UL);
+	car_assert_cmp(*get_right_child(block), (void *)0);
+	car_assert_cmp(*get_parent(block), (void *)18446744073709551615UL);
+
+	*get_left_child(block) = (void *)0;
+	
+	car_assert_cmp(*get_left_child(block), (void *)0);
+	car_assert_cmp(*get_right_child(block), (void *)0);
+	car_assert_cmp(*get_parent(block), (void *)18446744073709551615UL);
 	car_assert_cmp(*get_color(block), RED);
 }
 
