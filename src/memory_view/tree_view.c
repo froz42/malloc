@@ -29,12 +29,12 @@ void render_node_text(t_mlx *mlx, block_ptr block, int x, int y)
 	put_string(mlx, x + 5, y + 40, 0x0, "size:");
 	size_to_string(buff, get_block_size(block));
 	put_string(mlx, x + 5, y + 55, 0x0, buff);
-	put_string(mlx, x + 5, y + 70, 0x0, "color:");
-	put_string(mlx, x + 50, y + 70,
+	//put_string(mlx, x + 5, y + 70, 0x0, "color:");
+	/*put_string(mlx, x + 50, y + 70,
 			   *get_color(block) == RED ? 0xFF0000 : 0x0,
-			   *get_color(block) == RED ? "red" : "black");
+			   *get_color(block) == RED ? "red" : "black");*/
 	if (get_nil_node() == block)
-		put_string(mlx, x + 85, y + 70, 0x0, "(nil)");
+		put_string(mlx, x + 5, y + 70, 0x0, "(nil)");
 }
 
 /**

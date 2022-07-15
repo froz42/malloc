@@ -321,7 +321,7 @@ void delete_node(block_ptr z, block_ptr *root)
 {
 	block_ptr y = z;
 	block_ptr x;
-	int y_original_color = *get_color(y);
+	//int y_original_color = *get_color(y);
 	if (*get_left_child(z) == get_nil_node())
 	{
 		x = *get_right_child(z);
@@ -335,7 +335,7 @@ void delete_node(block_ptr z, block_ptr *root)
 	else
 	{
 		y = minimum(*get_right_child(z));
-		y_original_color = *get_color(y);
+		//y_original_color = *get_color(y);
 		x = *get_right_child(y);
 		if (*get_parent(y) == z)
 		{
