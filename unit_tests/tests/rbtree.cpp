@@ -38,7 +38,7 @@ car_test dummy_node(void)
 	car_assert_cmp(*get_color(nil), BLACK);
 }
 
-car_test test_insertion(void)
+void test_insertion(void)
 {
 	char block[128];
 	char block2[64];
@@ -92,7 +92,7 @@ car_test test_insertion(void)
 	trees->small = nil;
 }
 
-car_test test_deletion(void)
+void test_deletion(void)
 {
 	char block[128];
 	char block2[64];
@@ -223,7 +223,7 @@ void check_tree(block_ptr block)
 	
 }
 
-car_test rb_tree_stree_test(void)
+void rb_tree_stree_test(void)
 {
 	char block[128][128];
 
